@@ -1,0 +1,231 @@
+@font-face {
+  font-family: 'Spiegel';
+  src: url('/assets/fonts/spiegel-regular.otf') format('opentype');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Spiegel';
+  src: url('/assets/fonts/spiegel-semibold.otf') format('opentype');
+  font-weight: 600;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Spiegel';
+  src: url('/assets/fonts/spiegel-bold.otf') format('opentype');
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Spiegel';
+  src: url('/assets/fonts/spiegel-regularitalic.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Beaufort';
+  src: url('/assets/fonts/beaufortforlol-regular.otf') format('opentype');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Beaufort';
+  src: url('/assets/fonts/beaufortforlol-bold.otf') format('opentype');
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Beaufort';
+  src: url('/assets/fonts/beaufortforlol-light.otf') format('opentype');
+  font-weight: 300;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Beaufort';
+  src: url('/assets/fonts/beaufortforlol-heavy.otf') format('opentype');
+  font-weight: 900;
+  font-display: swap;
+}
+
+:root {
+  /* superficie */
+  --bg-void: #010a13;
+  --bg-deep: #06111c;
+  --bg-panel: #0a1622;
+  --bg-panel-2: #0d1b29;
+  --bg-raised: #12222f;
+  --bg-hover: #16293a;
+  --bg-sunken: #040c15;
+
+  /* tinta */
+  --ink-bright: #f0e6d2;
+  --ink-base: #d8cfbc;
+  --ink-muted: #a09b8c;
+  --ink-dim: #6b6a63;
+  --ink-ghost: #45443f;
+  --ink-on-gold: #1c1408;
+
+  /* oro */
+  --gold: #c8aa6e;
+  --gold-bright: #cdbe91;
+  --gold-deep: #8a6f3c;
+  --gold-dark: #463714;
+  --gold-glow: rgba(200, 170, 110, 0.22);
+  --gold-glow-strong: rgba(200, 170, 110, 0.42);
+
+  /* acentos */
+  --cyan: #0596aa;
+  --cyan-soft: #23a8b8;
+  --cyan-glow: rgba(5, 150, 170, 0.28);
+  --blue-link: #1e87f0;
+  --green-online: #22c55e;
+  --green-lobby: #1b6b3a;
+  --red-offline: #b23b3b;
+  --pink-bp: #ea0e91;
+
+  /* bordes */
+  --line-hair: rgba(200, 170, 110, 0.16);
+  --line-soft: rgba(200, 170, 110, 0.3);
+  --line-strong: rgba(200, 170, 110, 0.55);
+  --line-panel: rgba(4, 12, 21, 0.85);
+  --line-inset: rgba(0, 0, 0, 0.5);
+
+  /* medidas del cliente */
+  --topbar-h: 5.25rem;
+  --topbar-sub-h: 3.25rem;
+  --social-w: 20rem;
+  --radius-sm: 2px;
+  --radius-md: 3px;
+
+  /* sombras */
+  --shadow-panel: 0 0.5rem 2rem rgba(0, 0, 0, 0.6);
+  --shadow-inset: inset 0 0 0 1px var(--line-hair);
+  --shadow-gold: 0 0 1.5rem var(--gold-glow);
+  --shadow-card: 0 0.35rem 1.25rem rgba(0, 0, 0, 0.55);
+
+  /* motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --t-fast: 120ms;
+  --t-med: 220ms;
+  --t-slow: 420ms;
+
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg-void);
+  color: var(--ink-base);
+  font-family: 'Spiegel', 'Segoe UI', system-ui, sans-serif;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  margin: 0;
+  font-family: 'Beaufort', 'Spiegel', serif;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--ink-bright);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+a {
+  color: var(--blue-link);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+:focus-visible {
+  outline: 2px solid var(--gold-bright);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--gold-dark);
+  color: var(--ink-bright);
+}
+
+/* scrollbars discretas, como en el cliente */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--gold-deep) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--gold-deep);
+  border-radius: 99px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--gold);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

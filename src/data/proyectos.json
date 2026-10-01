@@ -1,0 +1,761 @@
+{
+  "perfil": {
+    "nombre": "Mario Muñoz Pequeño",
+    "summoner": "MarioMunPeq",
+    "nivel": 24,
+    "rango": "esmeralda",
+    "division": "IV",
+    "maestria": 650,
+    "meses": 46
+  },
+  "hero": {
+    "eyebrow": "Desarrollador de aplicaciones · DAM",
+    "titulo": "Construyo cosas para entender cómo funcionan.",
+    "subtitulo": "Desarrollador de aplicaciones con interés en inteligencia artificial, automatización y desarrollo.",
+    "descripcion": "Disfruto creando soluciones que resuelvan problemas reales y aprendiendo tecnologías nuevas mediante proyectos prácticos. Este portfolio es la sexta versión del mismo contenido: Persona 5, Minecraft, una biblioteca de repositorios, un compañero de mesa de D&D, un Pip-Boy y ahora el cliente de League of Legends.",
+    "ctaPrimario": "JUGAR",
+    "ctaSecundario": "VER PROYECTOS",
+    "champFavorito": "Yasuo",
+    "portada": "Janna"
+  },
+  "sobreMi": [
+    "Vengo de automatización y robótica industrial. Empecé pelando cables y configurando armarios de comunicaciones antes de escribir la primera línea de código, y esa base de manos sigue estando detrás de cada proyecto.",
+    "Después pasé por grado superior de DAM, con mención honorífica en el TFG, y por un bootcamp de inteligencia artificial de 450 horas. De ahí salí con la idea de que el 70% del trabajo con datos es limpiar y entender, no entrenar.",
+    "Ahora desarrollo en Cognizant como Pega Developer. Antes estuve en la Diputación de Valladolid haciendo desarrollo web con Liferay y Odoo, y en Michelin con Power Apps, Power BI y PI Vision.",
+    "Fuera del horario de servicio me dedico a videojuegos, rol de mesa, lectura de fantasía y a construir portfolio. Este es el sexto: mismo contenido, seis dispositivos distintos."
+  ],
+  "formacion": [
+    {
+      "periodo": "Septiembre 2022 — Junio 2024",
+      "titulo": "Grado Superior en Desarrollo de Aplicaciones Multiplataforma",
+      "centro": "IES Julián Marías",
+      "detalle": "Mención honorífica en el TFG. Java, Kotlin, Android y bases de datos. El grado que más me ha marcado, porque explica casi todo lo que viene después."
+    },
+    {
+      "periodo": "Junio 2024 — Enero 2025",
+      "titulo": "Bootcamp de Inteligencia Artificial",
+      "centro": "Qualentum",
+      "detalle": "450 horas de formación intensiva en Python, Scikit-learn, Pandas y PyTorch. Terminé el proyecto final con mención honorífica."
+    },
+    {
+      "periodo": "Septiembre 2020 — Junio 2022",
+      "titulo": "Grado Superior en Automatización y Robótica Industrial",
+      "centro": "IES Galileo",
+      "detalle": "Autómatas, robótica y SCADA. Terminé sin TFG, y no lo lamento."
+    },
+    {
+      "periodo": "Septiembre 2018 — Junio 2020",
+      "titulo": "Instalaciones de Telecomunicaciones",
+      "centro": "IES La Merced",
+      "detalle": "Grado medio con mucho taller: fibra óptica, cableado estructurado, medida y electrónica aplicada a red."
+    }
+  ],
+  "experiencia": [
+    {
+      "periodo": "Sep 2026 — Actualidad",
+      "puesto": "Pega Developer — Graduate Program",
+      "empresa": "Cognizant",
+      "resumen": [
+        "Programa de graduate developer especializado en desarrollo de soluciones empresariales con Pega.",
+        "Stack del puesto: Pega y Java."
+      ]
+    },
+    {
+      "periodo": "Feb 2026 — Sep 2026",
+      "puesto": "Desarrollador web",
+      "empresa": "Diputación de Valladolid",
+      "resumen": [
+        "Desarrollo web con Liferay.",
+        "Desarrollo con Odoo.",
+        "Soporte técnico a las áreas de la administración."
+      ]
+    },
+    {
+      "periodo": "Jun 2024 — Ene 2025",
+      "puesto": "Bootcamp de Inteligencia Artificial",
+      "empresa": "Qualentum",
+      "resumen": [
+        "450 horas de formación intensiva en inteligencia artificial.",
+        "Proyecto final con mención honorífica: un modelo de machine learning entrenado con datos reales de la API de Riot Games."
+      ]
+    },
+    {
+      "periodo": "Mar 2024 — Jun 2024",
+      "puesto": "Técnico — Prácticas Grado Superior DAM",
+      "empresa": "Michelin",
+      "resumen": [
+        "Desarrollo de aplicaciones, análisis de datos y herramientas de Microsoft.",
+        "Entornos industriales con Power Apps, Power BI, PI Vision, Python y SharePoint."
+      ]
+    },
+    {
+      "periodo": "Mar 2022 — Jun 2022",
+      "puesto": "Técnico — Prácticas Grado Superior ARI",
+      "empresa": "Synersight, S.L.",
+      "resumen": [
+        "Automatización y robótica industrial.",
+        "SEE Electrical, robots y AGV."
+      ]
+    }
+  ],
+  "hitos": [
+    {
+      "etiqueta": "Repositorios públicos",
+      "valor": "20",
+      "descripcion": "Código, juegos y portfolio. La cuenta de GitHub existe desde diciembre de 2022."
+    },
+    {
+      "etiqueta": "Horas de formación en IA",
+      "valor": "450",
+      "descripcion": "Bootcamp de Qualentum. La lección principal: el 70% del trabajo es limpiar datos, no entrenar."
+    },
+    {
+      "etiqueta": "Pruebas automatizadas",
+      "valor": "265",
+      "descripcion": "Suite de pytest que cubre el núcleo del pipeline de Euromario."
+    },
+    {
+      "etiqueta": "Portfolios temáticos",
+      "valor": "7",
+      "descripcion": "Persona 5, Minecraft, Papers Please, Repository Library, Vault Archive, Dungeon Archive y Cosmere Archive."
+    }
+  ],
+  "proyectos": [
+    {
+      "id": "dungeon-archive",
+      "campeon": "Sett",
+      "titulo": "Dungeon Archive",
+      "claim": "Compañero de mesa offline para D&D 5e",
+      "descripcion": "Una PWA rápida e instalable que pone la referencia de D&D 5e al alcance de la mesa sin depender de una conexión a Internet. Toda la referencia del SRD —hechizos, monstruos, equipo, condiciones, acciones, objetos mágicos y dotes— queda integrada en la compilación y disponible sin conexión. El único propósito es reducir el tiempo muerto: el intervalo entre que surge una pregunta y se encuentra la respuesta.",
+      "rol": "Diseño y desarrollo completo",
+      "anio": "2026",
+      "estado": "En curso",
+      "stack": ["TypeScript", "React", "Vite", "Tailwind CSS", "React Router", "Zustand", "PWA", "Firebase"],
+      "tags": ["frontend", "offline", "pwa", "productividad"],
+      "metricas": [
+        { "etiqueta": "Versión", "valor": "0.1.0" },
+        { "etiqueta": "Funciones", "valor": "12" },
+        { "etiqueta": "Categorías", "valor": "7" }
+      ],
+      "highlights": [
+        "Offline-first: arquitectura que funciona completamente sin Internet, con sincronización opcional a la nube.",
+        "Índice de búsqueda construido en memoria durante la compilación, para resultados instantáneos entre miles de entidades.",
+        "Service worker con estrategia de caché que mantiene la aplicación funcional sin conexión.",
+        "Sistema de diseño propio con rejilla de 4 px, siete temas de acento y animaciones compartidas."
+      ],
+      "enlaces": [
+        { "etiqueta": "Demo", "url": "https://mariomunpeq.github.io/Dungeon-Archive/" },
+        { "etiqueta": "Repositorio", "url": "https://github.com/MarioMunPeq/Dungeon-Archive" }
+      ],
+      "orden": 1
+    },
+    {
+      "id": "vault-archive",
+      "campeon": "Ornn",
+      "titulo": "Vault Archive",
+      "claim": "Portfolio dentro de un Pip-Boy 3000 replicado carcasa por carcasa",
+      "descripcion": "Un portfolio construido dentro de un Pip-Boy 3000 replicado carcasa por carcasa, con seis módulos que funcionan en lugar de un filtro verde sobre una página web. STAT, MISIONES, DATA, MAP, RADIO y HACK responden al teclado del dispositivo, con secuencia de arranque, efecto CRT y un mapa de Valladolid dibujado en fósforo monocromo.",
+      "rol": "Diseño y desarrollo completo",
+      "anio": "2026",
+      "estado": "Estable",
+      "stack": ["TypeScript", "React", "Vite", "Mapbox GL", "Web Audio API", "HTML/CSS"],
+      "tags": ["frontend", "3d", "audio", "cartografía"],
+      "metricas": [
+        { "etiqueta": "Módulos", "valor": "6" },
+        { "etiqueta": "Emisoras", "valor": "2" },
+        { "etiqueta": "Retos técnicos", "valor": "5" }
+      ],
+      "highlights": [
+        "Estilo de mapa propio en Mapbox Studio, monocromo verde capa por capa, para que el mapa pertenezca al fósforo del dispositivo.",
+        "Radio con dial, espectro de barras y dos emisoras que siguen sonando al cambiar de módulo: el reproductor vive fuera del árbol del componente.",
+        "Degradación limpia cuando faltan las variables de entorno: mensaje de señal GPS no disponible, nunca pantalla en blanco.",
+        "Secuencia de arranque con sprite y log, más barra de estado persistente de HP, NIVEL y AP."
+      ],
+      "enlaces": [
+        { "etiqueta": "Demo", "url": "https://mariomunpeq.github.io/Vault-Archive/" },
+        { "etiqueta": "Repositorio", "url": "https://github.com/MarioMunPeq/Vault-Archive" }
+      ],
+      "orden": 2
+    },
+    {
+      "id": "cosmere-archive",
+      "campeon": "Gnar",
+      "titulo": "Cosmere Archive",
+      "claim": "Archivo interactivo del universo de Brandon Sanderson",
+      "descripcion": "Archivo interactivo del Cosmere, pensado para explorar sus mundos, personajes, historias y sistemas a través de una experiencia visual alejada del formato tradicional de una wiki. Mapa galáctico, lector de libros en 3D, cronología cósmica, grafo de relaciones entre personajes y un motor de observación propio para Shadesmar.",
+      "rol": "Diseño y desarrollo completo",
+      "anio": "2026",
+      "estado": "Estable",
+      "stack": ["React", "TypeScript", "Three.js", "React Three Fiber", "GSAP", "d3-force", "Tailwind CSS", "PWA"],
+      "tags": ["frontend", "3d", "animación", "datos"],
+      "metricas": [
+        { "etiqueta": "Eventos", "valor": "+100" },
+        { "etiqueta": "Motores", "valor": "3" },
+        { "etiqueta": "Retos técnicos", "valor": "4" }
+      ],
+      "highlights": [
+        "Híbrido HTML + WebGL: el texto del lector 3D se proyecta como overlay HTML sobre la geometría, no como textura, para que siga siendo seleccionable y accesible.",
+        "Paso de página 3D animando la curvatura con BufferGeometry deformada por frame, conservando el acabado de papel.",
+        "Motor Canvas 2D propio para Shadesmar con física y selección, sin librerías extra.",
+        "Grafo de fuerzas con d3-force para las relaciones entre personajes."
+      ],
+      "enlaces": [
+        { "etiqueta": "Demo", "url": "https://mariomunpeq.github.io/Cosmere-Archive/" },
+        { "etiqueta": "Repositorio", "url": "https://github.com/MarioMunPeq/Cosmere-Archive" }
+      ],
+      "orden": 3
+    },
+    {
+      "id": "euromario",
+      "campeon": "Mordekaiser",
+      "titulo": "Euromario",
+      "claim": "Radar de noticias de videojuegos que las lee, las filtra y las resume con IA",
+      "descripcion": "Agregador que filtra el ruido, agrupa las historias duplicadas y usa IA para resumir y priorizar solo lo que importa, publicado como web estática sin infraestructura de pago. El repositorio es el almacén y GitHub Actions es el programador: el digest se renueva cada hora sin backend, sin base de datos y sin servidor siempre activo.",
+      "rol": "Diseño y construcción del pipeline",
+      "anio": "2026",
+      "estado": "Estable",
+      "stack": ["Python", "RSS", "GitHub Actions", "Ollama", "Groq", "JavaScript", "HTML/CSS"],
+      "tags": ["python", "ia", "automatización", "datos"],
+      "metricas": [
+        { "etiqueta": "Pruebas pytest", "valor": "265" },
+        { "etiqueta": "Llamadas de IA", "valor": "64 → 13" },
+        { "etiqueta": "Cadencia", "valor": "Cada hora" }
+      ],
+      "highlights": [
+        "Contrato de IA neutral entre proveedores: Ollama local con respaldo en Groq, validación de cada respuesta estructurada y reintento ante salidas inválidas.",
+        "Coste de inferencia optimizado aplicando el tope por juego antes de la inferencia: de 64 a 13 llamadas en una ejecución real.",
+        "Emparejamiento robusto con límites de palabra para evitar falsos positivos de alias cortos, dando prioridad a la lista de exclusión.",
+        "Frontend sin dependencias con filtros, estados visuales y sincronización de la URL."
+      ],
+      "enlaces": [
+        { "etiqueta": "Demo", "url": "https://mariomunpeq.github.io/Euromario/" },
+        { "etiqueta": "Repositorio", "url": "https://github.com/MarioMunPeq/Euromario" }
+      ],
+      "orden": 4
+    },
+    {
+      "id": "proyecto-gambia",
+      "campeon": "Illaoi",
+      "titulo": "Proyecto Gambia",
+      "claim": "TFG de DAM: gestión de salud en Gambia en Android nativo",
+      "descripcion": "Aplicación Android nativa en Kotlin para la gestión de salud en Gambia, inspirada en MyGNUHealth e implementada como Trabajo de Fin de Grado de DAM. Registra peso, presión, glucosa, saturación de oxígeno, sueño y actividad en SQLite local con credenciales cifradas, y sincroniza con un servidor remoto. Lectura directa de tensiómetro y termómetro por Bluetooth Low Energy.",
+      "rol": "Diseño y desarrollo completo · TFG con mención honorífica",
+      "anio": "2024",
+      "estado": "Estable",
+      "stack": ["Kotlin", "Android", "SQLite", "Retrofit", "OkHttp", "Gson", "Bluetooth LE", "MPAndroidChart"],
+      "tags": ["android", "kotlin", "offline", "salud"],
+      "metricas": [
+        { "etiqueta": "Nota del TFG", "valor": "Mención" },
+        { "etiqueta": "Stack", "valor": "12" },
+        { "etiqueta": "Retos técnicos", "valor": "4" }
+      ],
+      "highlights": [
+        "Bluetooth Low Energy: lectura de la característica médica de tensiómetro y termómetro (servicio 0x1810) suscribiéndose a sus notificaciones.",
+        "Orden de los datos Bluetooth: no se conocía el orden de llegada de las mediciones, así que hubo que ordenarlos y conservar el más reciente.",
+        "Sincronización remota en una corrutina para no bloquear la interfaz, gestionando errores, conexión y ciclo de vida de la actividad.",
+        "Modelo de datos en SQLite con tablas de personas, instituciones, datos de salud y pulseras, y hash de credenciales con BCrypt."
+      ],
+      "enlaces": [{ "etiqueta": "Repositorio", "url": "https://github.com/MarioMunPeq/MyGNUHealthApp" }],
+      "orden": 5
+    },
+    {
+      "id": "recomendador-campeones",
+      "campeon": "Yasuo",
+      "titulo": "Recomendador de Campeones",
+      "claim": "Machine learning entrenado con datos reales de la API de Riot Games",
+      "descripcion": "Proyecto final del bootcamp de Qualentum: un modelo de machine learning en Python que recomienda campeones de League of Legends según tu estilo de juego, entrenado con datos reales de partidas obtenidos de la API de Riot Games. Random Forest con búsqueda en rejilla, validación cruzada y SMOTE para equilibrar las clases.",
+      "rol": "Proyecto final de bootcamp",
+      "anio": "2025",
+      "estado": "Estable",
+      "stack": ["Python", "Jupyter Notebook", "pandas", "NumPy", "scikit-learn", "imblearn", "Riot Games API"],
+      "tags": ["python", "machine learning", "datos", "league of legends"],
+      "metricas": [
+        { "etiqueta": "Validación", "valor": "5 pliegues" },
+        { "etiqueta": "Balanceo", "valor": "SMOTE" },
+        { "etiqueta": "Nota", "valor": "Mención" }
+      ],
+      "highlights": [
+        "Límites de la API: la clave de Riot expira cada día y hay límites de tasa, lo que obligó a estructurar la recogida por lotes y manejar errores.",
+        "Datos desbalanceados: algunos campeones se jugaban mucho más que otros, así que hubo que aplicar SMOTE antes del entrenamiento.",
+        "Recomendación multiclase: para ordenar por probabilidad en vez de predecir una clase, se usa predict_proba en lugar de un clasificador binario.",
+        "Evaluación con accuracy, F1, ROC-AUC y log loss, más gráficas de EDA con matplotlib y seaborn."
+      ],
+      "enlaces": [{ "etiqueta": "Repositorio", "url": "https://github.com/MarioMunPeq/RecomendadorDeCampeones" }],
+      "orden": 6
+    },
+    {
+      "id": "repository-library",
+      "campeon": "Yone",
+      "titulo": "Repository Library",
+      "claim": "Portfolios temáticos presentados como productos de una tienda",
+      "descripcion": "Un hub con la distribución del cliente de escritorio de Steam que reúne varios portfolios temáticos de videojuegos y los abre como si fueran productos de una tienda. Cada proyecto tiene su ficha con descripción, capturas y actividad, y el panel de amigos se superpone como overlay sin romper el scroll del contenido que hay debajo.",
+      "rol": "Diseño y desarrollo completo",
+      "anio": "2026",
+      "estado": "Estable",
+      "stack": ["TypeScript", "React", "Vite", "HTML/CSS", "GitHub Pages"],
+      "tags": ["frontend", "replicación", "design system"],
+      "metricas": [
+        { "etiqueta": "Barras", "valor": "26/50/340/40 px" },
+        { "etiqueta": "Portfolios", "valor": "7" },
+        { "etiqueta": "Retos técnicos", "valor": "3" }
+      ],
+      "highlights": [
+        "Fidelidad de las medidas: cada barra, la sidebar y el área de contenido tienen medidas concretas del cliente original, y cualquier desvío se nota en pantalla.",
+        "Overlay sin desmontar: el panel de amigos se superpone en la esquina inferior derecha sin romper el scroll ni el estado del contenido de debajo.",
+        "Sin librerías de iconos: los iconos del cliente replicados con SVG en línea, legibles a 16 y 24 píxeles.",
+        "Buscador con filtro en la sidebar, con el estado de selección sincronizado con el contenido."
+      ],
+      "enlaces": [
+        { "etiqueta": "Demo", "url": "https://mariomunpeq.github.io/Repository-Library/" },
+        { "etiqueta": "Repositorio", "url": "https://github.com/MarioMunPeq/Repository-Library" }
+      ],
+      "orden": 7
+    },
+    {
+      "id": "papers-please",
+      "campeon": "Gwen",
+      "titulo": "Papers, Please Portfolio",
+      "claim": "Un puesto de fronteras hecho en web",
+      "descripcion": "Portfolio temático en clave Papers, Please: un puesto de fronteras donde revisas pasaportes, visados y documentos de solicitantes, decidiendo quién pasa y quién se queda fuera. La página de inicio funciona como un pasaporte profesional, con la experiencia laboral, los proyectos destacados y la formación presentados como documentos que inspeccionar.",
+      "rol": "Diseño y desarrollo completo",
+      "anio": "2026",
+      "estado": "Estable",
+      "stack": ["TypeScript", "JavaScript", "HTML", "CSS"],
+      "tags": ["frontend", "narrativa", "replicación"],
+      "metricas": [
+        { "etiqueta": "Documentos", "valor": "6 secciones" },
+        { "etiqueta": "Idiomas", "valor": "2" },
+        { "etiqueta": "Licencias", "valor": "3" }
+      ],
+      "highlights": [
+        "La experiencia profesional se lee como un permiso de trabajo y la formación como un visado de estudios.",
+        "Los proyectos como visados diplomáticos, con repositorio y demo enlazados en cada uno.",
+        "Los datos de contacto como sellos de inspección sobre una mesa de madera.",
+        "Idiomas, certificaciones e información adicional agrupados como registros de protocolo."
+      ],
+      "enlaces": [
+        { "etiqueta": "Demo", "url": "https://mariomunpeq.github.io/Papers-Please-Portfolio/" },
+        { "etiqueta": "Repositorio", "url": "https://github.com/MarioMunPeq/Papers-Please-Portfolio" }
+      ],
+      "orden": 8
+    },
+    {
+      "id": "minecraft",
+      "campeon": "Malphite",
+      "titulo": "Minecraft Portfolio",
+      "claim": "La trayectoria como un mundo jugable por builds",
+      "descripcion": "Portfolio temático construido como un mundo jugable en Minecraft: cada build cuenta un capítulo de la trayectoria como desarrollador. Los logros y avances de cada centro y cada empresa aparecen como nodos en un árbol de habilidades que se recorre de abajo arriba, y cada proyecto es una receta de crafteo con su patrón de ingredients.",
+      "rol": "Diseño y desarrollo completo",
+      "anio": "2026",
+      "estado": "En curso",
+      "stack": ["TypeScript", "JavaScript", "React", "HTML", "CSS"],
+      "tags": ["frontend", "narrativa", "replicación"],
+      "metricas": [
+        { "etiqueta": "Ediciones", "valor": "Java 1.21.8" },
+        { "etiqueta": "Capítulos", "valor": "7" },
+        { "etiqueta": "Habilidades", "valor": "5" }
+      ],
+      "highlights": [
+        "El árbol académico como árbol de habilidades: Teleco, Robótica y DAM con sus nodos y estados reales.",
+        "Cada empresa como un nodo de avances, con su período y su stack tecnológico.",
+        "Cada proyecto como una receta de crafteo con patrón de 3×3 que codifica el stack.",
+        "Habilidades blandas con nivel de 1 a 5 usando la escala de rareza de Minecraft."
+      ],
+      "enlaces": [
+        { "etiqueta": "Demo", "url": "https://mariomunpeq.github.io/Minecraft-Portfolio/" },
+        { "etiqueta": "Repositorio", "url": "https://github.com/MarioMunPeq/Minecraft-Portfolio" }
+      ],
+      "orden": 9
+    },
+    {
+      "id": "persona5",
+      "campeon": "TahmKench",
+      "titulo": "Persona 5 Royal",
+      "claim": "El CV convertido en una experiencia jugable",
+      "descripcion": "Portfolio personal desarrollado como un CV viviente con una estética inspirada en Persona 5: perfil, proyectos, experiencia, formación y contacto en una experiencia web interactiva y visual. Es la versión más ambiciosa del mismo contenido, y la que define el patrón que luego repetí en Minecraft, Repository Library, Vault Archive y Dungeon Archive.",
+      "rol": "Diseño y desarrollo completo",
+      "anio": "2026",
+      "estado": "Estable",
+      "stack": ["React", "TypeScript", "HTML", "CSS", "Vite"],
+      "tags": ["frontend", "narrativa", "replicación"],
+      "metricas": [
+        { "etiqueta": "Estrellas", "valor": "1" },
+        { "etiqueta": "Portfolios", "valor": "1 de 7" },
+        { "etiqueta": "Repos", "valor": "20" }
+      ],
+      "highlights": [
+        "El CV como navegación: cada sección es una pantalla con su propia entrada y transición.",
+        "Las estadísticas del personaje con valores aproximados y honestos, sin presentarse como datos objetivos.",
+        "Tipografía y color derivados de la estética del juego, con contraste suficiente para leer el contenido real.",
+        "El portfolio que fijó el patrón de replicar una interfaz conocida con contenido verdadeiro."
+      ],
+      "enlaces": [
+        { "etiqueta": "Demo", "url": "https://mariomunpeq.is-a.dev/" },
+        { "etiqueta": "Repositorio", "url": "https://github.com/MarioMunPeq/portfolio-persona5" }
+      ],
+      "orden": 10
+    }
+  ],
+  "materiales": [
+    {
+      "id": "typescript",
+      "nombre": "TypeScript",
+      "categoria": "Lenguajes",
+      "descripcion": "El lenguaje con el que más trabajo: es el que sostiene este portfolio y el resto de webs que he publicado.",
+      "icono": "/assets/perks/runes/legendalacrity.png",
+      "nivel": 92,
+      "destacado": true
+    },
+    {
+      "id": "javascript",
+      "nombre": "JavaScript",
+      "categoria": "Lenguajes",
+      "descripcion": "El lenguaje base de todo el frontend que hago, y el que usa el portfolio de Papers Please.",
+      "icono": "/assets/perks/runes/presstheattack.png",
+      "nivel": 90,
+      "destacado": true
+    },
+    {
+      "id": "python",
+      "nombre": "Python",
+      "categoria": "Lenguajes",
+      "descripcion": "Ingesta de datos, scripts de operación y el pipeline de Euromario. También el lenguaje del bootcamp de IA.",
+      "icono": "/assets/perks/runes/summonaery.png",
+      "nivel": 88,
+      "destacado": true
+    },
+    {
+      "id": "java",
+      "nombre": "Java",
+      "categoria": "Lenguajes",
+      "descripcion": "Del grado superior de DAM y del stack del trabajo actual en Cognizant con Pega.",
+      "icono": "/assets/perks/runes/conqueror.png",
+      "nivel": 74,
+      "destacado": false
+    },
+    {
+      "id": "kotlin",
+      "nombre": "Kotlin",
+      "categoria": "Lenguajes",
+      "descripcion": "El lenguaje del TFG: la aplicación Android nativa de gestión de salud está escrita enteramente en Kotlin.",
+      "icono": "/assets/perks/runes/electrocute.png",
+      "nivel": 80,
+      "destacado": true
+    },
+    {
+      "id": "csharp",
+      "nombre": "C#",
+      "categoria": "Lenguajes",
+      "descripcion": "De la parte de scripting de Unity y de la lectura del stack declarado en mi perfil profesional.",
+      "icono": "/assets/perks/runes/predator.png",
+      "nivel": 65,
+      "destacado": false
+    },
+    {
+      "id": "sql",
+      "nombre": "SQL",
+      "categoria": "Lenguajes",
+      "descripcion": "SQLite en el TFG, y el modelo de datos de las tablas de personas, instituciones y datos de salud.",
+      "icono": "/assets/perks/runes/gatheringstorm.png",
+      "nivel": 78,
+      "destacado": false
+    },
+    {
+      "id": "html-css",
+      "nombre": "HTML / CSS",
+      "categoria": "Lenguajes",
+      "descripcion": "La base de todas las réplicas: los iconos del cliente de Steam dibujados en SVG en línea, los grids de 4 px, los temas de acento.",
+      "icono": "/assets/perks/runes/scorch.png",
+      "nivel": 91,
+      "destacado": false
+    },
+    {
+      "id": "react",
+      "nombre": "React",
+      "categoria": "Interfaces",
+      "descripcion": "En casa, React para web. Los seis portfolios temáticos están escritos en React 19.",
+      "icono": "/assets/perks/runes/darkharvest.png",
+      "nivel": 90,
+      "destacado": true
+    },
+    {
+      "id": "threejs",
+      "nombre": "Three.js",
+      "categoria": "Interfaces",
+      "descripcion": "Escenas 3D del Cosmere Archive: la biblioteca y Aharietiam, con animaciones de extracción y paso de página.",
+      "icono": "/assets/perks/runes/hextechflashtraption.png",
+      "nivel": 72,
+      "destacado": false
+    },
+    {
+      "id": "gsap",
+      "nombre": "GSAP",
+      "categoria": "Interfaces",
+      "descripcion": "Animaciones del Cosmere Archive, sobre todo las transiciones entre páginas y el paso de página 3D.",
+      "icono": "/assets/perks/runes/celestialbody.png",
+      "nivel": 68,
+      "destacado": false
+    },
+    {
+      "id": "mapbox",
+      "nombre": "Mapbox GL",
+      "categoria": "Interfaces",
+      "descripcion": "El mapa del Pip-Boy. Estilo monocromo verde definido capa por capa en Mapbox Studio para que el mapa encaje con el fósforo de la interfaz.",
+      "icono": "/assets/perks/runes/mirrorshell.png",
+      "nivel": 70,
+      "destacado": false
+    },
+    {
+      "id": "css-arquitectura",
+      "nombre": "CSS moderno",
+      "categoria": "Interfaces",
+      "descripcion": "Container queries, cascada en capas, máscara de imagen para los iconos. Sin framework para lo que el navegador ya resuelve.",
+      "icono": "/assets/perks/runes/transcendence.png",
+      "nivel": 89,
+      "destacado": false
+    },
+    {
+      "id": "vite",
+      "nombre": "Vite",
+      "categoria": "Interfaces",
+      "descripcion": "Todos los portfolios se construyen en menos de un segundo. Arranque instantáneo y build con Rollup.",
+      "icono": "/assets/perks/runes/firststrike.png",
+      "nivel": 88,
+      "destacado": true
+    },
+    {
+      "id": "tailwind",
+      "nombre": "Tailwind CSS",
+      "categoria": "Interfaces",
+      "descripcion": "Sistema de estilos por utilidades en Dungeon Archive y Cosmere Archive, con tokens de acento configurables.",
+      "icono": "/assets/perks/runes/boneplating.png",
+      "nivel": 82,
+      "destacado": false
+    },
+    {
+      "id": "zustand",
+      "nombre": "Zustand",
+      "categoria": "Datos",
+      "descripcion": "Gestión del estado local en Dungeon Archive, con persistencia en localStorage y versionado del esquema.",
+      "icono": "/assets/perks/runes/guardian.png",
+      "nivel": 76,
+      "destacado": false
+    },
+    {
+      "id": "firebase",
+      "nombre": "Firebase",
+      "categoria": "Datos",
+      "descripcion": "Firestore para la copia de seguridad opcional de Dungeon Archive. El resto de la aplicación funciona sin conexión y sin cuenta.",
+      "icono": "/assets/perks/runes/treasurehunter.png",
+      "nivel": 72,
+      "destacado": false
+    },
+    {
+      "id": "liferay",
+      "nombre": "Liferay",
+      "categoria": "Plataformas",
+      "descripcion": "Desarrollo web en la Diputación de Valladolid, en el sector público.",
+      "icono": "/assets/perks/runes/unsealedspellbook.png",
+      "nivel": 75,
+      "destacado": false
+    },
+    {
+      "id": "odoo",
+      "nombre": "Odoo",
+      "categoria": "Plataformas",
+      "descripcion": "Desarrollo con Odoo en la Diputación de Valladolid.",
+      "icono": "/assets/perks/runes/suddenimpact.png",
+      "nivel": 73,
+      "destacado": false
+    },
+    {
+      "id": "pega",
+      "nombre": "Pega",
+      "categoria": "Plataformas",
+      "descripcion": "Desarrollo de soluciones empresariales en el trabajo actual, dentro del graduate program de Cognizant.",
+      "icono": "/assets/perks/runes/arcanecomet.png",
+      "nivel": 70,
+      "destacado": false
+    },
+    {
+      "id": "power-platform",
+      "nombre": "Power Platform",
+      "categoria": "Plataformas",
+      "descripcion": "Power Apps, Power BI y PI Vision en las prácticas con Michelin, sobre entornos industriales.",
+      "icono": "/assets/perks/runes/overgrowth.png",
+      "nivel": 71,
+      "destacado": false
+    },
+    {
+      "id": "android",
+      "nombre": "Android",
+      "categoria": "Plataformas",
+      "descripcion": "Kotlin, Jetpack, Navigation y Bluetooth LE en el TFG. Service worker y PWA en la web.",
+      "icono": "/assets/perks/runes/veteranaftershock.png",
+      "nivel": 79,
+      "destacado": false
+    },
+    {
+      "id": "scikit-learn",
+      "nombre": "Scikit-learn",
+      "categoria": "IA y datos",
+      "descripcion": "Random Forest con GridSearchCV y validación cruzada en el recomendador de campeones. SMOTE vía imbalanced-learn.",
+      "icono": "/assets/perks/runes/coupdegrace.png",
+      "nivel": 78,
+      "destacado": true
+    },
+    {
+      "id": "pandas",
+      "nombre": "Pandas",
+      "categoria": "IA y datos",
+      "descripcion": "Limpieza y modelado del dataset de partidas, incluida la conversión del rol categórico a numérico.",
+      "icono": "/assets/perks/runes/legendalacrity.png",
+      "nivel": 82,
+      "destacado": false
+    },
+    {
+      "id": "pytorch",
+      "nombre": "PyTorch",
+      "categoria": "IA y datos",
+      "descripcion": "Del bootcamp de 450 horas de Qualentum.",
+      "icono": "/assets/perks/runes/celestialbody.png",
+      "nivel": 66,
+      "destacado": false
+    },
+    {
+      "id": "ollama-groq",
+      "nombre": "Ollama / Groq",
+      "categoria": "IA y datos",
+      "descripcion": "Contrato de IA neutral en Euromario: Ollama local con respaldo en Groq, validación de salida estructurada y reintento.",
+      "icono": "/assets/perks/runes/summonaery.png",
+      "nivel": 74,
+      "destacado": false
+    },
+    {
+      "id": "git",
+      "nombre": "Git / GitHub",
+      "categoria": "Calidad",
+      "descripcion": "20 repositorios públicos desde diciembre de 2022. Historial legible, bisect sin miedo, y Actions como programador de tareas periódicas.",
+      "icono": "/assets/perks/runes/conqueror.png",
+      "nivel": 92,
+      "destacado": true
+    },
+    {
+      "id": "pytest",
+      "nombre": "pytest",
+      "categoria": "Calidad",
+      "descripcion": "265 casos que cubren el núcleo del pipeline de Euromario, más pruebas unitarias sobre las operaciones críticas del TFG.",
+      "icono": "/assets/perks/runes/suddenimpact.png",
+      "nivel": 80,
+      "destacado": true
+    },
+    {
+      "id": "pwa",
+      "nombre": "PWA / Service worker",
+      "categoria": "Calidad",
+      "descripcion": "Estrategia de caché y funcionamiento completo sin conexión, sin requerir cuenta.",
+      "icono": "/assets/perks/runes/firststrike.png",
+      "nivel": 81,
+      "destacado": false
+    },
+    {
+      "id": "a11y",
+      "nombre": "Accesibilidad",
+      "categoria": "Calidad",
+      "descripcion": "WCAG AA como requisito. En el Cosmere Archive el texto 3D se proyecta como overlay HTML precisamente para que siga siendo seleccionable y accesible.",
+      "icono": "/assets/perks/runes/mirrorshell.png",
+      "nivel": 85,
+      "destacado": true
+    },
+    {
+      "id": "web-audio",
+      "nombre": "Web Audio API",
+      "categoria": "Interfaces",
+      "descripcion": "La radio del Pip-Boy: dial, espectro de barras y dos emisoras que sobreviven al desmontaje del módulo.",
+      "icono": "/assets/perks/runes/arcanecomet.png",
+      "nivel": 74,
+      "destacado": false
+    },
+    {
+      "id": "d3-force",
+      "nombre": "d3-force",
+      "categoria": "Interfaces",
+      "descripcion": "Grafo de fuerzas para las relaciones entre personajes del Cosmere Archive.",
+      "icono": "/assets/perks/runes/darkharvest.png",
+      "nivel": 70,
+      "destacado": false
+    },
+    {
+      "id": "figma",
+      "nombre": "Figma",
+      "categoria": "Calidad",
+      "descripcion": "Del stack declarado en mi perfil, junto a Office.",
+      "icono": "/assets/perks/runes/transcendence.png",
+      "nivel": 68,
+      "destacado": false
+    },
+    {
+      "id": "unity-godot",
+      "nombre": "Unity / Godot",
+      "categoria": "Interfaces",
+      "descripcion": "Motores de videojuegos. En casa, como forma de aprender cosas que no se tocan en el trabajo.",
+      "icono": "/assets/perks/runes/presstheattack.png",
+      "nivel": 62,
+      "destacado": false
+    }
+  ],
+  "enlaces": [
+    {
+      "id": "github",
+      "nombre": "GitHub",
+      "handle": "MarioMunPeq",
+      "url": "https://github.com/MarioMunPeq",
+      "icono": "github",
+      "estado": "En linea"
+    },
+    {
+      "id": "linkedin",
+      "nombre": "LinkedIn",
+      "handle": "Desarrollador web · DAM",
+      "url": "https://www.linkedin.com/in/mario-mu%C3%B1oz-peque%C3%B1o/",
+      "icono": "linkedin",
+      "estado": "En linea"
+    },
+    {
+      "id": "web",
+      "nombre": "Sitio",
+      "handle": "mariomunpeq.is-a.dev",
+      "url": "https://mariomunpeq.is-a.dev/",
+      "icono": "web",
+      "estado": "En linea"
+    },
+    {
+      "id": "correo",
+      "nombre": "Correo",
+      "handle": "snakeyes271101@gmail.com",
+      "url": "mailto:snakeyes271101@gmail.com",
+      "icono": "mail",
+      "estado": "En linea"
+    },
+    {
+      "id": "persona5",
+      "nombre": "Portfolio Persona 5",
+      "handle": "CV viviente",
+      "url": "https://mariomunpeq.is-a.dev/",
+      "icono": "cv",
+      "estado": "En linea"
+    },
+    {
+      "id": "papers",
+      "nombre": "Portfolio Papers, Please",
+      "handle": "puesto de fronteras",
+      "url": "https://mariomunpeq.github.io/Papers-Please-Portfolio/",
+      "icono": "web",
+      "estado": "Ocupado"
+    }
+  ],
+  "contacto": {
+    "destinatario": "snakeyes271101@gmail.com",
+    "asunto": "Contacto desde el portfolio"
+  }
+}

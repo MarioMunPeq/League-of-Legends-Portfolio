@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 16 18" style="enable-background:new 0 0 16 18;" xml:space="preserve">
+  <path d="M16,3h-2c0,0-1,2-3,0l-1,1c0.8,0.9,1.5,1.9,2,3L16,3z" />
+  <polygon points="10,4 8,2 6,4 8,8" />
+  <path d="M15,6l-4,2v1L9,8l1,2l-1,1l-1,4l-1-4l-1-1l1-2L5,9V8L1,6c0,0,2,2,2,3l1,1H2.7L2,12h2l1-1l1,1l1,5l1,1l1-1l1-5l1-1l1,1h2 l-0.7-2H12l1-1C13,8,15,6,15,6z" />
+  <path d="M6,4L5,3C3,5,2,3,2,3H0l4,4C4.5,5.9,5.2,4.9,6,4z" />
+</svg>
