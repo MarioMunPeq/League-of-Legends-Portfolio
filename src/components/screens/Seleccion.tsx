@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { asset, champSpell, champSquare } from '../../data/assets'
 import { GoldButton } from '../ui/GoldButton'
 import { SearchField } from '../ui/Fields'
 import { Icon } from '../ui/Icon'
@@ -9,16 +10,16 @@ import './screens.css'
 
 /** El equipo de la partida: los cuatro aliados con su rol asignado. */
 const ALIADOS = [
-  { rol: 'Inferior', nombre: 'MISS FORTUNE', iconoPosicion: '/assets/ui/roles/position-bottom.svg' },
-  { rol: 'Jungla', nombre: 'LEE SIN', iconoPosicion: '/assets/ui/roles/position-jungle.svg' },
-  { rol: 'Superior', nombre: 'NASUS', iconoPosicion: '/assets/ui/roles/position-top.svg' },
-  { rol: 'Apoyo', nombre: 'ZYRA', iconoPosicion: '/assets/ui/roles/position-utility.svg' },
+  { rol: 'Inferior', nombre: 'MISS FORTUNE', iconoPosicion: asset("assets/ui/roles/position-bottom.svg") },
+  { rol: 'Jungla', nombre: 'LEE SIN', iconoPosicion: asset("assets/ui/roles/position-jungle.svg") },
+  { rol: 'Superior', nombre: 'NASUS', iconoPosicion: asset("assets/ui/roles/position-top.svg") },
+  { rol: 'Apoyo', nombre: 'ZYRA', iconoPosicion: asset("assets/ui/roles/position-utility.svg") },
 ]
 
 /** Dos ramas del arbol de estilos, como en la ficha del jugador. */
 const RUNAS = [
-  '/assets/perks/trees/7200_domination.png',
-  '/assets/perks/trees/7204_resolve.png',
+  asset("assets/perks/trees/7200_domination.png"),
+  asset("assets/perks/trees/7204_resolve.png"),
 ]
 
 const INVOCADORES = ['SummonerFlash', 'SummonerDot']
@@ -77,7 +78,7 @@ export function Seleccion({ proyectos, restantes, onAbrir, onNavegar }: Props) {
           </span>
           <span className={`ally__portrait ${proyectoElegido ? '' : 'ally__portrait--empty'}`}>
             {proyectoElegido ? (
-              <img src={`/assets/champions/square/${proyectoElegido.campeon}.png`} alt="" />
+              <img src={champSquare(proyectoElegido.campeon)} alt="" />
             ) : (
               '?'
             )}
@@ -92,7 +93,7 @@ export function Seleccion({ proyectos, restantes, onAbrir, onNavegar }: Props) {
           <div key={a.nombre} className="ally">
             <span className="ally__slot">
               <img className="ally__rune" src={a.iconoPosicion} alt="" />
-              <img className="ally__rune" src="/assets/ui/roles/blue-role-swapping-icon.svg" alt="" />
+              <img className="ally__rune" src={asset("assets/ui/roles/blue-role-swapping-icon.svg")} alt="" />
             </span>
             <span className="ally__portrait ally__portrait--empty">+</span>
             <span className="ally__text">
@@ -148,7 +149,7 @@ export function Seleccion({ proyectos, restantes, onAbrir, onNavegar }: Props) {
               {...sound}
             >
               <img
-                src={`/assets/champions/square/${champ}.png`}
+                src={champSquare(champ)}
                 alt={champ}
                 loading={i > 12 ? 'lazy' : 'eager'}
               />
@@ -161,7 +162,7 @@ export function Seleccion({ proyectos, restantes, onAbrir, onNavegar }: Props) {
           {proyectoElegido ? (
             <span className="seleccion__chosen">
               <img
-                src={`/assets/champions/square/${proyectoElegido.campeon}.png`}
+                src={champSquare(proyectoElegido.campeon)}
                 alt=""
               />
               <span className="seleccion__chosen-name">{proyectoElegido.titulo}</span>
@@ -176,7 +177,7 @@ export function Seleccion({ proyectos, restantes, onAbrir, onNavegar }: Props) {
             {INVOCADORES.map((s) => (
               <img
                 key={s}
-                src={`/assets/spells/${s}.png`}
+                src={champSpell(`${s}.png`)}
                 alt={s}
                 style={{ width: '2rem', height: '2rem' }}
               />

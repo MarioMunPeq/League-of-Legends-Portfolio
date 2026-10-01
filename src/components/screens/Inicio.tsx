@@ -1,8 +1,10 @@
 import { useMemo } from 'react'
+import { champSplash } from '../../data/assets'
 import { GoldButton } from '../ui/GoldButton'
 import type { PortfolioData } from '../../data/types'
 import type { Route } from '../../hooks/useHashRoute'
 import { useAudio } from '../../hooks/useAudio'
+import './screens.css'
 
 type Props = {
   data: PortfolioData
@@ -14,7 +16,7 @@ export function Inicio({ data, onNavegar }: Props) {
   const { hero, perfil, proyectos, hitos } = data
 
   const fondo = useMemo(
-    () => `/assets/champions/splash/${hero.champFavorito}.jpg`,
+    () => champSplash(hero.champFavorito),
     [hero.champFavorito],
   )
 

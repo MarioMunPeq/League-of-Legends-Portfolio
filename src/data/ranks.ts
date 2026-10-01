@@ -1,3 +1,4 @@
+import { asset } from './assets'
 import type { Rango } from './types'
 
 /**
@@ -39,16 +40,16 @@ export function rankLabel(rango: Rango): string {
 
 /** Insignia de rango junto al nivel, como en la barra superior. */
 export function crestPath(rango: Rango): string {
-  return `/assets/ranked/crest/${RANKS[rango].slug}.svg`
+  return asset(`assets/ranked/crest/${RANKS[rango].slug}.svg`)
 }
 
-export const UNRANKED_CREST = '/assets/ranked/crest/unranked.svg'
+export const UNRANKED_CREST = asset('assets/ranked/crest/unranked.svg')
 
 /** Marco hexagonal del perfil, dibujado sobre el icono de cuenta. */
-export const PROFILE_FRAME = '/assets/ranked/frame/ranked-emblem.png'
+export const PROFILE_FRAME = asset('assets/ranked/frame/ranked-emblem.png')
 
-/** Marco sin rango, para cuando la cuenta Todavia no tiene insignia. */
-export const PROFILE_FRAME_NEUTRAL = '/assets/ranked/frame/ranked-crest-placeholder.png'
+/** Marco sin rango, para cuando la cuenta todavia no tiene insignia. */
+export const PROFILE_FRAME_NEUTRAL = asset('assets/ranked/frame/ranked-crest-placeholder.png')
 
 /** Listones de la ficha del jugador en el lobby. */
-export const MEMBER_BANNER = '/assets/ranked/frame/member-banner.png'
+export const MEMBER_BANNER = asset('assets/ranked/frame/member-banner.png')

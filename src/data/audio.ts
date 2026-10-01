@@ -1,3 +1,5 @@
+import { asset } from './assets'
+
 export type SoundName =
   | 'hover'
   | 'click'
@@ -25,7 +27,7 @@ const templates = new Map<SoundName, HTMLAudioElement>()
 function ensure(): void {
   if (typeof Audio === 'undefined' || templates.size > 0) return
   for (const [name, file] of Object.entries(FILES) as [SoundName, string][]) {
-    const audio = new Audio(`/audio/${file}`)
+    const audio = new Audio(asset(`audio/${file}`))
     audio.preload = 'auto'
     templates.set(name, audio)
   }

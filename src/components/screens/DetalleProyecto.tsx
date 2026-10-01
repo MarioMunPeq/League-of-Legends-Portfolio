@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { champPassive, champSpell, champSplash } from '../../data/assets'
 import { GoldButton } from '../ui/GoldButton'
 import { Icon } from '../ui/Icon'
 import type { Proyecto } from '../../data/types'
@@ -40,7 +41,7 @@ export function DetalleProyecto({ proyecto, onVolver, onNavegar }: Props) {
   }
 
   const champ = getChamp(proyecto.campeon)
-  const splash = `/assets/champions/splash/${proyecto.campeon}.jpg`
+  const splash = champSplash(proyecto.campeon)
 
   const copiarEnlace = async () => {
     try {
@@ -95,7 +96,7 @@ export function DetalleProyecto({ proyecto, onVolver, onNavegar }: Props) {
             </p>
             <div className="ability-row">
               <figure className="ability ability--passive">
-                <img src={`/assets/passives/${champ?.passive.icon}`} alt="" />
+                <img src={champPassive(champ?.passive.icon ?? "")} alt="" />
                 <figcaption>
                   <span className="ability__name">{champ?.passive.name ?? 'Pasiva'}</span>
                   <span className="ability__desc">{champ?.passive.description}</span>
@@ -103,7 +104,7 @@ export function DetalleProyecto({ proyecto, onVolver, onNavegar }: Props) {
               </figure>
               {champ?.spells.map((spell, i) => (
                 <figure className="ability" key={spell.name}>
-                  <img src={`/assets/spells/${spell.icon}`} alt="" />
+                  <img src={champSpell(spell.icon)} alt="" />
                   <figcaption>
                     <span className="ability__key">{['Q', 'W', 'E', 'R'][i]}</span>
                     <span className="ability__name">{spell.name}</span>

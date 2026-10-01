@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { asset, champSquare } from '../../data/assets'
 import { SearchField, SelectField } from '../ui/Fields'
 import { TabStrip } from '../ui/TabStrip'
 import { useButtonSound } from '../../hooks/useAudio'
@@ -161,13 +162,13 @@ export function Coleccion({ proyectos, mastery, onAbrir }: Props) {
                   >
                     <div className="champ-card__art">
                       <img
-                        src={`/assets/champions/square/${proyecto.campeon}.png`}
+                        src={champSquare(proyecto.campeon)}
                         alt={proyecto.campeon}
                         loading="lazy"
                       />
                       <img
                         className="champ-card__mastery"
-                        src="/assets/mastery/mastery-mark.png"
+                        src={asset("assets/mastery/mastery-mark.png")}
                         alt=""
                       />
                       <span className="champ-card__level">

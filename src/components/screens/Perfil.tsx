@@ -1,7 +1,9 @@
+import { champSplash } from '../../data/assets'
 import { crestPath, rankLabel } from '../../data/ranks'
-import type { PortfolioData } from '../../data/types'
 import { Icon } from '../ui/Icon'
 import type { IconName } from '../ui/Icon'
+import type { PortfolioData } from '../../data/types'
+import './screens.css'
 
 const HITO_ICONS = ['crown', 'spark', 'shield', 'play'] as const satisfies readonly IconName[]
 
@@ -18,7 +20,7 @@ export function Perfil({ data }: Props) {
     <>
       <div className="perfil__banner">
         <img
-          src={`/assets/champions/splash/${portada}.jpg`}
+          src={champSplash(portada)}
           alt={`Arte de ${portada} como fondo de la ficha`}
         />
         <div className="perfil__banner-fade" />

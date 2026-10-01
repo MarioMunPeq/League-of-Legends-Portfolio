@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Icon } from '../ui/Icon'
 import { useButtonSound } from '../../hooks/useAudio'
+import { asset } from '../../data/assets'
 import type { EnlaceSocial } from '../../data/types'
 import './chrome.css'
 
@@ -57,7 +58,7 @@ export function SocialPanel({ enlaces }: Props) {
             >
               <span className="social__avatar">
                 {enlace.estado === 'En linea' ? (
-                  <img src={`/assets/icons/profile/${AVATARS[i % AVATARS.length]}.jpg`} alt="" />
+                  <img src={asset(`assets/icons/profile/${AVATARS[i % AVATARS.length]}.jpg`)} alt="" />
                 ) : (
                   <Icon name={enlace.icono} size={18} className="social__avatar--empty" />
                 )}

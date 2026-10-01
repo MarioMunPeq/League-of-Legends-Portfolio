@@ -4,6 +4,7 @@ import { GoldButton } from '../ui/GoldButton'
 import { useAudio, useButtonSound } from '../../hooks/useAudio'
 import type { Route } from '../../hooks/useHashRoute'
 import type { Perfil } from '../../data/types'
+import { asset } from '../../data/assets'
 import { crestPath } from '../../data/ranks'
 import './chrome.css'
 
@@ -83,14 +84,14 @@ export function TopBar({ route, perfil, onNavigate }: Props) {
 
         <div className="top__wallet">
           <span className="top__wallet-row">
-            <img src="/assets/ui/currency/icon-be-150.png" alt="" />
+            <img src={asset("assets/ui/currency/icon-be-150.png")} alt="" />
             20
             <span className="chip chip--gold" style={{ marginLeft: '0.25rem' }}>
               +
             </span>
           </span>
           <span className="top__wallet-row">
-            <img src="/assets/ui/currency/icon-rp-32.png" alt="" />
+            <img src={asset("assets/ui/currency/icon-rp-32.png")} alt="" />
             147 MIL
           </span>
         </div>

@@ -35,9 +35,16 @@ function walk(dir) {
 walk(SRC)
 scan(readFileSync(join(root, 'index.html'), 'utf8'))
 
-// las rutas con ${...} son plantillas: se validan abajo con valores reales
-const literal = [...refs].filter((r) => !r.endsWith('-') && !r.endsWith('/'))
-const templates = [...refs].filter((r) => r.endsWith('-') || r.endsWith('/'))
+/**
+ * Solo cuentan las rutas completas. Las de functions/assets.ts son
+ * plantillas a proposito (asset("assets/...") se resuelve en runtime) y las
+ * que terminan en guion son prefijos de plantilla.
+ */
+const isTemplate = (r) =>
+  r.endsWith('-') || r.endsWith('/') || r.includes('-${') || r.includes('/...')
+
+const literal = [...refs].filter((r) => !isTemplate(r))
+const templates = [...refs].filter(isTemplate)
 
 const problems = []
 const okCount = literal.filter((ref) => exists(join(PUBLIC, ref))).length
