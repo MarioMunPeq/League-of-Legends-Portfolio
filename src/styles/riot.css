@@ -147,37 +147,48 @@
   width: 100%;
 }
 
-/* el boton JUGAR de la barra superior, con plinto cian */
+/*
+ * El boton JUGAR de la barra superior.
+ *
+ * El cliente no lo dibuja con CSS: lo escala con el recorte. Ojo con cual de
+ * los dos hay que usar: `play-button-lobby-*` tiene los cantos rectos y es el
+ * de la sala; el de la barra superior es `play-button-*`, con los cantos
+ * inclinados, que es de donde sale el paralelogramo de la captura.
+ *
+ * El recorte es opaco en el centro (rgb 30,35,40) y transparente en los
+ * bordes, asi que estirarlo con background-size conserva el dibujo sin
+ * necesidad de un nueve-tramos. Proporcion tomada del cliente: la botonera
+ * ocupa ~48% del alto de la barra.
+ */
 .btn--play {
-  padding: 0.625rem 2.25rem 0.625rem 1.5rem;
-  font-size: 1.0625rem;
-  letter-spacing: 0.12em;
+  --play-art: url('/assets/ui/buttons/play-button-default.png');
+  min-width: 10.5rem;
+  height: 2.75rem;
+  padding: 0 1.75rem 0 0.75rem;
+  background-image: var(--play-art);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  border: 0;
+  font-family: 'Beaufort', serif;
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
   color: var(--ink-bright);
-  background:
-    linear-gradient(90deg, rgba(5, 150, 170, 0.35) 0%, rgba(6, 17, 28, 0.9) 60%);
-  border: 1px solid var(--cyan);
-  box-shadow:
-    0 0 1.25rem var(--cyan-glow),
-    inset 0 0 1.5rem rgba(5, 150, 170, 0.18);
-}
-
-.btn--play::after {
-  content: '';
-  position: absolute;
-  right: -1px;
-  top: 50%;
-  width: 1.25rem;
-  height: 1.25rem;
-  transform: translateY(-50%) skewX(-18deg);
-  background: linear-gradient(90deg, rgba(5, 150, 170, 0.9) 0%, rgba(35, 168, 184, 0.2) 100%);
+  text-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.9);
 }
 
 .btn--play:hover:not(:disabled) {
+  --play-art: url('/assets/ui/buttons/play-button-hover.png');
   color: #fff;
-  border-color: var(--cyan-soft);
-  box-shadow:
-    0 0 2rem var(--cyan-glow),
-    inset 0 0 2rem rgba(5, 150, 170, 0.3);
+}
+
+.btn--play:active:not(:disabled) {
+  --play-art: url('/assets/ui/buttons/play-button-pressed.png');
+}
+
+.btn--play:focus-visible {
+  outline: 2px solid var(--gold-bright);
+  outline-offset: 2px;
 }
 
 /* ============================================================

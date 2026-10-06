@@ -8,6 +8,19 @@ import {
   CD_UKIT,
   CD_GAME_DATA,
   CD_FONTS,
+  CD_NAV,
+  CD_SOCIAL,
+  CD_LOOT,
+  NAV_ICONS,
+  SOCIAL_MASKS,
+  SOCIAL_SVGS,
+  LEAGUE_LOGO,
+  FIND_MATCH,
+  LEVEL_RING,
+  UIKIT_ICONS,
+  LOOT_CATEGORIES,
+  RARITY_ICONS,
+  GEM_BORDERS,
   MINI_CRESTS,
   RUNE_STYLES,
   RUNE_TREES,
@@ -327,8 +340,7 @@ async function fetchMastery() {
 }
 
 async function fetchUi() {
-  const nav = ['collections', 'loot', 'profile', 'store']
-  for (const n of nav) {
+  for (const n of NAV_ICONS) {
     await download(`${CD_UI}/nav-icon-${n}.svg`, `ui/nav/nav-icon-${n}.svg`)
   }
 
@@ -479,6 +491,52 @@ async function fetchUi() {
   await download(`${CD_UI}/ranked-intro-background.jpg`, `backgrounds/ranked-intro.jpg`)
 }
 
+/**
+ * Chrome del cliente: los iconos de la barra superior, las mascaras del panel
+ * social, el logo, el boton de buscar partida, el anillo de nivel y los iconos
+ * de categoria de la armeria. Sin esto la interfaz se parece, pero no es la del
+ * cliente: los iconos dibujados a mano se notan.
+ */
+async function fetchChrome() {
+  for (const l of LEAGUE_LOGO) {
+    await download(`${CD_NAV}/${l}`, `ui/chrome/${l.split('/').pop()}`)
+  }
+
+  for (const m of SOCIAL_MASKS) {
+    await download(`${CD_SOCIAL}/${m}`, `ui/social/${m}`)
+  }
+  for (const s of SOCIAL_SVGS) {
+    await download(`${CD_SOCIAL}/${s}`, `ui/social/${s}`)
+  }
+  await download(`${CD_SOCIAL}/social_panel_level_ring.png`, `ui/social/level-ring.png`)
+
+  for (const b of FIND_MATCH) {
+    await download(`${CD_UI}/buttons/${b}`, `ui/buttons/${b}`)
+  }
+
+  for (const r of LEVEL_RING) {
+    await download(`${CD_UI}/uikit/themed-level-ring/${r}`, `ui/level-ring/${r}`)
+  }
+
+  for (const i of UIKIT_ICONS) {
+    await download(`${CD_UKIT}/images/${i}`, `ui/uikit-icons/${i}`)
+  }
+
+  for (const c of LOOT_CATEGORIES) {
+    await download(`${CD_LOOT}/assets/category_icons/${c}.png`, `ui/loot/category-${c}.png`)
+  }
+
+  for (const n of RARITY_ICONS) {
+    await download(`${CD_LOOT}/assets/rarity_icons/rarity${n}.png`, `ui/rarity/rarity${n}.png`)
+  }
+
+  for (const g of GEM_BORDERS) {
+    await download(`${CD_UI}/rarity/gem-borders/${g}.svg`, `ui/rarity/gem-${g}.svg`)
+  }
+
+  await download(`${CD_LOOT}/assets/tray_icons/loot.svg`, `ui/loot/tray-loot.svg`)
+}
+
 async function fetchRunes() {
   for (const style of RUNE_STYLES) {
     await download(
@@ -622,6 +680,7 @@ async function main() {
   await fetchRanked()
   await fetchMastery()
   await fetchUi()
+  await fetchChrome()
   await fetchRunes()
   await fetchItems()
   await fetchProfileIcons()

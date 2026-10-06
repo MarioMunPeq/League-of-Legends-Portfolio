@@ -7,6 +7,114 @@ export const CD_UI = `${CD}/plugins/rcp-fe-lol-static-assets/global/default`
 export const CD_UKIT = `${CD}/plugins/rcp-fe-lol-uikit/global/default`
 export const CD_GAME_DATA = `${CD}/plugins/rcp-be-lol-game-data/global/default/v1`
 export const CD_FONTS = `${CD}/game/assets/ux/fonts`
+export const CD_NAV = `${CD}/plugins/rcp-fe-lol-navigation/global/default`
+export const CD_SOCIAL = `${CD}/plugins/rcp-fe-lol-social/global/default`
+export const CD_LOOT = `${CD}/plugins/rcp-fe-lol-loot/global/default`
+
+/**
+ * Iconos de navegacion del cliente, por seccion del portfolio. Son los mismos
+ * archivos que carga la League: `nav-icon-profile` para la ficha,
+ * `nav-icon-collections` para la coleccion de campeones, `nav-icon-loot` para
+ * la armeria y `nav-icon-store` para la tienda.
+ */
+export const NAV_ICONS = ['collections', 'loot', 'profile', 'store']
+
+/**
+ * Mascaras del panel social. El cliente las pinta como `mask-image`, no como
+ * `<img>`, para que el icono tome el color del texto que tiene encima.
+ */
+export const SOCIAL_MASKS = [
+  'add_person_mask.png',
+  'add_folder_mask.png',
+  'sort_mask.png',
+  'search_mask.png',
+  'mute_mask.png',
+  'check_mask.png',
+  'person_mask.png',
+]
+
+/** Iconos vectoriales del panel social, que ya traen su propio color. */
+export const SOCIAL_SVGS = ['message-mask.svg', 'profile-mask.svg', 'party-invite-mask.svg', 'ring.svg']
+
+/** Logo de League: la placa de la izquierda de la barra superior. */
+export const LEAGUE_LOGO = [
+  'activity-center/league-logo-rest.svg',
+  'activity-center/league-logo-hover.svg',
+  'activity-center/league-logo-active.svg',
+]
+
+/** Boton de buscar partida (CONFIRMAR) de la pantalla de modos. */
+export const FIND_MATCH = [
+  'find_match_default.png',
+  'find_match_hover.png',
+  'find_match_active.png',
+]
+
+/** Anillo de nivel de la ficha de jugador. */
+export const LEVEL_RING = [
+  'theme-1-ring.png',
+  'theme-1-simplified-border.png',
+  'theme-1-solid-border.png',
+]
+
+/**
+ * Iconos de categoria de la armeria. Son los mismos que usa la pantalla de
+ * artesanado del cliente: MATERIALES es `all`, CAMPEONES es `champion`,
+ * ASPECTOS es `skin`, EFIGIES es `eternals` y EMOTICONOS es `emote`.
+ */
+export const LOOT_CATEGORIES = [
+  'all',
+  'champion',
+  'chest',
+  'companion',
+  'emote',
+  'eternals',
+  'skin',
+  'summonericon',
+  'wardskin',
+]
+
+/** Cristales de rareza de maestria, uno por nivel de la ficha de campeon. */
+export const RARITY_ICONS = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+/**
+ * Iconos de interfaz que sustituyen a los que estaban dibujados a mano: los
+ * de ajustes, cerrar,ayuda y recargar salen de uikit y de los hextech.
+ */
+export const UIKIT_ICONS = [
+  'icon_settings.png',
+  'icon_add.png',
+  'icon_plus.png',
+  'icon_clearall.png',
+  'x-icon.png',
+  'close.png',
+  'refresh.png',
+  'caret.png',
+  'preview.svg',
+  'play-video.svg',
+]
+
+/**
+ * Marcos de gema de la coleccion de campeones. El cliente engarza cada ficha
+ * con una gema distinta segun el nivel de maestria; el marco lo aporta el
+ * cliente y dentro va el retrato del campeon.
+ */
+export const GEM_BORDERS = [
+  'knorarity',
+  '1',
+  '2',
+  '4',
+  '5',
+  '6',
+  '7',
+  '9',
+  'kepic',
+  'klegendary',
+  'kmythic',
+  'kultimate',
+  'kexalted',
+  'ktranscendent',
+]
 
 export const RANKS = [
   'iron',

@@ -521,24 +521,73 @@
   font-family: 'Beaufort', serif;
 }
 
-.perfil__riotid {
+/* el campo de busqueda de invocador que el cliente pone a la derecha de las pestanas */
+.perfil__lookup {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.375rem 1rem;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-sm);
+  background: rgba(1, 10, 19, 0.7);
+}
+
+.perfil__lookup-name {
   font-family: 'Beaufort', serif;
-  font-size: 0.8125rem;
+  font-size: 0.9375rem;
   font-weight: 700;
-  letter-spacing: 0.06em;
-  color: var(--ink-bright);
+  color: var(--ink-base);
 }
 
-.perfil__riotid-nivel {
-  font-size: 0.6875rem;
-  color: var(--ink-dim);
-}
-
-.perfil__tab-tool {
+.perfil__lookup-tag {
+  font-family: 'Beaufort', serif;
+  font-size: 0.875rem;
+  font-weight: 700;
   color: var(--ink-muted);
+}
+
+/* --- panel de identidad --- */
+
+.perfil__levelchip {
+  display: inline-grid;
+  place-items: center;
+  min-width: 2.75rem;
+  padding: 0.25rem 0.75rem;
+  margin-bottom: 0.5rem;
+  font-family: 'Beaufort', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ink-bright);
+  background: rgba(1, 10, 19, 0.85);
+  border: 1px solid var(--gold-deep);
+  clip-path: polygon(12% 0, 88% 0, 100% 50%, 88% 100%, 12% 100%, 0 50%);
+  font-variant-numeric: tabular-nums;
+}
+
+/* insignia con el marco real del cliente, como el retrato de la barra */
+.perfil__emblem {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 8.5rem;
+  height: 8.5rem;
+  margin: 0 auto 0.75rem;
+}
+
+.perfil__emblem-crest {
+  width: 5rem;
+  height: 5rem;
+  object-fit: contain;
+  filter: drop-shadow(0 0.5rem 1rem rgba(0, 0, 0, 0.7));
+}
+
+.perfil__emblem-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
 }
 
 /* las cinco cifras del cliente, con su emblema colgando */
@@ -615,35 +664,6 @@
   position: relative;
   padding: 1.25rem;
   text-align: center;
-}
-
-/* insignia centrada, con el nivel colgando debajo como en la ficha real */
-.perfil__emblem {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: 7rem;
-  height: 7rem;
-  margin: 0 auto 0.5rem;
-}
-
-.perfil__emblem-crest {
-  width: 6rem;
-  height: 6rem;
-  filter: drop-shadow(0 0.5rem 1rem rgba(0, 0, 0, 0.6));
-}
-
-.perfil__level {
-  position: absolute;
-  left: 50%;
-  bottom: -0.75rem;
-  transform: translateX(-50%);
-  padding: 0.125rem 0.5rem;
-  font-family: 'Beaufort', serif;
-  font-weight: 700;
-  color: var(--ink-on-gold);
-  background: linear-gradient(180deg, var(--gold-bright), var(--gold-deep));
-  border-radius: 2px;
 }
 
 .perfil__name {
@@ -846,6 +866,8 @@
   grid-template-columns: 17rem minmax(0, 1fr);
   gap: 2rem;
   align-items: start;
+  /* el halo azul de la coleccion del cliente */
+  background: radial-gradient(ellipse at 55% 0%, rgba(20, 62, 122, 0.28) 0%, transparent 60%);
 }
 
 .coleccion > * {
@@ -956,8 +978,8 @@
 
 .champ-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
-  gap: 1.5rem 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
+  gap: 1.75rem 1.25rem;
 }
 
 .champ-card {
@@ -1006,26 +1028,34 @@
   transform: scale(1.06);
 }
 
-/* franja inferior con la insignia de maestría, como en la colección del cliente */
+/* franja inferior con la cifra de maestría, como en la colección del cliente */
 .champ-card__foot {
   position: absolute;
   inset: auto 0 0 0;
   z-index: 2;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  height: 2.5rem;
+  justify-content: flex-end;
+  height: 2.25rem;
   padding: 0 0.5rem;
-  background: linear-gradient(180deg, rgba(1, 10, 19, 0.25), rgba(1, 10, 19, 0.9));
+  background: linear-gradient(180deg, rgba(1, 10, 19, 0.1), rgba(1, 10, 19, 0.92));
 }
 
-/* el sello de maestría sobresale por encima del marco, abajo a la izquierda */
-.champ-card__mastery {
-  width: 3rem;
-  height: 3rem;
-  margin-bottom: 0.75rem;
+/*
+ * La gema del cliente cuelga de la esquina inferior izquierda y sobresale del
+ * marco. Los `gem-borders` son de 48x20: escalados a la mitad del ancho de la
+ * ficha, no al centro ni a todo el alto.
+ */
+.champ-card__gem {
+  position: absolute;
+  left: 0.5rem;
+  bottom: 1.25rem;
+  z-index: 3;
+  width: 4.5rem;
+  height: 1.875rem;
   object-fit: contain;
-  filter: drop-shadow(0 0.25rem 0.5rem rgba(0, 0, 0, 0.8));
+  pointer-events: none;
+  filter: drop-shadow(0 0.25rem 0.375rem rgba(0, 0, 0, 0.9));
 }
 
 .champ-card__level {
@@ -1088,6 +1118,84 @@
 /* ============================================================
    Materiales
    ============================================================ */
+
+/* pantalla con carril de categorias a la izquierda, como la del cliente */
+.screen--rail {
+  display: grid;
+  grid-template-columns: 3.75rem minmax(0, 1fr);
+  gap: 0;
+  padding-left: 0;
+}
+
+/* tira vertical de categorias: el activo lleva la barra de oro a la izquierda */
+.rail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.75rem 0;
+  background: linear-gradient(90deg, rgba(4, 12, 21, 0.95), rgba(10, 22, 34, 0.7));
+  border-right: 1px solid var(--line-hair);
+}
+
+.rail__item {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--radius-sm);
+  transition: background var(--t-fast) var(--ease-out);
+}
+
+.rail__item::before {
+  content: '';
+  position: absolute;
+  left: -0.75rem;
+  top: 50%;
+  width: 3px;
+  height: 0;
+  transform: translateY(-50%);
+  background: var(--gold);
+  transition: height var(--t-med) var(--ease-out);
+}
+
+.rail__item--on::before {
+  height: 2rem;
+}
+
+.rail__item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.rail__item img {
+  width: 1.75rem;
+  height: 1.75rem;
+  object-fit: contain;
+  opacity: 0.55;
+  transition: opacity var(--t-fast) var(--ease-out);
+}
+
+.rail__item:hover img,
+.rail__item--on img {
+  opacity: 1;
+}
+
+.rail__help {
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  font-family: 'Beaufort', serif;
+  font-size: 0.875rem;
+  color: var(--ink-dim);
+  border: 1px solid var(--line-hair);
+  border-radius: 50%;
+}
+
+.rail__spacer {
+  flex: 1;
+}
 
 /* cifras enmarcadas con esquinas de oro, como la caja de maestría del cliente */
 .framed-stat {
@@ -1191,12 +1299,26 @@
 }
 
 .arsenal__group h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   padding-bottom: 0.5rem;
   margin-bottom: 0.75rem;
+  font-family: 'Beaufort', serif;
   font-size: 0.8125rem;
+  font-weight: 700;
   letter-spacing: 0.14em;
+  text-transform: uppercase;
   color: var(--gold);
   border-bottom: 1px solid var(--line-hair);
+}
+
+/* el icono de categoria es el del cliente: 20 px, al lado del titulo */
+.arsenal__cat-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+  object-fit: contain;
 }
 
 .arsenal__items {
@@ -1370,7 +1492,25 @@
   border-radius: var(--radius-sm);
 }
 
+/* el fondo de montañas de la pantalla de modos del cliente */
+.jugar__bg {
+  position: absolute;
+  inset: 3.25rem 0 0 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(4, 12, 21, 0.75) 0%, transparent 30%, rgba(4, 12, 21, 0.9) 100%),
+    radial-gradient(ellipse at 20% 100%, rgba(5, 150, 170, 0.12) 0%, transparent 55%),
+    conic-gradient(from 210deg at 30% 115%, transparent 0deg, rgba(9, 30, 48, 0.9) 25deg, transparent 50deg),
+    conic-gradient(from 200deg at 62% 120%, transparent 0deg, rgba(7, 24, 40, 0.9) 22deg, transparent 46deg),
+    conic-gradient(from 190deg at 85% 115%, transparent 0deg, rgba(11, 34, 54, 0.85) 26deg, transparent 52deg);
+}
+
+.jugar {
+  position: relative;
+}
+
 .jugar__modes {
+  position: relative;
   display: flex;
   align-items: stretch;
   border-bottom: 1px solid var(--line-hair);
@@ -1438,39 +1578,81 @@
 }
 
 .jugar__foot {
+  position: relative;
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 3rem;
   flex: 1;
   min-height: 0;
-  padding: 2.25rem 2.5rem 2.75rem;
-  background:
-    radial-gradient(ellipse at 20% 100%, rgba(5, 150, 170, 0.1) 0%, transparent 60%),
-    radial-gradient(ellipse at 90% 0%, rgba(200, 170, 110, 0.07) 0%, transparent 55%);
+  padding: 2rem 2.5rem;
 }
 
 .jugar__copy {
-  max-width: 36rem;
+  max-width: 30rem;
 }
 
 .jugar__desc {
   margin-bottom: 1.5rem;
   font-size: 1rem;
-  line-height: 1.65;
+  line-height: 1.6;
   color: var(--ink-base);
+}
+
+/* acordeon de tipos de partida, con los rombos de oro del cliente */
+.colas {
+  min-width: 18rem;
+}
+
+.colas__item + .colas__item {
+  margin-top: 0.75rem;
+}
+
+.colas__head {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.25rem 0;
+  font-family: 'Beaufort', serif;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-bright);
+}
+
+.colas__bullet {
+  color: var(--gold);
+  font-size: 0.75rem;
+}
+
+.colas__nota {
+  margin: 0.25rem 0 0 1.5rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--ink-muted);
+}
+
+/* CONFIRMAR centrado abajo, con los pasos al lado */
+.jugar__confirm {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  padding: 0 2.5rem 2.5rem;
 }
 
 .jugar__etapas {
   display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  align-items: center;
+  gap: 1.25rem;
 }
 
 .jugar__etapas li {
   display: flex;
   align-items: center;
-  gap: 0.625rem;
+  gap: 0.5rem;
   font-family: 'Beaufort', serif;
   font-size: 0.8125rem;
   font-weight: 700;
@@ -1491,30 +1673,35 @@
   border-radius: 50%;
 }
 
-/* CONFIRMAR: placa cian con muesca a la derecha, como la del cliente */
+/* CONFIRMAR: el recorte real del cliente (find_match_*.png), con la X al lado */
 .confirmar {
+  --confirm-art: url('/assets/ui/buttons/find_match_default.png');
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.625rem 2.25rem 0.625rem 0.875rem;
+  border: 0 solid transparent;
+  padding: 0.5rem 1.75rem 0.5rem 0.5rem;
+  background: none;
+  border-image-source: var(--confirm-art);
+  border-image-slice: 22 fill;
+  border-image-width: 100% 100%;
+  border-image-outset: 0;
+  border-image-repeat: stretch;
   font-family: 'Beaufort', serif;
   font-size: 1rem;
-  font-weight: 900;
-  letter-spacing: 0.14em;
+  font-weight: 700;
+  letter-spacing: 0.06em;
   color: var(--ink-bright);
-  background: linear-gradient(90deg, rgba(5, 150, 170, 0.35), rgba(4, 12, 21, 0.9));
-  border: 1px solid var(--cyan);
-  clip-path: polygon(0 0, calc(100% - 1.25rem) 0, 100% 50%, calc(100% - 1.25rem) 100%, 0 100%);
-  transition:
-    color var(--t-fast) var(--ease-out),
-    border-color var(--t-fast) var(--ease-out),
-    box-shadow var(--t-med) var(--ease-out);
+  text-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.9);
 }
 
 .confirmar:hover {
+  --confirm-art: url('/assets/ui/buttons/find_match_hover.png');
   color: #fff;
-  border-color: var(--cyan-soft);
-  box-shadow: 0 0 1.75rem var(--cyan-glow);
+}
+
+.confirmar:active {
+  --confirm-art: url('/assets/ui/buttons/find_match_active.png');
 }
 
 .confirmar__x {
@@ -2004,10 +2191,25 @@
   .home__side {
     display: none;
   }
+  .screen--rail {
+    grid-template-columns: minmax(0, 1fr);
+    padding-left: 2.5rem;
+  }
+  .rail {
+    display: none;
+  }
   .jugar__foot {
     flex-direction: column;
     align-items: flex-start;
     gap: 2rem;
+  }
+  .jugar__confirm {
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  .jugar__etapas {
+    flex-wrap: wrap;
+    justify-content: center;
   }
 }
 

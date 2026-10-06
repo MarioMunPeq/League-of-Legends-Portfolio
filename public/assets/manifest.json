@@ -3648,9 +3648,9 @@
     }
   ],
   "_stats": {
-    "ok": 0,
-    "skipped": 504,
+    "ok": 10,
+    "skipped": 558,
     "failed": 0,
-    "bytes": 0
+    "bytes": 5453
   }
 }

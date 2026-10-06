@@ -16,6 +16,15 @@ const ORDEN_LABEL: Record<Orden, string> = {
   mastery: 'Maestría',
 }
 
+/**
+ * El cliente engarza cada campeon con una gema distinta segun su nivel de
+ * maestria. Estos son los marcos reales (`rarity/gem-borders`): el mismo salto
+ * de color, pero translationado a la escala del portfolio.
+ */
+const GEMA = ['gem-knorarity', 'gem-1', 'gem-2', 'gem-4', 'gem-5', 'gem-6', 'gem-7', 'gem-9']
+
+const gemaDe = (nivel: number) => GEMA[Math.max(0, Math.min(GEMA.length - 1, nivel - 5))]
+
 type Props = {
   proyectos: Proyecto[]
   /** puntos de maestria por proyecto, para ordenar y filtrar */
@@ -217,12 +226,12 @@ export function Coleccion({ proyectos, mastery, modo, onAbrir, onLimpiarModo }: 
                         alt={proyecto.campeon}
                         loading="lazy"
                       />
+                      <img
+                        className="champ-card__gem"
+                        src={asset(`assets/ui/rarity/${gemaDe(mastery[proyecto.id] ?? 0)}.svg`)}
+                        alt=""
+                      />
                       <span className="champ-card__foot">
-                        <img
-                          className="champ-card__mastery"
-                          src={asset('assets/mastery/mastery-mark.png')}
-                          alt=""
-                        />
                         <span className="champ-card__level">
                           <img src={asset('assets/mastery/icon-mark-of-mastery.png')} alt="" />
                           {mastery[proyecto.id] ?? 0}

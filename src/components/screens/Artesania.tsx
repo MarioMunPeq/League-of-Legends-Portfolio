@@ -3,6 +3,7 @@ import { TabStrip } from '../ui/TabStrip'
 import { SearchField, SelectField } from '../ui/Fields'
 import { MaterialIcon } from '../ui/MaterialIcon'
 import type { MaterialIconName } from '../ui/MaterialIcon'
+import { asset } from '../../data/assets'
 import { useButtonSound } from '../../hooks/useAudio'
 import type { Material } from '../../data/types'
 import './screens.css'
@@ -14,6 +15,36 @@ const ORDEN_LABEL: Record<Orden, string> = {
   nivel: 'Por nivel',
   categoria: 'Por categoría',
 }
+
+/**
+ * Icono de cabecera de categoria. Son los mismos archivos que usa la pantalla
+ * de artesanado del cliente (`assets/category_icons`), que en su lista de la
+ * izquierda aparecen junto a MATERIALES, CAMPEONES, ASPECTOS, EFIGIES y
+ * EMOTICONOS.
+ */
+const CATEGORIA_ICONO: Record<string, string> = {
+  Lenguajes: 'category-all.png',
+  Interfaces: 'category-champion.png',
+  Datos: 'category-chest.png',
+  Plataformas: 'category-companion.png',
+  'IA y datos': 'category-eternals.png',
+  Calidad: 'category-skin.png',
+}
+
+/**
+ * Carril de categorias de la izquierda, con la misma forma que el del cliente:
+ * una tira vertical de iconos, el activo marcado con una barra de oro. Los
+ * iconos de las seis primeras categorias son los del propio cliente; los dos
+ * ultimos (reordenar y ayuda) son glifos de interfaz.
+ */
+const CARRIL: { id: string; label: string; icono?: string }[] = [
+  { id: 'todas', label: 'Todo', icono: 'category-all.png' },
+  { id: 'Lenguajes', label: 'Lenguajes', icono: 'category-champion.png' },
+  { id: 'Interfaces', label: 'Interfaces', icono: 'category-chest.png' },
+  { id: 'Datos', label: 'Datos', icono: 'category-companion.png' },
+  { id: 'IA y datos', label: 'IA y datos', icono: 'category-eternals.png' },
+  { id: 'Calidad', label: 'Calidad', icono: 'category-skin.png' },
+]
 
 type Props = {
   materiales: Material[]
@@ -75,7 +106,34 @@ export function Artesania({ materiales }: Props) {
         />
       </div>
 
-      <div className="screen">
+      <div className="screen screen--rail">
+        <nav className="rail" aria-label="Categorias de artesania">
+          {CARRIL.map((c) => (
+            <button
+              key={c.id}
+              type="button"
+              className={`rail__item ${categoria === c.id ? 'rail__item--on' : ''}`}
+              title={c.label}
+              aria-label={c.label}
+              aria-pressed={categoria === c.id}
+              onClick={() => setCategoria(categoria === c.id ? 'todas' : c.id)}
+              {...sound}
+            >
+              <img src={asset(`assets/ui/loot/${c.icono}`)} alt="" />
+            </button>
+          ))}
+          <span className="rail__spacer" />
+          <button
+            type="button"
+            className="rail__item"
+            title="Ayuda"
+            aria-label="Ayuda"
+            {...sound}
+          >
+            <span className="rail__help">?</span>
+          </button>
+        </nav>
+
         <div className="coleccion">
           <aside className="arsenal">
             <div className="arsenal__stats">
@@ -104,7 +162,14 @@ export function Artesania({ materiales }: Props) {
 
             {categorias.map(([cat, lista]) => (
               <section key={cat} className="arsenal__group">
-                <h3>{cat}</h3>
+                <h3>
+                  <img
+                    className="arsenal__cat-icon"
+                    src={asset(`assets/ui/loot/${CATEGORIA_ICONO[cat] ?? 'category-all.png'}`)}
+                    alt=""
+                  />
+                  {cat}
+                </h3>
                 <ul className="arsenal__items">
                   <li>
                     <button

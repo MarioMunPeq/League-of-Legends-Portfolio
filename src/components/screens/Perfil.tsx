@@ -96,11 +96,10 @@ export function Perfil({ data }: Props) {
             </button>
           ))}
           <span className="spacer" />
-          <span className="perfil__riotid">
-            {perfil.summoner}
-            <span className="perfil__riotid-nivel">Nivel {perfil.nivel}</span>
+          <span className="perfil__lookup">
+            <span className="perfil__lookup-name">{perfil.summoner}</span>
+            <span className="perfil__lookup-tag">#ESPAÑA</span>
           </span>
-          <Icon name="settings" size={18} className="perfil__tab-tool" />
         </div>
 
         <div className="perfil__cifras">
@@ -120,19 +119,21 @@ export function Perfil({ data }: Props) {
 
       <div className="perfil__layout">
         <aside className="panel panel--capped perfil__card">
+          {/* El nivel va en su placa hexagonal, arriba del retrato. */}
+          <span className="perfil__levelchip">{perfil.nivel}</span>
+
+          {/* Marco real del cliente, con la insignia dentro del aro. */}
           <div className="perfil__emblem">
+            <img className="perfil__emblem-crest" src={crest} alt={`Insignia de ${rangoTexto}`} />
             <img
-              className="perfil__emblem-crest"
-              src={crest}
-              alt={`Insignia de ${rangoTexto}`}
+              className="perfil__emblem-frame"
+              src={asset('assets/ui/level-ring/theme-1-solid-border.png')}
+              alt=""
             />
-            <span className="perfil__level">{perfil.nivel}</span>
           </div>
 
           <h1 className="perfil__name">{perfil.nombre}</h1>
           <p className="perfil__riotid-plain">{perfil.summoner}</p>
-
-          <p className="perfil__title-line">{hero.eyebrow}</p>
 
           <p className="perfil__lema">Mente maestra</p>
 
@@ -141,6 +142,8 @@ export function Perfil({ data }: Props) {
             <img src={asset('assets/perks/trees/7204_resolve.png')} alt="" />
             <img src={asset('assets/perks/runes/firststrike.png')} alt="" />
           </div>
+
+          <p className="perfil__title-line">{hero.eyebrow}</p>
 
           <div className="chips" style={{ justifyContent: 'center', marginTop: '0.75rem' }}>
             <span className="chip chip--gold">Nivel {perfil.nivel}</span>
