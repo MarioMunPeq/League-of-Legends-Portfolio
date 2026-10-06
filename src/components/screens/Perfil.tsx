@@ -1,29 +1,121 @@
-import { champSplash } from '../../data/assets'
+import { useMemo, useRef, useState } from 'react'
+import { asset, champSplash } from '../../data/assets'
 import { crestPath, rankLabel } from '../../data/ranks'
 import { Icon } from '../ui/Icon'
 import type { IconName } from '../ui/Icon'
+import { FormularioContacto } from '../ui/FormularioContacto'
+import { useButtonSound } from '../../hooks/useAudio'
 import type { PortfolioData } from '../../data/types'
 import './screens.css'
 
 const HITO_ICONS = ['crown', 'spark', 'shield', 'play'] as const satisfies readonly IconName[]
 
+/** Las cinco pestañas de la ficha del cliente, con su seccion de destino. */
+const SECCIONES: { id: string; label: string }[] = [
+  { id: 'sobre-mi', label: 'SOBRE MÍ' },
+  { id: 'hitos', label: 'HITOS' },
+  { id: 'experiencia', label: 'EXPERIENCIA' },
+  { id: 'formacion', label: 'FORMACIÓN' },
+  { id: 'contacto', label: 'CONTACTO' },
+]
+
 type Props = {
   data: PortfolioData
 }
 
+/** Perfil: la ficha del jugador. Arriba el arte con las cinco cifras, a la izquierda el panel de identidad y a la derecha el contenido. */
 export function Perfil({ data }: Props) {
-  const { perfil, sobreMi, formacion, experiencia, hitos, hero } = data
+  const { perfil, sobreMi, formacion, experiencia, hitos, hero, enlaces, contacto } = data
   const rangoTexto = `${rankLabel(perfil.rango)} ${perfil.division}`.trim()
   const portada = hero.portada ?? hero.champFavorito
 
+  const mainRef = useRef<HTMLDivElement>(null)
+  const [activa, setActiva] = useState(() => SECCIONES[0]?.id ?? 'sobre-mi')
+  const sound = useButtonSound('grid')
+
+  const crest = useMemo(() => crestPath(perfil.rango), [perfil.rango])
+
+  /* Las cifras de la cabecera, con el emblema de cada una debajo. */
+  const cifras = [
+    { etiqueta: '5V5 FLEXIBLE', valor: rangoTexto, emblema: crest, svg: true },
+    {
+      etiqueta: 'HONOR',
+      valor: `NIVEL ${perfil.nivel}`,
+      emblema: asset('assets/ui/honor/heart-miniicon.png'),
+      svg: false,
+    },
+    {
+      etiqueta: 'PUNTUACIÓN DE MAESTRÍA',
+      valor: String(perfil.maestria),
+      emblema: asset('assets/mastery/mastery-mark.png'),
+      svg: false,
+    },
+    {
+      etiqueta: 'TROFEO',
+      valor: 'SIN LOGRO',
+      emblema: asset('assets/ranked/frame/ranked-emblem.png'),
+      svg: false,
+      apagado: true,
+    },
+    {
+      etiqueta: 'ESTANDARTE MUNDIAL',
+      valor: 'SIN LOGRO',
+      emblema: asset('assets/ranked/frame/member-banner.png'),
+      svg: false,
+      apagado: true,
+    },
+  ]
+
+  const irA = (id: string) => {
+    setActiva(id)
+    mainRef.current?.querySelector(`#${id}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
   return (
     <>
-      <div className="perfil__banner">
+      <div className="perfil__hero">
         <img
+          className="perfil__banner"
           src={champSplash(portada)}
           alt={`Arte de ${portada} como fondo de la ficha`}
         />
         <div className="perfil__banner-fade" />
+
+        <div className="perfil__tabs">
+          {SECCIONES.map((s) => (
+            <button
+              key={s.id}
+              type="button"
+              role="tab"
+              aria-selected={activa === s.id}
+              className="tab"
+              onClick={() => irA(s.id)}
+              {...sound}
+            >
+              {s.label}
+            </button>
+          ))}
+          <span className="spacer" />
+          <span className="perfil__riotid">
+            {perfil.summoner}
+            <span className="perfil__riotid-nivel">Nivel {perfil.nivel}</span>
+          </span>
+          <Icon name="settings" size={18} className="perfil__tab-tool" />
+        </div>
+
+        <div className="perfil__cifras">
+          {cifras.map((c) => (
+            <div key={c.etiqueta} className={`cifra ${c.apagado ? 'cifra--apagada' : ''}`}>
+              <span className="cifra__etiqueta">{c.etiqueta}</span>
+              <span className="cifra__valor">{c.valor}</span>
+              {c.svg ? (
+                <img className="cifra__emblema cifra__emblema--crest" src={c.emblema} alt="" />
+              ) : (
+                <img className="cifra__emblema" src={c.emblema} alt="" />
+              )}
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className="perfil__layout">
@@ -31,26 +123,24 @@ export function Perfil({ data }: Props) {
           <div className="perfil__emblem">
             <img
               className="perfil__emblem-crest"
-              src={crestPath(perfil.rango)}
+              src={crest}
               alt={`Insignia de ${rangoTexto}`}
             />
             <span className="perfil__level">{perfil.nivel}</span>
           </div>
 
           <h1 className="perfil__name">{perfil.nombre}</h1>
-          <p className="perfil__riotid">{perfil.summoner}</p>
+          <p className="perfil__riotid-plain">{perfil.summoner}</p>
 
-          <p className="muted" style={{ fontSize: '0.875rem' }}>
-            {hero.eyebrow}
-          </p>
+          <p className="perfil__title-line">{hero.eyebrow}</p>
 
-          <p className="perfil__title-line">
-            {rangoTexto}
-            <br />
-            <span className="muted" style={{ fontSize: '0.8125rem' }}>
-              Programando desde 2022
-            </span>
-          </p>
+          <p className="perfil__lema">Mente maestra</p>
+
+          <div className="perfil__circles" aria-hidden="true">
+            <img src={asset('assets/perks/trees/7200_domination.png')} alt="" />
+            <img src={asset('assets/perks/trees/7204_resolve.png')} alt="" />
+            <img src={asset('assets/perks/runes/firststrike.png')} alt="" />
+          </div>
 
           <div className="chips" style={{ justifyContent: 'center', marginTop: '0.75rem' }}>
             <span className="chip chip--gold">Nivel {perfil.nivel}</span>
@@ -58,8 +148,8 @@ export function Perfil({ data }: Props) {
           </div>
         </aside>
 
-        <div className="perfil__main">
-          <section className="perfil__section perfil__about">
+        <div className="perfil__main" ref={mainRef}>
+          <section className="perfil__section perfil__about" id="sobre-mi">
             <div className="section-title">
               <h2>SOBRE MÍ</h2>
               <span>quién está detrás de la cuenta</span>
@@ -69,7 +159,7 @@ export function Perfil({ data }: Props) {
             ))}
           </section>
 
-          <section className="perfil__section">
+          <section className="perfil__section" id="hitos">
             <div className="section-title">
               <h2>HITOS</h2>
               <span>números de la cuenta, traducidos</span>
@@ -88,7 +178,7 @@ export function Perfil({ data }: Props) {
             </div>
           </section>
 
-          <section className="perfil__section">
+          <section className="perfil__section" id="experiencia">
             <div className="section-title">
               <h2>EXPERIENCIA</h2>
               <span>trayectoria</span>
@@ -111,7 +201,7 @@ export function Perfil({ data }: Props) {
             </div>
           </section>
 
-          <section className="perfil__section">
+          <section className="perfil__section" id="formacion">
             <div className="section-title">
               <h2>FORMACIÓN</h2>
               <span>estudios y certificaciones</span>
@@ -129,6 +219,54 @@ export function Perfil({ data }: Props) {
                   </div>
                 </article>
               ))}
+            </div>
+          </section>
+
+          <section className="perfil__section" id="contacto">
+            <div className="section-title">
+              <h2>CONTACTO</h2>
+              <span>partida abierta: escribí y te contesto</span>
+            </div>
+            <div className="contacto">
+              <FormularioContacto contacto={contacto} />
+
+              <aside className="contacto__aside">
+                <div className="panel panel--capped side-block">
+                  <h3>Contacto directo</h3>
+                  <a className="side-link" href={`mailto:${contacto.destinatario}`}>
+                    <span>{contacto.destinatario}</span>
+                    <Icon name="mail" size={14} />
+                  </a>
+                </div>
+
+                <div className="panel panel--capped side-block">
+                  <h3>Disponibilidad</h3>
+                  <p className="muted" style={{ fontSize: '0.875rem' }}>
+                    UTC−3. Part-time remoto, respuesta en 24-48 h.
+                  </p>
+                </div>
+
+                <div className="panel panel--capped side-block">
+                  <h3>Enlaces</h3>
+                  <div className="stack" style={{ gap: '0.5rem' }}>
+                    {enlaces.slice(0, 4).map((e) => (
+                      <a
+                        key={e.id}
+                        className="side-link"
+                        href={e.url}
+                        target={e.url.startsWith('http') ? '_blank' : undefined}
+                        rel="noreferrer noopener"
+                      >
+                        <span className="row" style={{ gap: '0.5rem' }}>
+                          <Icon name={e.icono} size={16} />
+                          {e.nombre}
+                        </span>
+                        <Icon name="external" size={14} />
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </aside>
             </div>
           </section>
         </div>

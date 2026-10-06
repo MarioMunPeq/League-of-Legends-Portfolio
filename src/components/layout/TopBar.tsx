@@ -13,8 +13,6 @@ const NAV: { route: Route; label: string }[] = [
   { route: 'perfil', label: 'PERFIL' },
   { route: 'coleccion', label: 'CAMPEONES' },
   { route: 'artesania', label: 'ARTESANÍA' },
-  { route: 'seleccion', label: 'SELECCIÓN' },
-  { route: 'lobby', label: 'GRUPO' },
 ]
 
 const TOOLS = ['profile', 'collection', 'loot', 'party', 'store'] as const
@@ -41,7 +39,7 @@ export function TopBar({ route, perfil, onNavigate }: Props) {
           className="btn--play"
           onClick={() => {
             play('nav-click')
-            onNavigate('seleccion')
+            onNavigate('jugar')
           }}
         >
           JUGAR

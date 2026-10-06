@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { play } from '../data/audio'
 
-export type Route = 'inicio' | 'perfil' | 'coleccion' | 'artesania' | 'seleccion' | 'lobby'
+export type Route = 'inicio' | 'jugar' | 'perfil' | 'coleccion' | 'artesania'
 
-const ROUTES: Route[] = ['inicio', 'perfil', 'coleccion', 'artesania', 'seleccion', 'lobby']
+const ROUTES: Route[] = ['inicio', 'jugar', 'perfil', 'coleccion', 'artesania']
 
 function readHash(): { route: Route; param?: string } {
   const raw = window.location.hash.replace(/^#\/?/, '')

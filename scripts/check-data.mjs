@@ -3,6 +3,7 @@ import { readFileSync, existsSync } from 'node:fs'
 const data = JSON.parse(readFileSync('src/data/proyectos.json', 'utf8'))
 const gen = readFileSync('src/data/champs.generated.ts', 'utf8')
 const appSrc = readFileSync('src/App.tsx', 'utf8')
+const iconSrc = readFileSync('src/components/ui/MaterialIcon.tsx', 'utf8')
 
 const problemas = []
 
@@ -76,7 +77,10 @@ for (const p of data.proyectos) {
 }
 
 for (const m of data.materiales) {
-  if (!existsSync(`public${m.icono}`)) problemas.push(`icono de material inexistente: ${m.icono}`)
+  // el glifo SVG de cada material vive en MaterialIcon.tsx, con la clave = id
+  if (!new RegExp(`^\\s{2}'?${m.id}'?:\\s*[\\[{]`, 'm').test(iconSrc)) {
+    problemas.push(`material sin icono SVG: ${m.id}`)
+  }
   if (typeof m.nivel !== 'number') problemas.push(`nivel no numerico: ${m.nombre}`)
 }
 

@@ -1,26 +1,19 @@
-import { useCallback, useMemo } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { AudioProvider } from './hooks/AudioProvider'
 import { useHashRoute } from './hooks/useHashRoute'
 import { TopBar } from './components/layout/TopBar'
 import { SocialPanel } from './components/layout/SocialPanel'
 import { Inicio } from './components/screens/Inicio'
+import { Jugar } from './components/screens/Jugar'
 import { Perfil } from './components/screens/Perfil'
 import { Coleccion } from './components/screens/Coleccion'
 import { Artesania } from './components/screens/Artesania'
-import { Seleccion } from './components/screens/Seleccion'
-import { Lobby } from './components/screens/Lobby'
 import { DetalleProyecto } from './components/screens/DetalleProyecto'
 import raw from './data/proyectos.json'
-import { CHAMPS } from './data/champs.generated'
 import type { PortfolioData, Proyecto } from './data/types'
 import { useAudio } from './hooks/useAudio'
 
 const data = raw as PortfolioData
-
-/** Campeones descargados que todavía no tienen ficha: salen bloqueados en Selección. */
-const sinProyecto = CHAMPS.map((c) => c.name).filter(
-  (champ) => !data.proyectos.some((p) => p.campeon === champ),
-)
 
 /**
  * Maestría por proyecto. Es la única cifra que el cliente inventa: el resto
@@ -43,6 +36,8 @@ const MASTERY: Record<string, number> = {
 function Shell() {
   const { route, param, navigate } = useHashRoute()
   const { play } = useAudio()
+  /** modo confirmado en la pantalla Jugar; se muestra como contexto en la coleccion */
+  const [modo, setModo] = useState<string | null>(null)
 
   const proyecto = useMemo(
     () => (param ? data.proyectos.find((p) => p.id === param) : undefined),
@@ -55,6 +50,14 @@ function Shell() {
       navigate('coleccion', proyecto.id)
     },
     [play, navigate],
+  )
+
+  const jugar = useCallback(
+    (id: string) => {
+      setModo(id)
+      navigate('coleccion')
+    },
+    [navigate],
   )
 
   return (
@@ -71,41 +74,36 @@ function Shell() {
                 onNavegar={navigate}
               />
             ) : route === 'inicio' ? (
-              <Inicio data={data} onNavegar={navigate} />
+              <Inicio data={data} onNavegar={navigate} onAbrir={abrirProyecto} modo={modo} />
+            ) : route === 'jugar' ? (
+              <Jugar modoInicial={modo} onConfirmar={jugar} />
             ) : route === 'perfil' ? (
               <Perfil data={data} />
             ) : route === 'coleccion' ? (
               <Coleccion
                 proyectos={data.proyectos}
                 mastery={MASTERY}
+                modo={modo}
                 onAbrir={abrirProyecto}
-              />
-            ) : route === 'artesania' ? (
-              <Artesania materiales={data.materiales} />
-            ) : route === 'seleccion' ? (
-              <Seleccion
-                proyectos={data.proyectos}
-                restantes={sinProyecto}
-                onAbrir={abrirProyecto}
-                onNavegar={navigate}
+                onLimpiarModo={() => setModo(null)}
               />
             ) : (
-              <Lobby data={data} onNavegar={navigate} />
+              <Artesania materiales={data.materiales} />
             )}
           </div>
-
-          <footer className="footer">
-            <p className="footer__disclaimer">
-              <strong>Proyecto fan, no afiliado a Riot Games.</strong> League of Legends es una marca
-              registrada de Riot Games. Este portfolio replica su interfaz con fines educativos y de
-              portafolio; los               assets gráficos pertenecen a sus respectivos titulares.
-            </p>
-            <span className="chip">{data.perfil.summoner}</span>
-            <span className="chip chip--gold">Nivel {data.perfil.nivel}</span>
-          </footer>
         </main>
 
         <SocialPanel enlaces={data.enlaces} />
+
+        <footer className="footer">
+          <p className="footer__disclaimer">
+            <strong>Proyecto fan, no afiliado a Riot Games.</strong> League of Legends es una marca
+            registrada de Riot Games. Este portfolio replica su interfaz con fines educativos y de
+            portafolio; los assets gráficos pertenecen a sus respectivos titulares.
+          </p>
+          <span className="chip">{data.perfil.summoner}</span>
+          <span className="chip chip--gold">Nivel {data.perfil.nivel}</span>
+        </footer>
       </div>
     </div>
   )

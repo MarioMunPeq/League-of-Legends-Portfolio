@@ -8,11 +8,33 @@
   background: var(--bg-void);
 }
 
+/*
+ * El cuerpo son tres areas: el contenido que hace scroll a la izquierda, el
+ * panel social a la derecha ocupando toda la altura, y el pie pegado abajo de
+ * la columna de contenido. El pie queda fuera de `.main` a proposito: dentro
+ * del contenedor con scroll se solapaba con el contenido al desplazar.
+ */
 .frame__body {
   display: grid;
   grid-template-columns: minmax(0, 1fr) var(--social-w);
+  grid-template-rows: minmax(0, 1fr) auto;
   min-height: 0;
   min-width: 0;
+}
+
+.frame__body > .main {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.frame__body > .social {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+}
+
+.frame__body > .footer {
+  grid-column: 1;
+  grid-row: 2;
 }
 
 /* ============================================================
@@ -471,11 +493,16 @@
     var(--bg-void);
 }
 
-/* columna flex: las pantallas que ocupan el alto (Selección) se estiran
-   y empujan el footer al fondo; las demas crecen con su contenido. */
+/*
+ * Columna flex del contenido. `flex: 1 0 auto` es lo importante: con el valor
+ * corto (`flex: 1`, base 0) la caja se encogia al alto disponible y su
+ * contenido se salia por encima del pie. Con base auto crece hasta llenar la
+ * columna cuando la pantalla es corta y conserva su alto cuando es larga, de
+ * modo que el scroll lo lleva `.main` y el pie nunca se solapa.
+ */
 .main__inner {
   display: flex;
-  flex: 1;
+  flex: 1 0 auto;
   flex-direction: column;
   min-height: 0;
   animation: fade-in var(--t-slow) var(--ease-out);

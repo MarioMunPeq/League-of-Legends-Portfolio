@@ -402,7 +402,6 @@
       "nombre": "TypeScript",
       "categoria": "Lenguajes",
       "descripcion": "El lenguaje con el que más trabajo: es el que sostiene este portfolio y el resto de webs que he publicado.",
-      "icono": "/assets/perks/runes/legendalacrity.png",
       "nivel": 92,
       "destacado": true
     },
@@ -411,7 +410,6 @@
       "nombre": "JavaScript",
       "categoria": "Lenguajes",
       "descripcion": "El lenguaje base de todo el frontend que hago, y el que usa el portfolio de Papers Please.",
-      "icono": "/assets/perks/runes/presstheattack.png",
       "nivel": 90,
       "destacado": true
     },
@@ -420,7 +418,6 @@
       "nombre": "Python",
       "categoria": "Lenguajes",
       "descripcion": "Ingesta de datos, scripts de operación y el pipeline de Euromario. También el lenguaje del bootcamp de IA.",
-      "icono": "/assets/perks/runes/summonaery.png",
       "nivel": 88,
       "destacado": true
     },
@@ -429,7 +426,6 @@
       "nombre": "Java",
       "categoria": "Lenguajes",
       "descripcion": "Del grado superior de DAM y del stack del trabajo actual en Cognizant con Pega.",
-      "icono": "/assets/perks/runes/conqueror.png",
       "nivel": 74,
       "destacado": false
     },
@@ -438,7 +434,6 @@
       "nombre": "Kotlin",
       "categoria": "Lenguajes",
       "descripcion": "El lenguaje del TFG: la aplicación Android nativa de gestión de salud está escrita enteramente en Kotlin.",
-      "icono": "/assets/perks/runes/electrocute.png",
       "nivel": 80,
       "destacado": true
     },
@@ -447,7 +442,6 @@
       "nombre": "C#",
       "categoria": "Lenguajes",
       "descripcion": "De la parte de scripting de Unity y de la lectura del stack declarado en mi perfil profesional.",
-      "icono": "/assets/perks/runes/predator.png",
       "nivel": 65,
       "destacado": false
     },
@@ -456,7 +450,6 @@
       "nombre": "SQL",
       "categoria": "Lenguajes",
       "descripcion": "SQLite en el TFG, y el modelo de datos de las tablas de personas, instituciones y datos de salud.",
-      "icono": "/assets/perks/runes/gatheringstorm.png",
       "nivel": 78,
       "destacado": false
     },
@@ -465,7 +458,6 @@
       "nombre": "HTML / CSS",
       "categoria": "Lenguajes",
       "descripcion": "La base de todas las réplicas: los iconos del cliente de Steam dibujados en SVG en línea, los grids de 4 px, los temas de acento.",
-      "icono": "/assets/perks/runes/scorch.png",
       "nivel": 91,
       "destacado": false
     },
@@ -474,7 +466,6 @@
       "nombre": "React",
       "categoria": "Interfaces",
       "descripcion": "En casa, React para web. Los seis portfolios temáticos están escritos en React 19.",
-      "icono": "/assets/perks/runes/darkharvest.png",
       "nivel": 90,
       "destacado": true
     },
@@ -483,7 +474,6 @@
       "nombre": "Three.js",
       "categoria": "Interfaces",
       "descripcion": "Escenas 3D del Cosmere Archive: la biblioteca y Aharietiam, con animaciones de extracción y paso de página.",
-      "icono": "/assets/perks/runes/hextechflashtraption.png",
       "nivel": 72,
       "destacado": false
     },
@@ -492,7 +482,6 @@
       "nombre": "GSAP",
       "categoria": "Interfaces",
       "descripcion": "Animaciones del Cosmere Archive, sobre todo las transiciones entre páginas y el paso de página 3D.",
-      "icono": "/assets/perks/runes/celestialbody.png",
       "nivel": 68,
       "destacado": false
     },
@@ -501,7 +490,6 @@
       "nombre": "Mapbox GL",
       "categoria": "Interfaces",
       "descripcion": "El mapa del Pip-Boy. Estilo monocromo verde definido capa por capa en Mapbox Studio para que el mapa encaje con el fósforo de la interfaz.",
-      "icono": "/assets/perks/runes/mirrorshell.png",
       "nivel": 70,
       "destacado": false
     },
@@ -510,7 +498,6 @@
       "nombre": "CSS moderno",
       "categoria": "Interfaces",
       "descripcion": "Container queries, cascada en capas, máscara de imagen para los iconos. Sin framework para lo que el navegador ya resuelve.",
-      "icono": "/assets/perks/runes/transcendence.png",
       "nivel": 89,
       "destacado": false
     },
@@ -519,7 +506,6 @@
       "nombre": "Vite",
       "categoria": "Interfaces",
       "descripcion": "Todos los portfolios se construyen en menos de un segundo. Arranque instantáneo y build con Rollup.",
-      "icono": "/assets/perks/runes/firststrike.png",
       "nivel": 88,
       "destacado": true
     },
@@ -528,7 +514,6 @@
       "nombre": "Tailwind CSS",
       "categoria": "Interfaces",
       "descripcion": "Sistema de estilos por utilidades en Dungeon Archive y Cosmere Archive, con tokens de acento configurables.",
-      "icono": "/assets/perks/runes/boneplating.png",
       "nivel": 82,
       "destacado": false
     },
@@ -537,7 +522,6 @@
       "nombre": "Zustand",
       "categoria": "Datos",
       "descripcion": "Gestión del estado local en Dungeon Archive, con persistencia en localStorage y versionado del esquema.",
-      "icono": "/assets/perks/runes/guardian.png",
       "nivel": 76,
       "destacado": false
     },
@@ -546,7 +530,6 @@
       "nombre": "Firebase",
       "categoria": "Datos",
       "descripcion": "Firestore para la copia de seguridad opcional de Dungeon Archive. El resto de la aplicación funciona sin conexión y sin cuenta.",
-      "icono": "/assets/perks/runes/treasurehunter.png",
       "nivel": 72,
       "destacado": false
     },
@@ -555,7 +538,6 @@
       "nombre": "Liferay",
       "categoria": "Plataformas",
       "descripcion": "Desarrollo web en la Diputación de Valladolid, en el sector público.",
-      "icono": "/assets/perks/runes/unsealedspellbook.png",
       "nivel": 75,
       "destacado": false
     },
@@ -564,7 +546,6 @@
       "nombre": "Odoo",
       "categoria": "Plataformas",
       "descripcion": "Desarrollo con Odoo en la Diputación de Valladolid.",
-      "icono": "/assets/perks/runes/suddenimpact.png",
       "nivel": 73,
       "destacado": false
     },
@@ -573,7 +554,6 @@
       "nombre": "Pega",
       "categoria": "Plataformas",
       "descripcion": "Desarrollo de soluciones empresariales en el trabajo actual, dentro del graduate program de Cognizant.",
-      "icono": "/assets/perks/runes/arcanecomet.png",
       "nivel": 70,
       "destacado": false
     },
@@ -582,7 +562,6 @@
       "nombre": "Power Platform",
       "categoria": "Plataformas",
       "descripcion": "Power Apps, Power BI y PI Vision en las prácticas con Michelin, sobre entornos industriales.",
-      "icono": "/assets/perks/runes/overgrowth.png",
       "nivel": 71,
       "destacado": false
     },
@@ -591,7 +570,6 @@
       "nombre": "Android",
       "categoria": "Plataformas",
       "descripcion": "Kotlin, Jetpack, Navigation y Bluetooth LE en el TFG. Service worker y PWA en la web.",
-      "icono": "/assets/perks/runes/veteranaftershock.png",
       "nivel": 79,
       "destacado": false
     },
@@ -600,7 +578,6 @@
       "nombre": "Scikit-learn",
       "categoria": "IA y datos",
       "descripcion": "Random Forest con GridSearchCV y validación cruzada en el recomendador de campeones. SMOTE vía imbalanced-learn.",
-      "icono": "/assets/perks/runes/coupdegrace.png",
       "nivel": 78,
       "destacado": true
     },
@@ -609,7 +586,6 @@
       "nombre": "Pandas",
       "categoria": "IA y datos",
       "descripcion": "Limpieza y modelado del dataset de partidas, incluida la conversión del rol categórico a numérico.",
-      "icono": "/assets/perks/runes/legendalacrity.png",
       "nivel": 82,
       "destacado": false
     },
@@ -618,7 +594,6 @@
       "nombre": "PyTorch",
       "categoria": "IA y datos",
       "descripcion": "Del bootcamp de 450 horas de Qualentum.",
-      "icono": "/assets/perks/runes/celestialbody.png",
       "nivel": 66,
       "destacado": false
     },
@@ -627,7 +602,6 @@
       "nombre": "Ollama / Groq",
       "categoria": "IA y datos",
       "descripcion": "Contrato de IA neutral en Euromario: Ollama local con respaldo en Groq, validación de salida estructurada y reintento.",
-      "icono": "/assets/perks/runes/summonaery.png",
       "nivel": 74,
       "destacado": false
     },
@@ -636,7 +610,6 @@
       "nombre": "Git / GitHub",
       "categoria": "Calidad",
       "descripcion": "20 repositorios públicos desde diciembre de 2022. Historial legible, bisect sin miedo, y Actions como programador de tareas periódicas.",
-      "icono": "/assets/perks/runes/conqueror.png",
       "nivel": 92,
       "destacado": true
     },
@@ -645,7 +618,6 @@
       "nombre": "pytest",
       "categoria": "Calidad",
       "descripcion": "265 casos que cubren el núcleo del pipeline de Euromario, más pruebas unitarias sobre las operaciones críticas del TFG.",
-      "icono": "/assets/perks/runes/suddenimpact.png",
       "nivel": 80,
       "destacado": true
     },
@@ -654,7 +626,6 @@
       "nombre": "PWA / Service worker",
       "categoria": "Calidad",
       "descripcion": "Estrategia de caché y funcionamiento completo sin conexión, sin requerir cuenta.",
-      "icono": "/assets/perks/runes/firststrike.png",
       "nivel": 81,
       "destacado": false
     },
@@ -663,7 +634,6 @@
       "nombre": "Accesibilidad",
       "categoria": "Calidad",
       "descripcion": "WCAG AA como requisito. En el Cosmere Archive el texto 3D se proyecta como overlay HTML precisamente para que siga siendo seleccionable y accesible.",
-      "icono": "/assets/perks/runes/mirrorshell.png",
       "nivel": 85,
       "destacado": true
     },
@@ -672,7 +642,6 @@
       "nombre": "Web Audio API",
       "categoria": "Interfaces",
       "descripcion": "La radio del Pip-Boy: dial, espectro de barras y dos emisoras que sobreviven al desmontaje del módulo.",
-      "icono": "/assets/perks/runes/arcanecomet.png",
       "nivel": 74,
       "destacado": false
     },
@@ -681,7 +650,6 @@
       "nombre": "d3-force",
       "categoria": "Interfaces",
       "descripcion": "Grafo de fuerzas para las relaciones entre personajes del Cosmere Archive.",
-      "icono": "/assets/perks/runes/darkharvest.png",
       "nivel": 70,
       "destacado": false
     },
@@ -690,7 +658,6 @@
       "nombre": "Figma",
       "categoria": "Calidad",
       "descripcion": "Del stack declarado en mi perfil, junto a Office.",
-      "icono": "/assets/perks/runes/transcendence.png",
       "nivel": 68,
       "destacado": false
     },
@@ -699,7 +666,6 @@
       "nombre": "Unity / Godot",
       "categoria": "Interfaces",
       "descripcion": "Motores de videojuegos. En casa, como forma de aprender cosas que no se tocan en el trabajo.",
-      "icono": "/assets/perks/runes/presstheattack.png",
       "nivel": 62,
       "destacado": false
     }

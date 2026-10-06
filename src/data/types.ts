@@ -56,8 +56,10 @@ export type Material = {
   nombre: string
   categoria: string
   descripcion: string
-  /** runa de CommunityDragon usada como icono representativo */
-  icono: string
+  /**
+   * El glifo sale de `MaterialIcon`: `id` es a la vez la clave del icono, de
+   * modo que un material sin dibujo falla el validador de datos.
+   */
   nivel: number
   destacado: boolean
 }

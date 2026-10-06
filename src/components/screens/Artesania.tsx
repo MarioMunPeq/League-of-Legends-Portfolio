@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react'
 import { TabStrip } from '../ui/TabStrip'
-import { SearchField } from '../ui/Fields'
+import { SearchField, SelectField } from '../ui/Fields'
+import { MaterialIcon } from '../ui/MaterialIcon'
+import type { MaterialIconName } from '../ui/MaterialIcon'
 import { useButtonSound } from '../../hooks/useAudio'
 import type { Material } from '../../data/types'
 import './screens.css'
@@ -17,7 +19,7 @@ type Props = {
   materiales: Material[]
 }
 
-/** Artesania -> Botin: cada tecnologia es un objeto con su icono. */
+/** Artesania -> Botin: cada tecnologia es un objeto de la mochila. */
 export function Artesania({ materiales }: Props) {
   const [query, setQuery] = useState('')
   const [orden, setOrden] = useState<Orden>('nivel')
@@ -26,8 +28,12 @@ export function Artesania({ materiales }: Props) {
   const sound = useButtonSound('grid')
 
   const categorias = useMemo(() => {
-    const counts = new Map<string, number>()
-    for (const m of materiales) counts.set(m.categoria, (counts.get(m.categoria) ?? 0) + 1)
+    const counts = new Map<string, Material[]>()
+    for (const m of materiales) {
+      const lista = counts.get(m.categoria) ?? []
+      lista.push(m)
+      counts.set(m.categoria, lista)
+    }
     return [...counts.entries()].sort((a, b) => a[0].localeCompare(b[0], 'es'))
   }, [materiales])
 
@@ -50,6 +56,11 @@ export function Artesania({ materiales }: Props) {
     return lista
   }, [materiales, query, orden, categoria, soloDestacados])
 
+  const destacados = materiales.filter((m) => m.destacado).length
+  const mediaNivel = Math.round(
+    materiales.reduce((acc, m) => acc + m.nivel, 0) / (materiales.length || 1),
+  )
+
   return (
     <>
       <div className="subnav">
@@ -59,63 +70,103 @@ export function Artesania({ materiales }: Props) {
           onChange={setCategoria}
           tabs={[
             { id: 'todas', label: 'MATERIALES', badge: String(materiales.length) },
-            ...categorias.map(([cat, n]) => ({ id: cat, label: cat.toUpperCase(), badge: String(n) })),
+            ...categorias.map(([cat, lista]) => ({ id: cat, label: cat.toUpperCase(), badge: String(lista.length) })),
           ]}
         />
       </div>
 
       <div className="screen">
         <div className="coleccion">
-          <aside className="panel panel--capped side-filters">
-            <h3>Inventario</h3>
-            <div className="meter">
-              <div className="meter__value">{materiales.length}</div>
-              <div className="meter__label">Materiales en mochila</div>
+          <aside className="arsenal">
+            <div className="arsenal__stats">
+              <div className="framed-stat">
+                <span className="framed-stat__value">{materiales.length}</span>
+                <span className="framed-stat__label">Materiales en mochila</span>
+              </div>
+              <div className="framed-stat framed-stat--split">
+                <span className="framed-stat__value">{destacados}</span>
+                <span className="framed-stat__label">Destacados</span>
+                <span className="framed-stat__rule" aria-hidden="true" />
+                <span className="framed-stat__value">{mediaNivel}</span>
+                <span className="framed-stat__label">Nivel medio</span>
+              </div>
             </div>
-            <div className="meter">
-              <div className="meter__value">{materiales.filter((m) => m.destacado).length}</div>
-              <div className="meter__label">Destacados</div>
-            </div>
 
-            <h3>Buscar</h3>
-            <SearchField
-              label="Buscar materiales"
-              placeholder="Buscar"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
-
-            <h3 style={{ marginTop: '1.25rem' }}>Ordenar</h3>
-            <select
-              className="input input--plain"
-              aria-label="Ordenar materiales"
-              value={orden}
-              onChange={(e) => setOrden(e.target.value as Orden)}
-              {...sound}
-            >
-              {Object.entries(ORDEN_LABEL).map(([value, label]) => (
-                <option key={value} value={value}>
-                  {label}
-                </option>
-              ))}
-            </select>
-
-            <label
-              className="row"
-              style={{ gap: '0.5rem', marginTop: '1.25rem', fontSize: '0.8125rem', cursor: 'pointer' }}
-            >
+            <label className="arsenal__check">
               <input
                 type="checkbox"
                 checked={soloDestacados}
                 onChange={(e) => setSoloDestacados(e.target.checked)}
+                {...sound}
               />
               Solo destacados
             </label>
+
+            {categorias.map(([cat, lista]) => (
+              <section key={cat} className="arsenal__group">
+                <h3>{cat}</h3>
+                <ul className="arsenal__items">
+                  <li>
+                    <button
+                      type="button"
+                      className={`arsenal__item arsenal__item--all ${categoria === 'todas' ? 'is-on' : ''}`}
+                      aria-pressed={categoria === 'todas'}
+                      aria-label="Ver todos los materiales"
+                      onClick={() => setCategoria('todas')}
+                      {...sound}
+                    >
+                      <MaterialIcon name="vite" categoria={cat} size={44} />
+                    </button>
+                  </li>
+                  {lista.map((m) => (
+                    <li key={m.id}>
+                      <button
+                        type="button"
+                        className={`arsenal__item ${categoria === cat ? 'is-on' : ''}`}
+                        aria-pressed={categoria === cat}
+                        aria-label={`Ver ${m.nombre}`}
+                        title={m.nombre}
+                        onClick={() => setCategoria(categoria === cat ? 'todas' : cat)}
+                        {...sound}
+                      >
+                        <MaterialIcon
+                          name={m.id as MaterialIconName}
+                          categoria={m.categoria}
+                          size={44}
+                        />
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ))}
           </aside>
 
           <div>
+            <div className="arsenal__toolbar">
+              <SearchField
+                label="Buscar materiales"
+                placeholder="Buscar"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className="arsenal__search"
+              />
+              <SelectField
+                label="Ordenar materiales"
+                value={orden}
+                onChange={(e) => setOrden(e.target.value as Orden)}
+                className="arsenal__sort"
+              >
+                {Object.entries(ORDEN_LABEL).map(([value, label]) => (
+                  <option key={value} value={value}>
+                    {label}
+                  </option>
+                ))}
+              </SelectField>
+            </div>
+
             <div className="section-title">
-              <h2>MATERIALES</h2>
+              <h2>{categoria === 'todas' ? 'MATERIALES' : categoria.toUpperCase()}</h2>
               <span>
                 {visibles.length} de {materiales.length}
               </span>
@@ -128,7 +179,7 @@ export function Artesania({ materiales }: Props) {
                   className={`material ${m.destacado ? 'material--destacado' : ''}`}
                   {...sound}
                 >
-                  <img className="material__icon" src={m.icono} alt="" loading="lazy" />
+                  <MaterialIcon name={m.id as MaterialIconName} categoria={m.categoria} />
                   <div style={{ minWidth: 0 }}>
                     <span className="material__cat">{m.categoria}</span>
                     <h3 className="material__name">{m.nombre}</h3>

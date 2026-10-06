@@ -195,8 +195,8 @@ export function DetalleProyecto({ proyecto, onVolver, onNavegar }: Props) {
           <div className="panel panel--capped side-block">
             <h3 className="label">Interés</h3>
             <p className="muted">¿Hablamos de este proyecto?</p>
-            <GoldButton block onClick={() => onNavegar('lobby')}>
-              IR AL GRUPO
+            <GoldButton block onClick={() => onNavegar('perfil')}>
+              ESCRIBIRME
             </GoldButton>
           </div>
         </aside>

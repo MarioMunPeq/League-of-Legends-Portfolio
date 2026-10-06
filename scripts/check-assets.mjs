@@ -87,7 +87,7 @@ if (rankMissing.length) {
 }
 
 /* ------------------------------------------------------------------
-   3. Assets dinamicos de los proyectos y materiales
+   3. Assets dinamicos de los proyectos
    ------------------------------------------------------------------ */
 
 const data = JSON.parse(readFileSync(join(SRC, 'data', 'proyectos.json'), 'utf8'))
@@ -110,16 +110,8 @@ console.log(
 )
 for (const m of champMissing) console.log('  ' + m)
 
-const materialMissing = []
-for (const m of data.materiales) {
-  if (!exists(join(PUBLIC, m.icono))) materialMissing.push(m.icono)
-}
-console.log(
-  materialMissing.length
-    ? `materiales: faltan ${materialMissing.length}`
-    : `materiales: ok (${data.materiales.length})`,
-)
-for (const m of materialMissing) console.log('  ' + m)
+/* Los iconos de material ya no son archivos: son glifos SVG en linea dentro de
+   MaterialIcon.tsx, que check-data.mjs recorre material por material. */
 
 /* ------------------------------------------------------------------
    4. Assets citados por los resumenes del script de descarga
@@ -131,8 +123,7 @@ console.log(
   manifest ? `manifiesto: ${manifest.champions?.length ?? 0} campeones` : 'manifiesto: ausente',
 )
 
-const total =
-  problems.length + rankMissing.length + champMissing.length + materialMissing.length
+const total = problems.length + rankMissing.length + champMissing.length
 if (total > 0) {
   console.log(`\n${total} referencias sin resolver`)
   process.exitCode = 1
