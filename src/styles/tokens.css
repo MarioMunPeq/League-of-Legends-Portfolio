@@ -92,7 +92,13 @@
   --line-inset: rgba(0, 0, 0, 0.5);
 
   /* medidas del cliente */
-  --topbar-h: 5.25rem;
+  /*
+   * La barra del cliente ocupa 152 px en una captura de 2396 px de ancho, o
+   * sea un 6.3% del ancho de la ventana. A 7.25rem (116 px) la barra de este
+   * portfolio queda con la misma proporcion que en el cliente a 1440p, que es
+   * la resolucion de la captura de referencia.
+   */
+  --topbar-h: 7.25rem;
   --topbar-sub-h: 3.25rem;
   --social-w: 20rem;
   --radius-sm: 2px;

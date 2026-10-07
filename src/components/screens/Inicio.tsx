@@ -4,6 +4,7 @@ import { asset } from '../../data/assets'
 import { GoldButton } from '../ui/GoldButton'
 import { Icon, type IconName } from '../ui/Icon'
 import { MaterialIcon, type MaterialIconName } from '../ui/MaterialIcon'
+import { PlayButton } from '../ui/PlayButton'
 import { crestPath } from '../../data/ranks'
 import { modoPorId } from '../../data/modos'
 import type { PortfolioData, Proyecto } from '../../data/types'
@@ -227,16 +228,11 @@ export function Inicio({ data, onNavegar, onAbrir, modo }: Props) {
             )}
 
             <div className="hero__actions">
-              <GoldButton
-                variant="play"
+              <PlayButton
                 size="lg"
-                onClick={() => {
-                  play('nav-click')
-                  onNavegar('jugar')
-                }}
-              >
-                {hero.ctaPrimario}
-              </GoldButton>
+                label={hero.ctaPrimario}
+                onClick={() => onNavegar('jugar')}
+              />
               <GoldButton
                 variant="ghost"
                 size="lg"

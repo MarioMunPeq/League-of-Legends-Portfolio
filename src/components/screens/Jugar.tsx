@@ -11,6 +11,15 @@ const COLAS = [
   { id: 'clasificatoria', titulo: 'CLASIFICATORIA', nota: 'Sin límite de tiempo para leer' },
 ]
 
+/**
+ * Pestañas de la cabecera del cliente. Solo PVP tiene contenido en el
+ * portfolio: las demas se pintan igual que en la captura, pero sin pulsador.
+ */
+const PESTANAS = ['PVP', 'COOPERATIVA VS. IA', 'ENTRENAMIENTO']
+
+/** A la derecha del filete, como en el cliente. */
+const PERSONALIZADAS = ['CREAR PARTIDA PERSONALIZADA', 'UNIRSE A PARTIDA PERSONALIZADA']
+
 type Props = {
   /** arranca en el modo confirmado desde la colección */
   modoInicial?: string | null
@@ -18,10 +27,11 @@ type Props = {
 }
 
 /**
- * Jugar -> modos de partida, como la pantalla PvP del cliente: fichas de
- * modo con emblema, acordeon de tipos de partida a la izquierda y boton de
- * confirmar centrado abajo. Confirmar lleva a la coleccion, donde cada
- * campeon es un proyecto.
+ * Jugar -> modos de partida, como la pantalla PvP del cliente: cabecera con los
+ * tipos de partida, carrusel de cinco fichas de modo con su filete de oro
+ * separando el grupo de TFT, panel con la descripcion y el acordeon de tipos
+ * de partida a la izquierda, y boton de confirmar centrado abajo. Confirmar
+ * lleva a la coleccion, donde cada campeon es un proyecto.
  */
 export function Jugar({ modoInicial, onConfirmar }: Props) {
   const { play } = useAudio()
@@ -39,14 +49,31 @@ export function Jugar({ modoInicial, onConfirmar }: Props) {
   return (
     <div className="jugar">
       <div className="jugar__tabs">
-        <span className="tab" role="tab" aria-selected="true" tabIndex={-1}>
-          PVP
-        </span>
-        <span className="spacer" />
-        <span className="jugar__badge">
-          <Icon name="crown" size={16} />
-          COMPETITIVO
-        </span>
+        {PESTANAS.map((p) => (
+          <span key={p} className={`jugar__tab ${p === 'PVP' ? 'jugar__tab--on' : ''}`}>
+            {p}
+          </span>
+        ))}
+
+        <span className="jugar__sep" aria-hidden="true" />
+
+        {PERSONALIZADAS.map((p) => (
+          <span key={p} className="jugar__tab">
+            {p}
+          </span>
+        ))}
+
+        {/* el trofeo de la clasificatoria, en el extremo derecho de la cabecera */}
+        <button
+          type="button"
+          className="jugar__trofeo"
+          aria-label="Ver la clasificatoria"
+          aria-expanded={abierta === 'clasificatoria'}
+          onClick={() => setAbierta(abierta === 'clasificatoria' ? null : 'clasificatoria')}
+          {...sound}
+        >
+          <Icon name="trophy" size={22} />
+        </button>
       </div>
 
       {/* el fondo de montañas, como el de la pantalla de modos del cliente */}
@@ -59,7 +86,13 @@ export function Jugar({ modoInicial, onConfirmar }: Props) {
             type="button"
             role="radio"
             aria-checked={m.id === elegido}
-            className={`mode ${m.id === elegido ? 'mode--active' : ''}`}
+            className={[
+              'mode',
+              m.id === elegido ? 'mode--active' : '',
+              m.separado ? 'mode--sep' : '',
+            ]
+              .filter(Boolean)
+              .join(' ')}
             onClick={() => {
               play('nav-click')
               setElegido(m.id)
@@ -73,29 +106,34 @@ export function Jugar({ modoInicial, onConfirmar }: Props) {
         ))}
       </div>
 
-      <div className="jugar__foot">
-        <div className="jugar__copy">
-          <p className="jugar__desc">{modo.descripcion}</p>
-        </div>
+      {/* filete del cliente: separa el carrusel del panel de descripcion */}
+      <div className="jugar__rule" aria-hidden="true" />
 
-        <div className="colas">
-          {COLAS.map((c) => (
-            <div key={c.id} className="colas__item">
-              <button
-                type="button"
-                className="colas__head"
-                aria-expanded={abierta === c.id}
-                onClick={() => setAbierta(abierta === c.id ? null : c.id)}
-                {...sound}
-              >
-                <span className="colas__bullet" aria-hidden="true">
-                  {abierta === c.id ? '▴' : '◈'}
-                </span>
-                {c.titulo}
-              </button>
-              {abierta === c.id && <p className="colas__nota">{c.nota}</p>}
-            </div>
-          ))}
+      <div className="jugar__body">
+        <div className="jugar__panel">
+          <p className="jugar__desc">{modo.descripcion}</p>
+
+          <div className="jugar__rule jugar__rule--short" aria-hidden="true" />
+
+          <div className="colas">
+            {COLAS.map((c) => (
+              <div key={c.id} className="colas__item">
+                <button
+                  type="button"
+                  className="colas__head"
+                  aria-expanded={abierta === c.id}
+                  onClick={() => setAbierta(abierta === c.id ? null : c.id)}
+                  {...sound}
+                >
+                  <span className="colas__bullet" aria-hidden="true">
+                    {abierta === c.id ? '▴' : '◈'}
+                  </span>
+                  {c.titulo}
+                </button>
+                {abierta === c.id && <p className="colas__nota">{c.nota}</p>}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 

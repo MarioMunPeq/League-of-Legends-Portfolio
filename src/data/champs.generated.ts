@@ -522,34 +522,13 @@ export const CHAMPS: Champ[] = [
     blurb: "Armed with the power of Runeterra's gales, Janna is a mysterious, elemental wind spirit who protects the dispossessed of Zaun. Some believe she was brought into existence by the pleas of Runeterra's sailors who prayed for fair winds as they navigated...",
     tags: ["Support","Mage"],
     info: {"attack":3,"defense":5,"magic":7,"difficulty":7},
-    hasSplash: true,
+    hasSplash: false,
     passive: {
-      name: "Tailwind",
-      icon: "JannaP.png",
-      description: "Janna's allies gain Move Speed moving towards her. Janna deals a portion of bonus Move Speed as bonus magic damage on hit and with Zephyr.",
+      name: "",
+      icon: "",
+      description: "",
     },
-    spells: [
-          {
-                "name": "Howling Gale",
-                "icon": "HowlingGale.png",
-                "description": "By creating a localized change in pressure and temperature, Janna is able to create a small storm that grows in size with time. She can activate the spell again to release the storm. On release this storm will fly towards the direction it was cast in, dealing damage and knocking away any enemies in its path."
-          },
-          {
-                "name": "Zephyr",
-                "icon": "SowTheWind.png",
-                "description": "Janna summons an air elemental that passively increases her Move Speed and enables her to pass through units. She may also activate this ability to deal damage and slow an enemy's Move Speed."
-          },
-          {
-                "name": "Eye Of The Storm",
-                "icon": "EyeOfTheStorm.png",
-                "description": "Janna conjures a defensive gale that shields an ally champion or turret from incoming damage and increases their Attack Damage."
-          },
-          {
-                "name": "Monsoon",
-                "icon": "ReapTheWhirlwind.png",
-                "description": "Janna surrounds herself in a magical storm, throwing enemies back. After the storm has settled, soothing winds heal nearby allies while the ability is active."
-          }
-    ],
+    spells: [],
   },
   {
     name: "Gangplank",
@@ -1922,6 +1901,43 @@ export const CHAMPS: Champ[] = [
                 "name": "Devour",
                 "icon": "TahmKenchRWrapper.png",
                 "description": "Tahm Kench devours a champion for a few seconds, dealing magic damage if they are an enemy, or shielding them if they are an ally."
+          }
+    ],
+  },
+  {
+    name: "Briar",
+    displayName: "Briar",
+    key: "233",
+    title: "the Restrained Hunger",
+    blurb: "A failed experiment by the Black Rose, Briar's uncontrollable bloodlust required a special pillory to focus her frenzied mind. After years of confinement, this living weapon broke free from her restraints and unleashed herself into the world. Now she's...",
+    tags: ["Fighter","Assassin"],
+    info: {"attack":9,"defense":5,"magic":3,"difficulty":3},
+    hasSplash: true,
+    passive: {
+      name: "Crimson Curse",
+      icon: "BriarP.png",
+      description: "Briar's attacks and abilities apply a stacking bleed that heals her for a portion of the damage it deals. Perpetually hungry, she gains increased healing based on her missing Health, but lacks innate Health Regeneration.",
+    },
+    spells: [
+          {
+                "name": "Head Rush",
+                "icon": "BriarQ.png",
+                "description": "Briar leaps to a unit and hits enemies with The Heel Wheel (of Pain), stunning them and breaking their Armor."
+          },
+          {
+                "name": "Blood Frenzy / Snack Attack",
+                "icon": "BriarW.png",
+                "description": "Briar leaps forward and shatters her pillory, entering a Blood Frenzy that causes her to relentlessly pursue the nearest enemy (prioritizing champions). While frenzied, she gains increased Attack Speed and Move Speed, and her attacks deal damage in an area around her target. Briar can reactivate this ability while frenzied to take a CHOMP out of her target on her next attack, dealing additional damage based on their missing Health, and healing Briar based on the damage she deals."
+          },
+          {
+                "name": "Chilling Scream",
+                "icon": "BriarE.png",
+                "description": "Briar refocuses her mind, removing Blood Frenzy and channeling energy into a powerful scream that damages and slows enemies. While charging, she takes reduced damage and heals for a portion of her max Health. A fully charged scream knocks foes back, dealing additional damage and stunning those who collide with a wall."
+          },
+          {
+                "name": "Certain Death",
+                "icon": "BriarR.png",
+                "description": "Briar kicks her pillory's hemolith gemstone, marking the first champion it hits as her prey. She then beelines straight to them, fearing other surrounding enemies upon arriving at her target, and enters a state of complete hemomania. She will pursue her prey until death, gaining the benefits of Blood Frenzy as well as additional Armor, Magic Resistance, Life Steal, and Move Speed."
           }
     ],
   },

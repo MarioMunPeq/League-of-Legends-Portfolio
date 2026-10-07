@@ -149,6 +149,25 @@ export const MINI_CRESTS = [
   'challenger',
 ]
 
+/**
+ * Emblema grande de rango: el que el cliente dibuja a un palmo bajo la cifra
+ * "5V5 FLEXIBLE" de la ficha. A diferencia de los mini crests, este si es una
+ * pieza de arte con relieve y brillo, y es la que se ve en la captura.
+ */
+export const RANK_EMBLEMS = [
+  'unranked',
+  'iron',
+  'bronze',
+  'silver',
+  'gold',
+  'platinum',
+  'emerald',
+  'diamond',
+  'master',
+  'grandmaster',
+  'challenger',
+]
+
 export const RUNE_STYLES = [
   'domination',
   'precision',

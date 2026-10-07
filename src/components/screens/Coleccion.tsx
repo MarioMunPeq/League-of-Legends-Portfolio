@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { asset, champSquare } from '../../data/assets'
+import { asset, champSplash } from '../../data/assets'
 import { SearchField, SelectField } from '../ui/Fields'
 import { TabStrip } from '../ui/TabStrip'
 import { Icon } from '../ui/Icon'
@@ -17,13 +17,11 @@ const ORDEN_LABEL: Record<Orden, string> = {
 }
 
 /**
- * El cliente engarza cada campeon con una gema distinta segun su nivel de
- * maestria. Estos son los marcos reales (`rarity/gem-borders`): el mismo salto
- * de color, pero translationado a la escala del portfolio.
+ * La gema de maestria cuelga de la esquina inferior izquierda de cada ficha del
+ * botin. `ui/rarity/rarity<N>` son las que usa el cliente: un rombo morado con
+ * la barra dorada detrás. El numero N es el nivel de maestria del proyecto.
  */
-const GEMA = ['gem-knorarity', 'gem-1', 'gem-2', 'gem-4', 'gem-5', 'gem-6', 'gem-7', 'gem-9']
-
-const gemaDe = (nivel: number) => GEMA[Math.max(0, Math.min(GEMA.length - 1, nivel - 5))]
+const gemaDe = (nivel: number) => `rarity${Math.max(1, Math.min(9, nivel))}`
 
 type Props = {
   proyectos: Proyecto[]
@@ -40,8 +38,8 @@ export function Coleccion({ proyectos, mastery, modo, onAbrir, onLimpiarModo }: 
   const { play } = useAudio()
   const [query, setQuery] = useState('')
   const [orden, setOrden] = useState<Orden>('orden')
-  const [categoria, setCategoria] = useState<'todas' | 'favoritos' | 'en-curso'>('todas')
   const [soloDestacados, setSoloDestacados] = useState(false)
+  const [etiquetaActiva, setEtiquetaActiva] = useState<string | null>(null)
   const sound = useButtonSound('grid')
 
   const modoActual = modoPorId(modo)
@@ -53,11 +51,9 @@ export function Coleccion({ proyectos, mastery, modo, onAbrir, onLimpiarModo }: 
     return [...counts.entries()].sort((a, b) => a[0].localeCompare(b[0], 'es'))
   }, [proyectos])
 
-  const [etiquetaActiva, setEtiquetaActiva] = useState<string | null>(null)
-
   const visibles = useMemo(() => {
     const q = query.trim().toLowerCase()
-    let lista = proyectos.filter((p) => {
+    const lista = proyectos.filter((p) => {
       if (soloDestacados && (mastery[p.id] ?? 0) < 8) return false
       if (etiquetaActiva && !p.tags.includes(etiquetaActiva)) return false
       if (!q) return true
@@ -70,15 +66,12 @@ export function Coleccion({ proyectos, mastery, modo, onAbrir, onLimpiarModo }: 
       )
     })
 
-    if (categoria === 'favoritos') lista = lista.filter((p) => (mastery[p.id] ?? 0) >= 8)
-    if (categoria === 'en-curso') lista = lista.filter((p) => p.estado === 'En curso')
-
     const sorted = [...lista]
     if (orden === 'orden') sorted.sort((a, b) => a.orden - b.orden)
     if (orden === 'alfabetico') sorted.sort((a, b) => a.titulo.localeCompare(b.titulo, 'es'))
     if (orden === 'mastery') sorted.sort((a, b) => (mastery[b.id] ?? 0) - (mastery[a.id] ?? 0))
     return sorted
-  }, [proyectos, query, orden, categoria, mastery, soloDestacados, etiquetaActiva])
+  }, [proyectos, query, orden, mastery, soloDestacados, etiquetaActiva])
 
   const totalMaestria = useMemo(
     () => proyectos.reduce((acc, p) => acc + (mastery[p.id] ?? 0), 0),
@@ -95,27 +88,23 @@ export function Coleccion({ proyectos, mastery, modo, onAbrir, onLimpiarModo }: 
 
   return (
     <>
-      <div className="subnav">
+      <div className="subnav subnav--loot">
         <TabStrip
+          variant="loot"
           ariaLabel="Secciones de la coleccion"
-          active={categoria}
-          onChange={(id) => setCategoria(id as typeof categoria)}
-          tabs={[
-            { id: 'todas', label: 'CAMPEONES', badge: String(proyectos.length) },
-            { id: 'favoritos', label: 'PREFERIDOS' },
-            { id: 'en-curso', label: 'EN CURSO' },
-          ]}
+          active="campeones"
+          onChange={() => {}}
+          tabs={[{ id: 'campeones', label: 'CAMPEONES' }]}
         />
       </div>
 
-      <div className="screen">
+      <div className="screen screen--coleccion">
         <div className="coleccion">
           <aside className="coleccion__side">
-            <div className="framed-stat">
+            <div className="framed-stat framed-stat--split">
               <span className="framed-stat__value">{totalMaestria}</span>
               <span className="framed-stat__label">Nivel de maestría total</span>
-            </div>
-            <div className="framed-stat">
+              <span className="framed-stat__rule" />
               <span className="framed-stat__value">{totalMaestria * 37}</span>
               <span className="framed-stat__label">Cifras de partida</span>
             </div>
@@ -185,13 +174,6 @@ export function Coleccion({ proyectos, mastery, modo, onAbrir, onLimpiarModo }: 
               </p>
             )}
 
-            <div className="section-title">
-              <h2>SUPERIOR</h2>
-              <span>
-                {visibles.length} de {proyectos.length} proyectos
-              </span>
-            </div>
-
             {visibles.length === 0 ? (
               <div className="screen--center" style={{ minHeight: '20rem' }}>
                 <p className="label">Sin resultados</p>
@@ -220,26 +202,37 @@ export function Coleccion({ proyectos, mastery, modo, onAbrir, onLimpiarModo }: 
                     onClick={() => onAbrir(proyecto)}
                     {...sound}
                   >
-                    <span className="champ-card__art">
-                      <img
-                        src={champSquare(proyecto.campeon)}
-                        alt={proyecto.campeon}
-                        loading="lazy"
-                      />
-                      <img
-                        className="champ-card__gem"
-                        src={asset(`assets/ui/rarity/${gemaDe(mastery[proyecto.id] ?? 0)}.svg`)}
-                        alt=""
-                      />
+                    <span className="champ-card__tile">
+                      {proyecto.highlights.length > 0 && (
+                        <span
+                          className="champ-card__badge"
+                          title={`${proyecto.highlights.length} puntos clave`}
+                        >
+                          {proyecto.highlights.length}
+                        </span>
+                      )}
+                      <span className="champ-card__art">
+                        <img
+                          className="champ-card__portrait"
+                          src={champSplash(proyecto.campeon)}
+                          alt={proyecto.campeon}
+                          loading="lazy"
+                        />
+                        <span
+                          className={`champ-card__estado ${estadoClass(proyecto.estado)}`}
+                          title={proyecto.estado}
+                        />
+                      </span>
                       <span className="champ-card__foot">
                         <span className="champ-card__level">
                           <img src={asset('assets/mastery/icon-mark-of-mastery.png')} alt="" />
                           {mastery[proyecto.id] ?? 0}
                         </span>
                       </span>
-                      <span
-                        className={`champ-card__estado ${estadoClass(proyecto.estado)}`}
-                        title={proyecto.estado}
+                      <img
+                        className="champ-card__gem"
+                        src={asset(`assets/ui/rarity/${gemaDe(mastery[proyecto.id] ?? 0)}.png`)}
+                        alt=""
                       />
                     </span>
                     <span className="champ-card__name">{proyecto.titulo}</span>

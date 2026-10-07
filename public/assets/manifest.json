@@ -449,6 +449,51 @@
       }
     },
     {
+      "name": "Briar",
+      "displayName": "Briar",
+      "key": "233",
+      "title": "the Restrained Hunger",
+      "blurb": "A failed experiment by the Black Rose, Briar's uncontrollable bloodlust required a special pillory to focus her frenzied mind. After years of confinement, this living weapon broke free from her restraints and unleashed herself into the world. Now she's...",
+      "tags": [
+        "Fighter",
+        "Assassin"
+      ],
+      "info": {
+        "attack": 9,
+        "defense": 5,
+        "magic": 3,
+        "difficulty": 3
+      },
+      "hasSplash": true,
+      "spells": [
+        {
+          "name": "Head Rush",
+          "description": "Briar leaps to a unit and hits enemies with The Heel Wheel (of Pain), stunning them and breaking their Armor.",
+          "icon": "BriarQ.png"
+        },
+        {
+          "name": "Blood Frenzy / Snack Attack",
+          "description": "Briar leaps forward and shatters her pillory, entering a Blood Frenzy that causes her to relentlessly pursue the nearest enemy (prioritizing champions). While frenzied, she gains increased Attack Speed and Move Speed, and her attacks deal damage in an area around her target.<br><br>Briar can reactivate this ability while frenzied to take a CHOMP out of her target on her next attack, dealing additional damage based on their missing Health, and healing Briar based on the damage she deals.",
+          "icon": "BriarW.png"
+        },
+        {
+          "name": "Chilling Scream",
+          "description": "Briar refocuses her mind, removing Blood Frenzy and channeling energy into a powerful scream that damages and slows enemies. While charging, she takes reduced damage and heals for a portion of her max Health. A fully charged scream knocks foes back, dealing additional damage and stunning those who collide with a wall.",
+          "icon": "BriarE.png"
+        },
+        {
+          "name": "Certain Death",
+          "description": "Briar kicks her pillory's hemolith gemstone, marking the first champion it hits as her prey. She then beelines straight to them, fearing other surrounding enemies upon arriving at her target, and enters a state of complete hemomania. She will pursue her prey until death, gaining the benefits of Blood Frenzy as well as additional Armor, Magic Resistance, Life Steal, and Move Speed.",
+          "icon": "BriarR.png"
+        }
+      ],
+      "passive": {
+        "name": "Crimson Curse",
+        "description": "Briar's attacks and abilities apply a stacking bleed that heals her for a portion of the damage it deals. Perpetually hungry, she gains increased healing based on her missing Health, but lacks innate Health Regeneration.",
+        "icon": "BriarP.png"
+      }
+    },
+    {
       "name": "Akali",
       "displayName": "Akali",
       "key": "84",
@@ -1340,33 +1385,12 @@
         "magic": 7,
         "difficulty": 7
       },
-      "hasSplash": true,
-      "spells": [
-        {
-          "name": "Howling Gale",
-          "description": "By creating a localized change in pressure and temperature, Janna is able to create a small storm that grows in size with time. She can activate the spell again to release the storm. On release this storm will fly towards the direction it was cast in, dealing damage and knocking away any enemies in its path.",
-          "icon": "HowlingGale.png"
-        },
-        {
-          "name": "Zephyr",
-          "description": "Janna summons an air elemental that passively increases her Move Speed and enables her to pass through units. She may also activate this ability to deal damage and slow an enemy's Move Speed.",
-          "icon": "SowTheWind.png"
-        },
-        {
-          "name": "Eye Of The Storm",
-          "description": "Janna conjures a defensive gale that shields an ally champion or turret from incoming damage and increases their Attack Damage.",
-          "icon": "EyeOfTheStorm.png"
-        },
-        {
-          "name": "Monsoon",
-          "description": "Janna surrounds herself in a magical storm, throwing enemies back. After the storm has settled, soothing winds heal nearby allies while the ability is active.",
-          "icon": "ReapTheWhirlwind.png"
-        }
-      ],
+      "hasSplash": false,
+      "spells": [],
       "passive": {
-        "name": "Tailwind",
-        "description": "Janna's allies gain Move Speed moving towards her.<br><br>Janna deals a portion of bonus Move Speed as bonus magic damage on hit and with Zephyr.",
-        "icon": "JannaP.png"
+        "name": "",
+        "icon": "",
+        "description": ""
       }
     },
     {
@@ -3648,9 +3672,9 @@
     }
   ],
   "_stats": {
-    "ok": 10,
-    "skipped": 558,
-    "failed": 0,
-    "bytes": 5453
+    "ok": 17,
+    "skipped": 562,
+    "failed": 1,
+    "bytes": 1295294
   }
 }

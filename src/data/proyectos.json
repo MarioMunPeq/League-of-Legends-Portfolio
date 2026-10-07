@@ -1,4 +1,4 @@
-{
+﻿{
   "perfil": {
     "nombre": "Mario Muñoz Pequeño",
     "summoner": "MarioMunPeq",
@@ -16,7 +16,7 @@
     "ctaPrimario": "JUGAR",
     "ctaSecundario": "VER PROYECTOS",
     "champFavorito": "Yasuo",
-    "portada": "Janna"
+    "portada": "Briar"
   },
   "sobreMi": [
     "Vengo de automatización y robótica industrial. Empecé pelando cables y configurando armarios de comunicaciones antes de escribir la primera línea de código, y esa base de manos sigue estando detrás de cada proyecto.",
@@ -696,14 +696,6 @@
       "estado": "En linea"
     },
     {
-      "id": "correo",
-      "nombre": "Correo",
-      "handle": "snakeyes271101@gmail.com",
-      "url": "mailto:snakeyes271101@gmail.com",
-      "icono": "mail",
-      "estado": "En linea"
-    },
-    {
       "id": "persona5",
       "nombre": "Portfolio Persona 5",
       "handle": "CV viviente",
@@ -721,7 +713,7 @@
     }
   ],
   "contacto": {
-    "destinatario": "snakeyes271101@gmail.com",
-    "asunto": "Contacto desde el portfolio"
+    "github": "https://github.com/MarioMunPeq",
+    "linkedin": "https://www.linkedin.com/in/mario-mu%C3%B1oz-peque%C3%B1o/"
   }
 }

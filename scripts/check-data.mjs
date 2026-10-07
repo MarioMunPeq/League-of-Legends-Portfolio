@@ -85,7 +85,19 @@ for (const m of data.materiales) {
 }
 
 for (const e of data.enlaces) {
-  if (!/^(https?:\/\/|mailto:)/.test(e.url)) problemas.push(`enlace social invalido: ${e.nombre} -> ${e.url}`)
+  // el portfolio no expone correo, asi que mailto queda fuera a proposito
+  if (/^mailto:/i.test(e.url)) problemas.push(`enlace por correo no permitido: ${e.nombre}`)
+  else if (!/^https?:\/\//.test(e.url)) problemas.push(`enlace social invalido: ${e.nombre} -> ${e.url}`)
+}
+
+// El contacto se resuelve por red: ni correo ni otros esquemas.
+for (const k of ['github', 'linkedin']) {
+  if (!/^https:\/\//.test(data.contacto?.[k] ?? '')) {
+    problemas.push(`contacto.${k} no es una URL https`)
+  }
+}
+if (/@/.test(JSON.stringify(data.contacto ?? {}))) {
+  problemas.push('el bloque de contacto expone un correo')
 }
 
 const ids = data.proyectos.map((p) => p.id)

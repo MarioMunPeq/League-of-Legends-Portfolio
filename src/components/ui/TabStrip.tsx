@@ -11,12 +11,28 @@ type Props<T extends string> = {
   active: T
   onChange: (id: T) => void
   ariaLabel: string
+  /**
+   * `loot` reproduce la tira de categorias del botin del cliente: serif de oro,
+   * muy espaciada y con el separador bajo la activa. Sin variante, la tira
+   * compacta que usan la ficha y la armeria.
+   */
+  variant?: 'default' | 'loot'
 }
 
-export function TabStrip<T extends string>({ tabs, active, onChange, ariaLabel }: Props<T>) {
+export function TabStrip<T extends string>({
+  tabs,
+  active,
+  onChange,
+  ariaLabel,
+  variant = 'default',
+}: Props<T>) {
   const sound = useButtonSound('grid')
   return (
-    <div className="tabs" role="tablist" aria-label={ariaLabel}>
+    <div
+      className={variant === 'loot' ? 'tabs tabs--loot' : 'tabs'}
+      role="tablist"
+      aria-label={ariaLabel}
+    >
       {tabs.map((tab) => (
         <button
           key={tab.id}

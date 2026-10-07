@@ -29,6 +29,7 @@ import {
   PROFILE_ICONS,
   ITEM_IDS,
   SUMMONER_SPELLS,
+  RANK_EMBLEMS,
 } from './assets.config.mjs'
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..')
@@ -46,10 +47,11 @@ const CHAMPIONS = [
   'Gwen',
   'Malphite',
   'TahmKench',
+  'Briar',
 ]
 
 /** Fondos de pantalla: los que la app usa como hero o portada del perfil. */
-const HERO_SPLASH = ['Yasuo', 'Janna']
+const HERO_SPLASH = ['Yasuo', 'Briar']
 
 /**
  * Roster de relleno para la pantalla de seleccion: aparecen bloqueados,
@@ -215,6 +217,31 @@ const exists = async (p) => {
   }
 }
 
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
+
+/**
+ * El origen de CommunityDragon corta la conexion con un 522 con cierta
+ * frecuencia y no es raro al abrir muchas peticiones seguidas. Reintentar con
+ * espera creciente evita que un asset quede sin descargar y luego se referencie
+ * desde la app.
+ */
+async function request(url, intentos = 4) {
+  let ultimo = null
+  for (let i = 0; i < intentos; i++) {
+    try {
+      const res = await fetch(url, { redirect: 'follow' })
+      if (res.ok) return res
+      ultimo = `HTTP ${res.status}`
+      // un 404 no se arregla esperando
+      if (res.status === 404) return null
+    } catch (err) {
+      ultimo = err.message
+    }
+    await sleep(600 * (i + 1))
+  }
+  return ultimo
+}
+
 async function download(url, relPath, { force = false } = {}) {
   const dest = join(OUT, relPath)
   if (!force && (await exists(dest))) {
@@ -222,12 +249,14 @@ async function download(url, relPath, { force = false } = {}) {
     return dest
   }
   await mkdir(dirname(dest), { recursive: true })
-  const res = await fetch(url, { redirect: 'follow' })
-  if (!res.ok) {
+
+  const res = await request(url)
+  if (!res || typeof res === 'string') {
     stats.failed++
-    failures.push({ url, relPath, status: res.status })
+    failures.push({ url, relPath, status: res ?? 'sin respuesta' })
     return null
   }
+
   const buf = Buffer.from(await res.arrayBuffer())
   if (buf.length === 0) {
     stats.failed++
@@ -311,6 +340,15 @@ async function fetchRanked() {
   // insignias vectoriales: son las que se ven junto al nivel en la barra superior
   for (const rank of MINI_CRESTS) {
     await download(`${CD_UI}/ranked-mini-crests/${rank}.svg`, `ranked/crest/${rank}.svg`)
+  }
+
+  /*
+   * Emblema grande de rango. El de la ficha es una pieza de arte con relieve,
+   * no el vectorito de20 px: son las que el cliente dibuja a un palmo bajo
+   * cada cifra, asi que van aparte de los mini crests.
+   */
+  for (const rank of RANK_EMBLEMS) {
+    await download(`${CD_UI}/ranked-emblem/emblem-${rank}.png`, `ranked/emblem/emblem-${rank}.png`)
   }
 
   // emblemas grandes para el fondo de la ficha de perfil

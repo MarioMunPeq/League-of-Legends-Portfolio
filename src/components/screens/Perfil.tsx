@@ -23,7 +23,12 @@ type Props = {
   data: PortfolioData
 }
 
-/** Perfil: la ficha del jugador. Arriba el arte con las cinco cifras, a la izquierda el panel de identidad y a la derecha el contenido. */
+/**
+ * Perfil: la ficha del jugador. El arte ocupa todo el bloque; abajo se reparten
+ * en dos columnas, el panel de identidad a la izquierda y las cinco cifras a la
+ * derecha, tal y como los compone el cliente. El contenido va debajo, a ancho
+ * completo.
+ */
 export function Perfil({ data }: Props) {
   const { perfil, sobreMi, formacion, experiencia, hitos, hero, enlaces, contacto } = data
   const rangoTexto = `${rankLabel(perfil.rango)} ${perfil.division}`.trim()
@@ -35,33 +40,34 @@ export function Perfil({ data }: Props) {
 
   const crest = useMemo(() => crestPath(perfil.rango), [perfil.rango])
 
-  /* Las cifras de la cabecera, con el emblema de cada una debajo. */
-  const cifras = [
+  /*
+   * Las cinco cifras de la cabecera. `valor` a null es una insignia que el
+   * cliente no sabe mostrar y dibuja como un interrogante dorado en vez de
+   * un texto de reemplazo.
+   */
+  const cifras: {
+    etiqueta: string
+    valor: string | null
+    emblema: string
+    svg?: boolean
+    apagado?: boolean
+  }[] = [
     { etiqueta: '5V5 FLEXIBLE', valor: rangoTexto, emblema: crest, svg: true },
     {
       etiqueta: 'HONOR',
       valor: `NIVEL ${perfil.nivel}`,
       emblema: asset('assets/ui/honor/heart-miniicon.png'),
-      svg: false,
     },
     {
       etiqueta: 'PUNTUACIÓN DE MAESTRÍA',
       valor: String(perfil.maestria),
       emblema: asset('assets/mastery/mastery-mark.png'),
-      svg: false,
     },
-    {
-      etiqueta: 'TROFEO',
-      valor: 'SIN LOGRO',
-      emblema: asset('assets/ranked/frame/ranked-emblem.png'),
-      svg: false,
-      apagado: true,
-    },
+    { etiqueta: 'TROFEO', valor: null, emblema: asset('assets/ranked/frame/ranked-emblem.png'), apagado: true },
     {
       etiqueta: 'ESTANDARTE MUNDIAL',
-      valor: 'SIN LOGRO',
+      valor: null,
       emblema: asset('assets/ranked/frame/member-banner.png'),
-      svg: false,
       apagado: true,
     },
   ]
@@ -100,57 +106,76 @@ export function Perfil({ data }: Props) {
             <span className="perfil__lookup-name">{perfil.summoner}</span>
             <span className="perfil__lookup-tag">#ESPAÑA</span>
           </span>
+          <span className="perfil__gear" aria-hidden="true">
+            <Icon name="settings" size={18} />
+          </span>
         </div>
 
-        <div className="perfil__cifras">
-          {cifras.map((c) => (
-            <div key={c.etiqueta} className={`cifra ${c.apagado ? 'cifra--apagada' : ''}`}>
-              <span className="cifra__etiqueta">{c.etiqueta}</span>
-              <span className="cifra__valor">{c.valor}</span>
-              {c.svg ? (
-                <img className="cifra__emblema cifra__emblema--crest" src={c.emblema} alt="" />
-              ) : (
-                <img className="cifra__emblema" src={c.emblema} alt="" />
-              )}
+        {/* Panel de identidad y cifras: las dos mitades de la ficha del cliente. */}
+        <div className="perfil__stage">
+          <aside className="perfil__card">
+            {/* El nivel va en su pastilla, con el disco de cuenta delante. */}
+            <span className="perfil__levelchip">
+              <span className="perfil__levelchip-mark" aria-hidden="true" />
+              {perfil.nivel}
+            </span>
+
+            {/* Marco real del cliente, con la insignia dentro del aro. */}
+            <div className="perfil__emblem">
+              <img className="perfil__emblem-crest" src={crest} alt={`Insignia de ${rangoTexto}`} />
+              <img
+                className="perfil__emblem-frame"
+                src={asset('assets/ui/level-ring/theme-1-solid-border.png')}
+                alt=""
+              />
             </div>
-          ))}
+
+            <h1 className="perfil__name">{perfil.nombre}</h1>
+
+            {/* el lema bajo el nombre, como el titulo de rango del cliente */}
+            <p className="perfil__lema">Mente maestra</p>
+
+            {/*
+              Los tres huecos de runa. El cliente los deja vacios cuando la
+              cuenta no tiene pagina montada, asi que aqui son solo aros.
+            */}
+            <div className="perfil__circles" aria-hidden="true">
+              <i />
+              <i />
+              <i />
+            </div>
+
+            <p className="perfil__title-line">{hero.eyebrow}</p>
+
+            {/* el remate del panel y el boton de plegar, bajo la punta */}
+            <span className="perfil__collapse" aria-hidden="true">
+              <Icon name="caret" size={18} />
+            </span>
+          </aside>
+
+          <div className="perfil__cifras">
+            {cifras.map((c) => (
+              <div key={c.etiqueta} className={`cifra ${c.apagado ? 'cifra--apagada' : ''}`}>
+                <span className="cifra__etiqueta">{c.etiqueta}</span>
+                {c.valor ? (
+                  <span className="cifra__valor">{c.valor}</span>
+                ) : (
+                  <span className="cifra__valor cifra__valor--q" title="Sin mostrar">
+                    ?
+                  </span>
+                )}
+                <img
+                  className={`cifra__emblema ${c.svg ? 'cifra__emblema--crest' : ''}`}
+                  src={c.emblema}
+                  alt=""
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
       <div className="perfil__layout">
-        <aside className="panel panel--capped perfil__card">
-          {/* El nivel va en su placa hexagonal, arriba del retrato. */}
-          <span className="perfil__levelchip">{perfil.nivel}</span>
-
-          {/* Marco real del cliente, con la insignia dentro del aro. */}
-          <div className="perfil__emblem">
-            <img className="perfil__emblem-crest" src={crest} alt={`Insignia de ${rangoTexto}`} />
-            <img
-              className="perfil__emblem-frame"
-              src={asset('assets/ui/level-ring/theme-1-solid-border.png')}
-              alt=""
-            />
-          </div>
-
-          <h1 className="perfil__name">{perfil.nombre}</h1>
-          <p className="perfil__riotid-plain">{perfil.summoner}</p>
-
-          <p className="perfil__lema">Mente maestra</p>
-
-          <div className="perfil__circles" aria-hidden="true">
-            <img src={asset('assets/perks/trees/7200_domination.png')} alt="" />
-            <img src={asset('assets/perks/trees/7204_resolve.png')} alt="" />
-            <img src={asset('assets/perks/runes/firststrike.png')} alt="" />
-          </div>
-
-          <p className="perfil__title-line">{hero.eyebrow}</p>
-
-          <div className="chips" style={{ justifyContent: 'center', marginTop: '0.75rem' }}>
-            <span className="chip chip--gold">Nivel {perfil.nivel}</span>
-            <span className="chip chip--cyan">Maestría {perfil.maestria}</span>
-          </div>
-        </aside>
-
         <div className="perfil__main" ref={mainRef}>
           <section className="perfil__section perfil__about" id="sobre-mi">
             <div className="section-title">
@@ -231,17 +256,9 @@ export function Perfil({ data }: Props) {
               <span>partida abierta: escribí y te contesto</span>
             </div>
             <div className="contacto">
-              <FormularioContacto contacto={contacto} />
+              <FormularioContacto contacto={contacto} summoner={perfil.summoner} />
 
               <aside className="contacto__aside">
-                <div className="panel panel--capped side-block">
-                  <h3>Contacto directo</h3>
-                  <a className="side-link" href={`mailto:${contacto.destinatario}`}>
-                    <span>{contacto.destinatario}</span>
-                    <Icon name="mail" size={14} />
-                  </a>
-                </div>
-
                 <div className="panel panel--capped side-block">
                   <h3>Disponibilidad</h3>
                   <p className="muted" style={{ fontSize: '0.875rem' }}>
@@ -252,7 +269,7 @@ export function Perfil({ data }: Props) {
                 <div className="panel panel--capped side-block">
                   <h3>Enlaces</h3>
                   <div className="stack" style={{ gap: '0.5rem' }}>
-                    {enlaces.slice(0, 4).map((e) => (
+                    {enlaces.map((e) => (
                       <a
                         key={e.id}
                         className="side-link"

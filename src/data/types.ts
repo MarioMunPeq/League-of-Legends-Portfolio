@@ -129,7 +129,8 @@ export type PortfolioData = {
   materiales: Material[]
   enlaces: EnlaceSocial[]
   contacto: {
-    destinatario: string
-    asunto: string
+    /** el portfolio no expone correo: el contacto es por GitHub o LinkedIn */
+    github: string
+    linkedin: string
   }
 }

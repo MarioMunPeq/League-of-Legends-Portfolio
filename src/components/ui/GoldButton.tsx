@@ -1,7 +1,7 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react'
 import { useButtonSound } from '../../hooks/useAudio'
 
-type Variant = 'gold' | 'ghost' | 'play'
+type Variant = 'gold' | 'ghost'
 
 type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: Variant
@@ -14,7 +14,6 @@ type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
 const VARIANTS: Record<Variant, string> = {
   gold: 'btn btn--gold',
   ghost: 'btn btn--ghost',
-  play: 'btn btn--play',
 }
 
 export function GoldButton({

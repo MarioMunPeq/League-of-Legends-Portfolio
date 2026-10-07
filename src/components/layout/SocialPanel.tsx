@@ -1,4 +1,4 @@
-import { useState, type CSSProperties } from 'react'
+﻿import { useState, type CSSProperties } from 'react'
 import { useButtonSound } from '../../hooks/useAudio'
 import { asset } from '../../data/assets'
 import type { EnlaceSocial } from '../../data/types'
@@ -6,11 +6,18 @@ import './chrome.css'
 
 const AVATARS = [1, 12, 26, 588, 1013, 1420]
 
-/** Los grupos plegados del panel, tal y como los pinta el cliente. */
+/**
+ * Los grupos plegados del panel. El cliente no lista los miembros de estos
+ * grupos: solo ensena el total y cuantos hay disponibles, asi que aqui se
+ * declaran las dos cifras y no un relleno que se recalcula al desplegar.
+ */
 const GRUPOS = [
-  { id: 'reclutamiento', label: 'RECLUTAMIENTO', total: 3 },
-  { id: 'general', label: 'GENERAL', total: 12 },
+  { id: 'reclutamiento', label: 'RECLUTAMIENTO', disponibles: 0, total: 3 },
+  { id: 'general', label: 'GENERAL', disponibles: 1, total: 12 },
 ]
+
+/** Avisos sin leer apilados sobre el boton de grupo, como en el cliente. */
+const AVISOS = 7
 
 type Props = {
   enlaces: EnlaceSocial[]
@@ -19,8 +26,8 @@ type Props = {
 /**
  * El panel social del cliente: cabecera "SOCIAL" con cuatro botones de icono,
  * el grupo PANAS con el nivel de cada persona, dos grupos plegados y la barra
- * inferior de chat, amigos y micro. Los iconos son las mascaras que carga la
- * League, pintadas como mascara para heredar el color.
+ * inferior de chat, amigos, micro y ajustes. Los iconos son las mascaras que
+ * carga la League, pintadas como mascara para heredar el color.
  */
 export function SocialPanel({ enlaces }: Props) {
   const [abiertos, setAbiertos] = useState<Record<string, boolean>>({})
@@ -39,16 +46,16 @@ export function SocialPanel({ enlaces }: Props) {
             aria-label="Anadir enlace"
             {...sound}
           >
-            <Mask name="add_person_mask.png" size={20} />
+            <Mask name="social/add_person_mask.png" size={22} />
           </button>
           <button type="button" className="social__tool" aria-label="Anadir carpeta" {...sound}>
-            <Mask name="add_folder_mask.png" size={20} />
+            <Mask name="social/add_folder_mask.png" size={22} />
           </button>
           <button type="button" className="social__tool" aria-label="Ordenar" {...sound}>
-            <Mask name="sort_mask.png" size={20} />
+            <Mask name="social/sort_mask.png" size={22} />
           </button>
           <button type="button" className="social__tool" aria-label="Buscar" {...sound}>
-            <Mask name="search_mask.png" size={20} />
+            <Mask name="social/search_mask.png" size={22} />
           </button>
         </div>
       </div>
@@ -69,6 +76,7 @@ export function SocialPanel({ enlaces }: Props) {
             href={enlace.url}
             target={enlace.url.startsWith('http') ? '_blank' : undefined}
             rel="noreferrer noopener"
+            title={`${enlace.nombre} · ${enlace.estado}`}
             {...sound}
           >
             <span className="social__avatar">
@@ -77,28 +85,24 @@ export function SocialPanel({ enlaces }: Props) {
                 alt=""
                 loading="lazy"
               />
+              {/*
+                El cliente no escribe el estado a la derecha de la fila: lo
+                marca con un punto encajado en el aro del avatar.
+              */}
+              <span
+                className={`social__pip social__pip--${estadoSlug(enlace.estado)}`}
+                aria-hidden="true"
+              />
             </span>
             <span className="social__member-text">
               <span className="social__member-name">{enlace.nombre}</span>
               <span className="social__member-handle">{enlace.handle}</span>
-            </span>
-            <span
-              className={`social__member-state ${
-                enlace.estado === 'En linea'
-                  ? 'social__member-state--online'
-                  : enlace.estado === 'Ocupado'
-                    ? 'social__member-state--busy'
-                    : ''
-              }`}
-            >
-              {enlace.estado}
             </span>
           </a>
         ))}
 
         {GRUPOS.map((grupo) => {
           const abierto = abiertos[grupo.id] ?? false
-          const relleno = grupo.total - (abierto ? 1 : 0)
           return (
             <div key={grupo.id}>
               <button
@@ -116,7 +120,7 @@ export function SocialPanel({ enlaces }: Props) {
                 </span>
                 <span>{grupo.label}</span>
                 <span className="social__count">
-                  ({relleno}/{grupo.total})
+                  ({grupo.disponibles}/{grupo.total})
                 </span>
               </button>
               {abierto && (
@@ -131,30 +135,51 @@ export function SocialPanel({ enlaces }: Props) {
       </div>
 
       <div className="social__bottom">
-        <p className="social__note social__note--legal">
-          Proyecto fan no afiliado a Riot Games. League of Legends y todos sus personajes son marcas
-          de Riot Games.
-        </p>
         <div className="social__foot">
           <button type="button" className="social__foot-btn" aria-label="Chat" {...sound}>
-            <img src={asset('assets/ui/social/message-mask.svg')} alt="" />
+            <Mask name="social/message-mask.svg" size={24} />
           </button>
-          <button type="button" className="social__foot-btn" aria-label="Amigos" {...sound}>
-            <img src={asset('assets/ui/social/profile-mask.svg')} alt="" />
+          <button
+            type="button"
+            className="social__foot-btn social__foot-btn--badged"
+            aria-label="Amigos"
+            {...sound}
+          >
+            <Mask name="social/party-invite-mask.svg" size={24} />
+            <span className="social__badge">{AVISOS}</span>
           </button>
           <button type="button" className="social__foot-btn" aria-label="Micro" {...sound}>
-            <Mask name="mute_mask.png" size={22} />
+            <Mask name="social/mute_mask.png" size={24} />
           </button>
           <span className="social__version">26.19</span>
+          {/*
+            El boton de ajustes vive al otro extremo de la barra, separado del
+            grupo de chat: el cliente lo deja suelto contra el borde.
+          */}
+          <button
+            type="button"
+            className="social__foot-btn social__foot-btn--settings"
+            aria-label="Ajustes"
+            {...sound}
+          >
+            <Mask name="uikit-icons/icon_settings.png" size={24} />
+          </button>
         </div>
       </div>
     </aside>
   )
 }
 
+/** El estado sepainta como clase; el texto va en el title de la fila. */
+function estadoSlug(estado: EnlaceSocial['estado']) {
+  if (estado === 'En linea') return 'online'
+  if (estado === 'Ocupado') return 'busy'
+  return 'away'
+}
+
 /** Icono del cliente pintado como mascara, para heredar el color del texto. */
 function Mask({ name, size }: { name: string; size: number }) {
-  const url = asset(`assets/ui/social/${name}`)
+  const url = asset(`assets/ui/${name}`)
   return (
     <span
       className="maskicon"

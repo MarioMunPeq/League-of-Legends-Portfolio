@@ -3,6 +3,7 @@ import { useAudio } from '../../hooks/useAudio'
 /** Iconos de navegacion dibujados en SVG, con la silueta del cliente. */
 export type IconName =
   | 'play'
+  | 'home'
   | 'profile'
   | 'collection'
   | 'loot'
@@ -22,6 +23,7 @@ export type IconName =
   | 'cv'
   | 'web'
   | 'crown'
+  | 'trophy'
   | 'shield'
   | 'spark'
   | 'plus'
@@ -31,6 +33,7 @@ export type IconName =
 
 const PATHS: Record<IconName, string> = {
   play: 'M8 5v14l11-7z',
+  home: 'M12 3 2 11.2l1.2 1.8L4 12.4V21h6v-6h4v6h6v-8.6l.8.6 1.2-1.8L12 3Z',
   profile:
     'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0 2c-4 0-7 2.2-7 5v1h14v-1c0-2.8-3-5-7-5Z',
   collection: 'M4 5h7v6H4V5Zm9 0h7v6h-7V5ZM4 13h7v6H4v-6Zm9 0h7v6h-7v-6Z',
@@ -56,6 +59,8 @@ const PATHS: Record<IconName, string> = {
   cv: 'M6 2h8l4 4v16H6V2Zm7 1.5V7h3.5L13 3.5ZM8.5 10h7v1.6h-7V10Zm0 3.4h7V15h-7v-1.6Zm0 3.4h4.5v1.6H8.5v-1.6Z',
   web: 'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm6.9 9h-3a15 15 0 0 0-1.4-5.7A8 8 0 0 1 18.9 11ZM12 4.1c.8 1.2 1.4 3.4 1.6 6.9h-3.2c.2-3.5.8-5.7 1.6-6.9ZM8.5 5.3A15 15 0 0 0 7.1 11h-3a8 8 0 0 1 4.4-5.7ZM5.1 13h3a15 15 0 0 0 1.4 5.7A8 8 0 0 1 5.1 13ZM12 19.9c-.8-1.2-1.4-3.4-1.6-6.9h3.2c-.2 3.5-.8 5.7-1.6 6.9Zm3.5-1.2a15 15 0 0 0 1.4-5.7h3a8 8 0 0 1-4.4 5.7Z',
   crown: 'M3 18h18l1.5-11-5.5 4L12 4 7 11 1.5 7 3 18Z',
+  trophy:
+    'M8 4h8v6a4 4 0 0 1-8 0V4ZM4 5h2a6 6 0 0 0 1 4.4A5 5 0 0 1 4 9V5Zm16 0h-2a6 6 0 0 1-1 4.4A5 5 0 0 0 20 9V5ZM11 14h2v3h3v2H8v-2h3v-3Z',
   shield: 'M12 2 4 5.5v6c0 5 3.4 9.4 8 10.5 4.6-1.1 8-5.5 8-10.5v-6L12 2Z',
   spark: 'M12 2.5 14 9l6.5 2-6.5 2-2 6.5-2-6.5L3.5 11 10 9l2-6.5Z',
   plus: 'M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6V5Z',
@@ -65,7 +70,7 @@ const PATHS: Record<IconName, string> = {
     'M14 3h7v7h-2V6.4l-8.3 8.3-1.4-1.4L17.6 5H14V3ZM5 5h5v2H6v11h11v-4h2v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z',
 }
 
-const FILLED: IconName[] = ['play', 'crown', 'spark']
+const FILLED: IconName[] = ['play', 'home', 'crown', 'spark']
 
 type Props = {
   name: IconName

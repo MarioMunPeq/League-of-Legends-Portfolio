@@ -1,103 +1,142 @@
 import { useMemo, type CSSProperties } from 'react'
-import { GoldButton } from '../ui/GoldButton'
+import { Icon } from '../ui/Icon'
+import { PlayButton } from '../ui/PlayButton'
 import { useAudio, useButtonSound } from '../../hooks/useAudio'
 import type { Route } from '../../hooks/useHashRoute'
-import type { Perfil } from '../../data/types'
+import type { EnlaceSocial, Perfil } from '../../data/types'
 import { asset } from '../../data/assets'
 import { crestPath } from '../../data/ranks'
 import './chrome.css'
 
 /**
- * Secciones de la barra superior. El cliente no pone texto: pone el icono de
- * la seccion y el nombre sale al pasar el raton. Estos son los archivos que
- * carga la League (`nav-icon-profile`, `nav-icon-collections`, `nav-icon-loot`),
- * y van en el grupo de la derecha, que es donde el cliente los coloca.
+ * Pestanas de la izquierda. En el cliente son los juegos (LOL, CLASSIC, TFT): el
+ * sitio entero cambia con ellas, asi que en el portfolio son las tres pantallas
+ * por las que se entra. El mismo comportamiento, otro contenido.
  */
-const SECCIONES: { route: Route; label: string; icono: string }[] = [
-  { route: 'perfil', label: 'Perfil', icono: 'nav-icon-profile.svg' },
-  { route: 'coleccion', label: 'Campeones', icono: 'nav-icon-collections.svg' },
-  { route: 'artesania', label: 'Artesanía', icono: 'nav-icon-loot.svg' },
+const PESTANAS: { route: Route; label: string }[] = [
+  { route: 'inicio', label: 'INICIO' },
+  { route: 'coleccion', label: 'COLECCIÓN' },
+  { route: 'artesania', label: 'ARTESANÍA' },
+]
+
+/**
+ * Celdas de la derecha. El cliente llena ese grupo con los iconos de misiones,
+ * botin, tienda y runas; aqui solo caben los dos enlaces que el portfolio anade
+ * al juego: repositorio y perfil profesional.
+ */
+const EXTERNOS: { id: string; label: string; glifo: 'github' | 'linkedin' }[] = [
+  { id: 'github', label: 'Repositorio', glifo: 'github' },
+  { id: 'linkedin', label: 'Perfil profesional', glifo: 'linkedin' },
 ]
 
 type Props = {
   route: Route
   perfil: Perfil
+  enlaces: EnlaceSocial[]
   onNavigate: (route: Route) => void
 }
 
-export function TopBar({ route, perfil, onNavigate }: Props) {
+export function TopBar({ route, perfil, enlaces, onNavigate }: Props) {
   const { muted, toggle, play } = useAudio()
   const sound = useButtonSound('grid')
+  const navSound = useButtonSound('gold')
   const crest = useMemo(() => crestPath(perfil.rango), [perfil.rango])
+
+  const porId = useMemo(
+    () => new Map(enlaces.map((e) => [e.id, e] as const)),
+    [enlaces],
+  )
+  const correo = porId.get('correo')
 
   return (
     <header className="top">
-      {/* El logo de League es el boton de inicio, igual que en el cliente. */}
-      <button
-        type="button"
-        className="top__logo"
-        aria-label="Inicio"
-        aria-current={route === 'inicio' ? 'page' : undefined}
-        onClick={() => {
-          play('nav-click')
-          onNavigate('inicio')
-        }}
+      {/* La placa de JUGAR del cliente: escudo de League + cartel con punta. */}
+      <PlayButton onClick={() => onNavigate('jugar')} />
+
+      {/* El boton azul de avisos del cliente; aqui abre el canal de contacto. */}
+      <a
+        className="top__alert"
+        href={correo?.url ?? '#contacto'}
+        aria-label={correo ? `Escribir a ${correo.handle}` : 'Contacto'}
+        title={correo ? `Escribir a ${correo.handle}` : 'Contacto'}
         {...sound}
       >
-        <img src={asset('assets/ui/chrome/league-logo-active.svg')} alt="" />
-      </button>
+        !
+      </a>
 
-      <GoldButton
-        variant="play"
-        className="btn--play"
-        onClick={() => {
-          play('nav-click')
-          onNavigate('jugar')
-        }}
-      >
-        JUGAR
-      </GoldButton>
+      {/* Doble galon del cliente, entre el aviso y las pestanas. */}
+      <span className="top__chevron" aria-hidden="true" />
+
+      <nav className="top__tabs" aria-label="Secciones principales">
+        {PESTANAS.map((p) => (
+          <button
+            key={p.route}
+            type="button"
+            className="top__tab"
+            aria-current={route === p.route ? 'page' : undefined}
+            onClick={() => {
+              play('nav-click')
+              onNavigate(p.route)
+            }}
+            {...navSound}
+          >
+            {p.label}
+          </button>
+        ))}
+      </nav>
 
       <div className="top__tools">
-        {/* Secciones del portfolio, en el grupo de iconos de la derecha. */}
-        <nav className="top__nav" aria-label="Navegacion principal">
-          {SECCIONES.map((s) => (
-            <button
-              key={s.route}
-              type="button"
-              className="top__link"
-              title={s.label}
-              aria-label={s.label}
-              aria-current={route === s.route ? 'page' : undefined}
-              onClick={() => {
-                play('nav-click')
-                onNavigate(s.route)
-              }}
-              {...sound}
-            >
-              <img src={asset(`assets/ui/nav/${s.icono}`)} alt="" />
-            </button>
-          ))}
+        <nav className="top__nav" aria-label="Enlaces externos">
+          {EXTERNOS.map((s) => {
+            const destino = porId.get(s.id)
+            if (!destino) return null
+            return (
+              <a
+                key={s.id}
+                className="top__link top__link--ext"
+                href={destino.url}
+                target={destino.url.startsWith('http') ? '_blank' : undefined}
+                rel="noreferrer noopener"
+                title={s.label}
+                aria-label={s.label}
+                {...sound}
+              >
+                <Icon name={s.glifo} size={28} />
+              </a>
+            )
+          })}
         </nav>
 
+        {/*
+         * La cartera. Ojo con los nombres de archivo de Riot: estan cruzados.
+         * `icon-be-150.png` contiene el diamante cian de los Riot Points y
+         * `icon-rp-72.png` la llama dorada de las esencias azules. Por eso la primera
+         * fila (esencias) usa el fichero "rp" y la segunda (RP) el "be".
+         *
+         * El cliente solo encierra la primera fila en la capsula: los Riot Points
+         * van debajo, fuera del borde.
+         */}
         <div className="top__wallet">
-          <span className="top__wallet-row">
-            <img src={asset('assets/ui/currency/icon-be-150.png')} alt="" />
+          <span className="top__wallet-pill">
+            <img src={asset('assets/ui/currency/icon-rp-72.png')} alt="" />
             20
             <span className="top__wallet-plus">+</span>
           </span>
           <span className="top__wallet-row">
-            <img src={asset('assets/ui/currency/icon-rp-32.png')} alt="" />
+            <img src={asset('assets/ui/currency/icon-be-150.png')} alt="" />
             147 MIL
           </span>
         </div>
 
-        {/* Retrato con el marco real del cliente y el nivel en su hexagono. */}
+        {/*
+         * La cuenta es la unica via a la ficha: el retrato y el nombre son un
+         * solo boton, como en el cliente, donde el invocador abre su perfil.
+         */}
         <button
           type="button"
-          className="top__profile"
+          className="top__account"
           title="Perfil"
-          aria-label={`${perfil.summoner}, nivel ${perfil.nivel}`}
+          aria-label={`Perfil de ${perfil.summoner}, nivel ${perfil.nivel}`}
           aria-current={route === 'perfil' ? 'page' : undefined}
           onClick={() => {
             play('nav-click')
@@ -115,18 +154,19 @@ export function TopBar({ route, perfil, onNavigate }: Props) {
             />
             <span className="top__level">{perfil.nivel}</span>
           </span>
+          <span className="top__summoner">
+            <span className="top__summoner-name">{perfil.summoner}</span>
+            <span className="top__status">
+              <span className="top__status-dot" aria-hidden="true">
+                <Icon name="check" size={11} />
+              </span>
+              En linea
+            </span>
+          </span>
         </button>
 
-        <div className="top__summoner">
-          <span className="top__summoner-name">{perfil.summoner}</span>
-          <span className="top__status">
-            <span className="top__status-dot" />
-            En linea
-          </span>
-        </div>
-
         <button type="button" className="top__iconbtn" aria-label="Invitar" {...sound}>
-          <Mask name="party-invite-mask.svg" size={22} />
+          <Mask name="party-invite-mask.svg" size={24} tone="orange" />
         </button>
         <button
           type="button"
@@ -139,7 +179,10 @@ export function TopBar({ route, perfil, onNavigate }: Props) {
           <Mask name="mute_mask.png" size={22} />
         </button>
 
-        {/* Controles de ventana: en el cliente van al extremo derecho. */}
+        {/*
+         * Controles de ventana. El cliente los TREPONE en la esquina superior
+         * derecha, no centrados en la barra, asi que van fuera del flujo.
+         */}
         <div className="top__sysbtns">
           <button type="button" className="top__sysbtn" aria-label="Ayuda" {...sound}>
             <img src={asset('assets/ui/hextech/question-mark.svg')} alt="" />
@@ -161,13 +204,14 @@ export function TopBar({ route, perfil, onNavigate }: Props) {
 
 /**
  * Icono del cliente pintado como mascara, para heredar el color del texto.
- * Es lo que hace la League con sus iconos de la barra social.
+ * Es lo que hace la League con sus iconos de la barra social: el glifo es
+ * monocromo y el color lo pone quien lo usa.
  */
-function Mask({ name, size }: { name: string; size: number }) {
+function Mask({ name, size, tone }: { name: string; size: number; tone?: string }) {
   const url = asset(`assets/ui/social/${name}`)
   return (
     <span
-      className="maskicon"
+      className={`maskicon ${tone === 'orange' ? 'maskicon--orange' : ''}`}
       style={
         {
           width: size,

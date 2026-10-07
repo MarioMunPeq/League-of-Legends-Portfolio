@@ -62,7 +62,12 @@ function Shell() {
 
   return (
     <div className="frame">
-      <TopBar route={route} perfil={data.perfil} onNavigate={navigate} />
+      <TopBar
+        route={route}
+        perfil={data.perfil}
+        enlaces={data.enlaces}
+        onNavigate={navigate}
+      />
 
       <div className="frame__body">
         <main className="main" id="contenido">
