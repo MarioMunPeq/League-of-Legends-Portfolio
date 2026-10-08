@@ -160,12 +160,25 @@
  * El recorte son dos poligonos: el exterior pinta el filo cian y el
  * pseudoelemento inset repite la punta tres pixeles mas pequena con el
  * degradado de Marina del cliente.
+ *
+ * Medidas del escudo, leidas en la captura con un muestreo de pixeles:
+ *   medallon ....... 72 x 75 px en una barra de 152  -> 0.47 del alto
+ *   aro dorado ..... 6 px, o sea el 8% del diametro
+ *   globo .......... 60 px de diametro, 83% del medallon
+ *   L de oro ....... 20 px de ancho, un tercio del globo
+ *   color del globo . rgb(3,120,154) en el borde, rgb(35,211,252) en el nucleo
+ *   nucleo ......... al 67% del ancho y al 48% del alto, no al centro
+ *
+ * De ahi salen el diametro de 3.4rem (0.47 x 7.25rem de barra), el aro de
+ * 0.4375rem y el degradado. Antes el globo era casi blanco y llevaba un halo
+ * cian por fuera, y la L venia desplazada con un translateX para compensar un
+ * inset asimetrico: de ahi que se lea descentrada.
  */
 .play {
   display: inline-flex;
   align-items: center;
   flex-shrink: 0;
-  height: 3.25rem;
+  height: 3.55rem;
   padding: 0 0.5rem;
 }
 
@@ -174,38 +187,45 @@
   z-index: 2;
   display: grid;
   place-items: center;
-  width: 3.75rem;
-  height: 3.75rem;
+  width: 3.4rem;
+  height: 3.4rem;
   flex-shrink: 0;
-  margin-right: -0.5rem;
+  margin-right: -0.6rem;
 }
 
-/* el globo cian detras de la L */
+/* el globo teal con su nucleo cian y el aro dorado del cliente */
 .play-crest::before {
   content: '';
   position: absolute;
-  inset: 0.25rem 0.125rem 0.25rem 0.5rem;
+  inset: 0.25rem;
   border-radius: 50%;
   background: radial-gradient(
-    circle at 62% 24%,
-    #d3fbff 0%,
-    #4cd0f0 24%,
-    #0f7ba6 62%,
-    #05283c 100%
+    circle at 67% 48%,
+    #1cb8e8 0%,
+    #1094c2 16%,
+    #037c9a 42%,
+    #04566f 74%,
+    #04222f 100%
   );
   box-shadow:
-    0 0 0 0.125rem rgba(4, 14, 24, 0.9),
-    0 0 0 0.3125rem var(--gold-deep),
-    0 0 0.75rem rgba(76, 208, 240, 0.5);
+    inset 0 0 0.4375rem rgba(2, 14, 22, 0.85),
+    0 0 0 0.125rem #0c141c,
+    0 0 0 0.375rem #a8894f,
+    0 0 0 0.5rem rgba(10, 18, 26, 0.9),
+    0 0 0.5rem rgba(0, 0, 0, 0.8);
 }
 
+/*
+ * El dibujo va centrado y al 95% del globo, que es la proporcion del cliente
+ * (la Ldorada ocupa 57 px de un globo de 60). Sin el `translateX` de antes: el
+ * inset asimetrico lo empujaba fuera de centro y por eso se leia torcido.
+ */
 .play-crest img {
   position: relative;
-  width: 3rem;
-  height: 2.5rem;
+  width: 2.75rem;
+  height: 2.25rem;
   object-fit: contain;
-  transform: translateX(-0.3125rem);
-  filter: drop-shadow(0 0.125rem 0.25rem rgba(0, 0, 0, 0.85));
+  filter: drop-shadow(0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.85));
 }
 
 .play-plate {
@@ -214,8 +234,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 11rem;
-  height: 3.25rem;
+  min-width: 10.3rem;
+  height: 3.55rem;
   padding: 0 1.875rem;
   clip-path: polygon(0 0, calc(100% - 1.25rem) 0, 100% 50%, calc(100% - 1.25rem) 100%, 0 100%);
   background: linear-gradient(180deg, #8ff0ff 0%, #35c2e8 45%, #1279a4 100%);
@@ -280,23 +300,23 @@
 
 /* la del escenario de inicio, un punto mayor */
 .play--lg {
-  height: 4.25rem;
+  height: 4.5rem;
 }
 
 .play--lg .play-crest {
-  width: 4.5rem;
-  height: 4.5rem;
-  margin-right: -0.625rem;
+  width: 4.25rem;
+  height: 4.25rem;
+  margin-right: -0.75rem;
 }
 
 .play--lg .play-crest img {
-  width: 3.625rem;
-  height: 3rem;
+  width: 3rem;
+  height: 2.5rem;
 }
 
 .play--lg .play-plate {
-  min-width: 13.5rem;
-  height: 4.25rem;
+  min-width: 12.5rem;
+  height: 4.5rem;
   font-size: 1.375rem;
 }
 
@@ -314,15 +334,15 @@
   .play-crest {
     width: 2.75rem;
     height: 2.75rem;
-    margin-right: -0.75rem;
+    margin-right: -0.6rem;
   }
   .play-crest img {
-    width: 2.5rem;
-    height: 2.125rem;
+    width: 2rem;
+    height: 1.625rem;
   }
   .play-plate {
-    min-width: 8.5rem;
-    height: 2.5rem;
+    min-width: 8rem;
+    height: 2.75rem;
     padding: 0 1.5rem;
   }
   .play-plate::after {

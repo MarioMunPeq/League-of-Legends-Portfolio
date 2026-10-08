@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState } from 'react'
 import { asset, champSplash } from '../../data/assets'
-import { crestPath, rankLabel } from '../../data/ranks'
+import { emblemCrop, profileIcon, rankEmblem, rankLabel } from '../../data/ranks'
 import { Icon } from '../ui/Icon'
 import type { IconName } from '../ui/Icon'
 import { FormularioContacto } from '../ui/FormularioContacto'
@@ -18,6 +18,12 @@ const SECCIONES: { id: string; label: string }[] = [
   { id: 'formacion', label: 'FORMACIÓN' },
   { id: 'contacto', label: 'CONTACTO' },
 ]
+
+/**
+ * Icono de cuenta de la ficha. El cliente muestra un profile-icon real dentro
+ * del marco de nivel; este es el que mejor encaja con la paleta del portfolio.
+ */
+const ICONO_CUENTA = 1013
 
 type Props = {
   data: PortfolioData
@@ -38,7 +44,8 @@ export function Perfil({ data }: Props) {
   const [activa, setActiva] = useState(() => SECCIONES[0]?.id ?? 'sobre-mi')
   const sound = useButtonSound('grid')
 
-  const crest = useMemo(() => crestPath(perfil.rango), [perfil.rango])
+  const crest = useMemo(() => rankEmblem(perfil.rango), [perfil.rango])
+  const recorte = useMemo(() => emblemCrop(perfil.rango), [perfil.rango])
 
   /*
    * Las cinco cifras de la cabecera. `valor` a null es una insignia que el
@@ -49,14 +56,14 @@ export function Perfil({ data }: Props) {
     etiqueta: string
     valor: string | null
     emblema: string
-    svg?: boolean
+    recorte?: number
     apagado?: boolean
   }[] = [
-    { etiqueta: '5V5 FLEXIBLE', valor: rangoTexto, emblema: crest, svg: true },
+    { etiqueta: '5V5 FLEXIBLE', valor: rangoTexto, emblema: crest, recorte },
     {
       etiqueta: 'HONOR',
       valor: `NIVEL ${perfil.nivel}`,
-      emblema: asset('assets/ui/honor/heart-miniicon.png'),
+      emblema: asset('assets/ui/honor/shotcaller-selected.png'),
     },
     {
       etiqueta: 'PUNTUACIÓN DE MAESTRÍA',
@@ -120,9 +127,17 @@ export function Perfil({ data }: Props) {
               {perfil.nivel}
             </span>
 
-            {/* Marco real del cliente, con la insignia dentro del aro. */}
+            {/*
+              El retrato de la cuenta dentro del marco real de nivel. Antes
+              aqui iba la insignia de rango, que es lo que el cliente NO
+              muestra en este hueco: el aro lo ocupa el profile-icon.
+            */}
             <div className="perfil__emblem">
-              <img className="perfil__emblem-crest" src={crest} alt={`Insignia de ${rangoTexto}`} />
+              <img
+                className="perfil__emblem-icon"
+                src={profileIcon(ICONO_CUENTA)}
+                alt={`Icono de cuenta de ${perfil.summoner}`}
+              />
               <img
                 className="perfil__emblem-frame"
                 src={asset('assets/ui/level-ring/theme-1-solid-border.png')}
@@ -164,11 +179,19 @@ export function Perfil({ data }: Props) {
                     ?
                   </span>
                 )}
-                <img
-                  className={`cifra__emblema ${c.svg ? 'cifra__emblema--crest' : ''}`}
-                  src={c.emblema}
-                  alt=""
-                />
+                {/*
+                  El emblema de rango llega en un lienzo mucho mayor que el
+                  escudo que contiene: `recorte` lo encoge para que se vea la
+                  pieza, no el fondo transparente de la composicion.
+                */}
+                <span className="cifra__emblema-box">
+                  <img
+                    className="cifra__emblema"
+                    src={c.emblema}
+                    alt=""
+                    style={c.recorte ? { width: `${(1 / c.recorte) * 100}%` } : undefined}
+                  />
+                </span>
               </div>
             ))}
           </div>

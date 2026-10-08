@@ -7,24 +7,34 @@ import type { EnlaceSocial, Perfil } from '../../data/types'
 import { asset } from '../../data/assets'
 import { crestPath } from '../../data/ranks'
 import './chrome.css'
-
 /**
  * Pestanas de la izquierda. En el cliente son los juegos (LOL, CLASSIC, TFT): el
  * sitio entero cambia con ellas, asi que en el portfolio son las tres pantallas
- * por las que se entra. El mismo comportamiento, otro contenido.
+ * por las que se entra. Coleccion y artesania no van aqui: el cliente tambien
+ * las deja en el grupo de iconos de la derecha, que es donde se han puesto.
  */
 const PESTANAS: { route: Route; label: string }[] = [
   { route: 'inicio', label: 'INICIO' },
-  { route: 'coleccion', label: 'COLECCIÓN' },
-  { route: 'artesania', label: 'ARTESANÍA' },
+  { route: 'jugar', label: 'JUGAR' },
+  { route: 'perfil', label: 'PERFIL' },
 ]
 
 /**
- * Celdas de la derecha. El cliente llena ese grupo con los iconos de misiones,
- * botin, tienda y runas; aqui solo caben los dos enlaces que el portfolio anade
- * al juego: repositorio y perfil profesional.
+ * Celdas de la derecha. El cliente llena ese grupo con los iconos de sus
+ * secciones (coleccion, botin, tienda...) y aqui se mixes con los dos enlaces
+ * que el portfolio anade al juego: repositorio y perfil profesional. Las dos
+ * primeras son navegacion de la app y van con el icono del cliente; las otras
+ * dos son enlaces y usan el glifo, tambien en dorado como las del cliente.
  */
-const EXTERNOS: { id: string; label: string; glifo: 'github' | 'linkedin' }[] = [
+const SECCIONES: {
+  route?: Route
+  id?: string
+  label: string
+  icono?: string
+  glifo?: 'github' | 'linkedin'
+}[] = [
+  { route: 'coleccion', label: 'Coleccion de campeones', icono: 'nav-icon-collections.svg' },
+  { route: 'artesania', label: 'Artesania y materiales', icono: 'nav-icon-loot.svg' },
   { id: 'github', label: 'Repositorio', glifo: 'github' },
   { id: 'linkedin', label: 'Perfil profesional', glifo: 'linkedin' },
 ]
@@ -46,7 +56,8 @@ export function TopBar({ route, perfil, enlaces, onNavigate }: Props) {
     () => new Map(enlaces.map((e) => [e.id, e] as const)),
     [enlaces],
   )
-  const correo = porId.get('correo')
+  // el portfolio no publica correo: el boton de aviso abre el canal de GitHub
+  const github = porId.get('github')
 
   return (
     <header className="top">
@@ -56,9 +67,11 @@ export function TopBar({ route, perfil, enlaces, onNavigate }: Props) {
       {/* El boton azul de avisos del cliente; aqui abre el canal de contacto. */}
       <a
         className="top__alert"
-        href={correo?.url ?? '#contacto'}
-        aria-label={correo ? `Escribir a ${correo.handle}` : 'Contacto'}
-        title={correo ? `Escribir a ${correo.handle}` : 'Contacto'}
+        href={github?.url ?? '#contacto'}
+        aria-label={github ? `Escribir por GitHub a ${github.handle}` : 'Contacto'}
+        title={github ? `Escribir por GitHub a ${github.handle}` : 'Contacto'}
+        target={github?.url.startsWith('http') ? '_blank' : undefined}
+        rel="noreferrer noopener"
         {...sound}
       >
         !
@@ -86,23 +99,50 @@ export function TopBar({ route, perfil, enlaces, onNavigate }: Props) {
       </nav>
 
       <div className="top__tools">
-        <nav className="top__nav" aria-label="Enlaces externos">
-          {EXTERNOS.map((s) => {
-            const destino = porId.get(s.id)
-            if (!destino) return null
+        <nav className="top__nav" aria-label="Navegacion secundaria">
+          {SECCIONES.map((s) => {
+            const destino = s.id ? porId.get(s.id) : undefined
+
+            const inner = s.glifo ? (
+              <Icon name={s.glifo} size={28} />
+            ) : (
+              <img src={asset(`assets/ui/nav/${s.icono}`)} alt="" />
+            )
+
+            if (destino) {
+              return (
+                <a
+                  key={s.id}
+                  className="top__link top__link--ext"
+                  href={destino.url}
+                  target={destino.url.startsWith('http') ? '_blank' : undefined}
+                  rel="noreferrer noopener"
+                  title={s.label}
+                  aria-label={s.label}
+                  {...sound}
+                >
+                  {inner}
+                </a>
+              )
+            }
+
+            const activo = s.route !== undefined && route === s.route
             return (
-              <a
-                key={s.id}
-                className="top__link top__link--ext"
-                href={destino.url}
-                target={destino.url.startsWith('http') ? '_blank' : undefined}
-                rel="noreferrer noopener"
+              <button
+                key={s.route}
+                type="button"
+                className="top__link"
                 title={s.label}
                 aria-label={s.label}
+                aria-current={activo ? 'page' : undefined}
+                onClick={() => {
+                  play('nav-click')
+                  if (s.route) onNavigate(s.route)
+                }}
                 {...sound}
               >
-                <Icon name={s.glifo} size={28} />
-              </a>
+                {inner}
+              </button>
             )
           })}
         </nav>

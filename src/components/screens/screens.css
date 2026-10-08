@@ -586,8 +586,12 @@
 
 /*
  * El panel del cliente no es un rectangulo: los laterales entran en bisel y
- * el remate baja a punta. El recorte es lo que reproduce esa silueta; el
- * filete dorado va en el pseudoelemento desplazado por debajo.
+ * el remate baja a punta. El recorte es lo que reproduce esa silueta.
+ *
+ * El filete va en `::before` con el mismo recorte pero algo mas grande, para
+ * que asome como una orla. Va sin `z-index`: el orden de pintado lo pone
+ * encima del fondo del panel y no tapa el contenido, que es lo contrario de
+ * lo que hacia antes y lo que dejaba el panel en un tono marron continuo.
  */
 .perfil__card {
   position: relative;
@@ -596,16 +600,27 @@
   align-items: center;
   padding: 1.5rem 1.5rem 3rem;
   text-align: center;
-  background: linear-gradient(180deg, rgba(18, 34, 47, 0.94) 0%, rgba(6, 17, 28, 0.96) 100%);
-  clip-path: polygon(0 0, 100% 0, 100% 86%, 50% 100%, 0 86%);
+  background: linear-gradient(180deg, #16273c 0%, #0b1524 60%, #0d1a2e 100%);
+  clip-path: polygon(0 0, 100% 0, 100% 88%, 50% 100%, 0 88%);
 }
 
+/* la orla dorada: mismo recorte, dilatado 2 px hacia fuera */
 .perfil__card::before {
   content: '';
   position: absolute;
-  inset: 0.125rem;
-  background: linear-gradient(180deg, rgba(74, 55, 20, 0.85), rgba(30, 22, 8, 0.9));
-  clip-path: polygon(0 0, 100% 0, 100% 88.5%, 50% 100%, 0 88.5%);
+  inset: -2px;
+  background: linear-gradient(180deg, #6d5a2a 0%, #3d3318 55%, #5c4a22 100%);
+  clip-path: polygon(0 0, 100% 0, 100% 88%, 50% 100%, 0 88%);
+  z-index: -1;
+}
+
+/* el filo interior claro, como el borde biselado del panel real */
+.perfil__card::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  background: linear-gradient(180deg, rgba(139, 168, 214, 0.5) 0%, rgba(60, 88, 130, 0.25) 70%);
+  clip-path: polygon(0 0, 100% 0, 100% 89%, 50% 100%, 0 89%);
   z-index: -1;
 }
 
@@ -644,11 +659,16 @@
   margin-bottom: 0.75rem;
 }
 
-.perfil__emblem-crest {
-  width: 5rem;
-  height: 5rem;
-  object-fit: contain;
-  filter: drop-shadow(0 0.5rem 1rem rgba(0, 0, 0, 0.7));
+/*
+ * El retrato de la cuenta va recortado en circulo porque el profile-icon del
+ * juego es un cuadrado; el marco de nivel es el que aporta la forma.
+ */
+.perfil__emblem-icon {
+  width: 5.25rem;
+  height: 5.25rem;
+  object-fit: cover;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px rgba(1, 10, 19, 0.9), 0 0.5rem 1rem rgba(0, 0, 0, 0.7);
 }
 
 .perfil__emblem-frame {
@@ -784,24 +804,39 @@
   color: var(--ink-dim);
 }
 
-/* las insignias son piezas grandes: el cliente las dibuja a casi un palmo */
-.cifra__emblema {
+/*
+ * Las insignias son piezas grandes: el cliente las dibuja a casi un palmo. La
+ * caja es fija y la imagen se desborda a proposito, porque el emblema de rango
+ * llega en un lienzo de 1280x720 con el escudo diminuto en medio; `recorte` (un
+ * ancho en % en linea) lo escala para que la pieza, y no el lienzo, sea lo que
+ * se ve.
+ */
+.cifra__emblema-box {
+  display: block;
+  position: relative;
   width: 9rem;
   height: 9rem;
   margin-top: 0.75rem;
+  overflow: hidden;
+}
+
+.cifra__emblema {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: auto;
   object-fit: contain;
+  transform: translate(-50%, -50%);
   filter: drop-shadow(0 0.5rem 1rem rgba(0, 0, 0, 0.75));
 }
 
-.cifra__emblema--crest {
-  width: 11rem;
-  height: 11rem;
-  margin-top: 0.25rem;
+.cifra--apagada .cifra__emblema-box {
+  opacity: 0.45;
 }
 
 .cifra--apagada .cifra__emblema {
-  opacity: 0.45;
-  filter: grayscale(0.8) brightness(0.7);
+  filter: grayscale(0.8) brightness(0.7) drop-shadow(0 0.5rem 1rem rgba(0, 0, 0, 0.75));
 }
 
 .perfil__layout {
@@ -1809,7 +1844,7 @@
 .jugar__modes {
   position: relative;
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   align-items: stretch;
 }
 
@@ -1836,21 +1871,6 @@
   background: rgba(200, 170, 110, 0.18);
 }
 
-/* el grupo de TFT va separado del resto con un filete de oro a todo el alto */
-.mode.mode--sep::before {
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: linear-gradient(
-    180deg,
-    transparent 0%,
-    var(--gold-deep) 18%,
-    var(--gold) 50%,
-    var(--gold-deep) 82%,
-    transparent 100%
-  );
-}
-
 .mode:hover {
   background: linear-gradient(180deg, rgba(18, 34, 47, 0.55), rgba(4, 12, 21, 0.25));
 }
@@ -1862,26 +1882,28 @@
     linear-gradient(180deg, rgba(70, 55, 20, 0.16), transparent 78%);
 }
 
+/*
+ * El recorte del icono trae el fondo del cliente dentro, asi que la ficha
+ * inactiva se apaga con el filtro (como en el juego) y no con opacidad: bajar
+ * la opacidad dejaria ver el fondo de la pagina a traves del recorte.
+ */
 .mode__icon {
   width: 5.5rem;
   height: 5.5rem;
   object-fit: contain;
-  opacity: 0.45;
-  filter: grayscale(0.6) brightness(0.85) drop-shadow(0 0.375rem 0.75rem rgba(0, 0, 0, 0.7));
+  filter: grayscale(0.55) brightness(0.72) drop-shadow(0 0.375rem 0.75rem rgba(0, 0, 0, 0.7));
   transition:
-    opacity var(--t-med) var(--ease-out),
     filter var(--t-med) var(--ease-out),
     transform var(--t-med) var(--ease-out);
 }
 
 .mode:hover .mode__icon {
-  opacity: 0.8;
+  filter: grayscale(0.15) brightness(0.92) drop-shadow(0 0.375rem 0.75rem rgba(0, 0, 0, 0.7));
   transform: translateY(-2px);
 }
 
 .mode--active .mode__icon,
 .mode--active:hover .mode__icon {
-  opacity: 1;
   transform: none;
   filter: drop-shadow(0 0 1.5rem var(--gold-glow));
 }
@@ -2044,46 +2066,29 @@
   border-radius: 50%;
 }
 
-/* CONFIRMAR: el recorte real del cliente (find_match_*.png), con la X al lado */
+/*
+ * CONFIRMAR: el boton entero del cliente (marco de oro, flecha cian y el
+ * circulo con la X) viene recortado de una captura del propio cliente, asi
+ * que aqui solo se escala. Sin esto el texto se descentraba al usar el recorte
+ * como nine-tramos.
+ */
 .confirmar {
-  --confirm-art: url('/assets/ui/buttons/find_match_default.png');
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  border: 0 solid transparent;
-  padding: 0.5rem 1.75rem 0.5rem 0.5rem;
-  background: none;
-  border-image-source: var(--confirm-art);
-  border-image-slice: 22 fill;
-  border-image-width: 100% 100%;
-  border-image-outset: 0;
-  border-image-repeat: stretch;
-  font-family: 'Beaufort', serif;
-  font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  color: var(--ink-bright);
-  text-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.9);
+  width: 19.5rem;
+  aspect-ratio: 784 / 172;
+  flex-shrink: 0;
+  background: url('/assets/ui/buttons/confirmar.png') center / 100% 100% no-repeat;
+  transition:
+    filter var(--t-fast) var(--ease-out),
+    transform var(--t-fast) var(--ease-out);
 }
 
 .confirmar:hover {
-  --confirm-art: url('/assets/ui/buttons/find_match_hover.png');
-  color: #fff;
+  filter: brightness(1.18) saturate(1.15);
 }
 
 .confirmar:active {
-  --confirm-art: url('/assets/ui/buttons/find_match_active.png');
-}
-
-.confirmar__x {
-  display: grid;
-  place-items: center;
-  width: 1.75rem;
-  height: 1.75rem;
-  font-size: 0.8125rem;
-  color: var(--gold-bright);
-  border: 2px solid var(--gold);
-  border-radius: 50%;
+  filter: brightness(0.82);
+  transform: translateY(1px);
 }
 
 /* ============================================================
@@ -2111,65 +2116,88 @@
   border-radius: var(--radius-sm);
 }
 
-.contacto__panel--listo {
-  align-items: center;
-  text-align: center;
-  color: var(--green-online);
-}
-
-.contacto__panel--listo h3 {
+.contacto__panel h3 {
   margin: 0;
-}
-
-.contacto__panel--listo p {
-  max-width: 30rem;
-}
-
-.contacto__filas {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
-  gap: 1rem;
-}
-
-.contacto__label {
-  display: block;
-  margin-bottom: 0.375rem;
   font-family: 'Beaufort', serif;
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  letter-spacing: 0.14em;
   color: var(--gold);
 }
 
-.contacto__error {
-  margin-top: 0.375rem;
-  font-size: 0.8125rem;
-  color: var(--red-offline);
+/*
+ * Las dos redes como filas de la ficha: icono en placa, nombre de canal y el
+ * dato a la derecha. Sustituyen a los campos del formulario, que ya no hay.
+ */
+.contacto__redes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
 }
 
-.contacto__summary {
+.contacto__red {
   display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-  padding: 1rem 1.25rem;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.75rem 1rem;
+  text-decoration: none;
   background: rgba(4, 12, 21, 0.6);
-  border: 1px dashed var(--line-hair);
+  border: 1px solid var(--line-hair);
+  border-radius: var(--radius-sm);
+  color: var(--ink-muted);
+  transition:
+    border-color var(--t-med) var(--ease-out),
+    background var(--t-med) var(--ease-out);
+}
+
+.contacto__red:hover {
+  text-decoration: none;
+  color: var(--gold-bright);
+  border-color: var(--line-soft);
+  background: rgba(18, 34, 47, 0.7);
+}
+
+.contacto__red-icon {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  flex-shrink: 0;
+  color: var(--gold);
+  background: var(--bg-sunken);
+  border: 1px solid var(--line-hair);
   border-radius: var(--radius-sm);
 }
 
-.contacto__summary > span > span {
-  display: block;
-  font-size: 0.6875rem;
-  letter-spacing: 0.1em;
+.contacto__red:hover .contacto__red-icon {
+  color: var(--gold-bright);
+  border-color: var(--line-soft);
+}
+
+.contacto__red-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.contacto__red-label {
+  font-family: 'Beaufort', serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--ink-dim);
 }
 
-.contacto__summary strong {
+.contacto__red-valor {
   font-family: 'Beaufort', serif;
   font-size: 0.9375rem;
-  color: var(--ink-bright);
+  color: var(--ink-base);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .contacto__aside {
@@ -2546,13 +2574,9 @@
   .perfil__hero {
     min-height: 38rem;
   }
-  .cifra__emblema {
+  .cifra__emblema-box {
     width: 7rem;
     height: 7rem;
-  }
-  .cifra__emblema--crest {
-    width: 8.5rem;
-    height: 8.5rem;
   }
   .cifra__valor {
     font-size: 1.5rem;
@@ -2587,8 +2611,7 @@
     display: none;
   }
   .jugar__modes {
-    /* con cinco fichas el carrusel no cabe: se desplaza como en el cliente */
-    grid-template-columns: repeat(5, 11rem);
+    grid-template-columns: repeat(2, 14rem);
     overflow-x: auto;
     scrollbar-width: none;
   }

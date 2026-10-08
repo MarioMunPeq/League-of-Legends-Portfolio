@@ -43,7 +43,38 @@ export function crestPath(rango: Rango): string {
   return asset(`assets/ranked/crest/${RANKS[rango].slug}.svg`)
 }
 
-export const UNRANKED_CREST = asset('assets/ranked/crest/unranked.svg')
+/**
+ * Emblema grande de rango: la pieza de arte que el cliente dibuja a un palmo
+ * bajo la cifra "5V5 FLEXIBLE" de la ficha. Son composiciones de 1280x720 (algunas
+ * 2560x1440) con el escudo en el centro, asi que hay que recortarlo con
+ * `object-fit` sobre un lienzo cuadrado o se veria el marco entero.
+ */
+export function rankEmblem(rango: Rango): string {
+  return asset(`assets/ranked/emblem/emblem-${RANKS[rango].slug}.png`)
+}
+
+/**
+ * El emblema viene en un lienzo mucho mayor que el escudo que contiene. Estos
+ * son los factores con los que hay que encogerlo para que el escudo, y no el
+ * fondo, sea lo que ocupa la caja; se midieron sobre el alfa de cada PNG.
+ */
+export const EMBLEM_CROP: Record<string, number> = {
+  iron: 0.15,
+  bronze: 0.178,
+  silver: 0.202,
+  gold: 0.197,
+  platinum: 0.204,
+  emerald: 0.223,
+  diamond: 0.234,
+  master: 0.23,
+  grandmaster: 0.239,
+  challenger: 0.244,
+  unranked: 0.2,
+}
+
+export function emblemCrop(rango: Rango): number {
+  return EMBLEM_CROP[RANKS[rango].slug] ?? 0.2
+}
 
 /** Marco hexagonal del perfil, dibujado sobre el icono de cuenta. */
 export const PROFILE_FRAME = asset('assets/ranked/frame/ranked-emblem.png')
@@ -53,3 +84,12 @@ export const PROFILE_FRAME_NEUTRAL = asset('assets/ranked/frame/ranked-crest-pla
 
 /** Listones de la ficha del jugador en el lobby. */
 export const MEMBER_BANNER = asset('assets/ranked/frame/member-banner.png')
+
+/**
+ * Icono de cuenta del jugador. Es una pieza real del cliente (los profile-icon
+ * del juego de datos), no la insignia de rango: la ficha muestra el retrato de
+ * la cuenta dentro del marco, no un escudo.
+ */
+export function profileIcon(id: number): string {
+  return asset(`assets/icons/profile/${id}.jpg`)
+}

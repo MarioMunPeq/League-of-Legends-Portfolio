@@ -86,13 +86,7 @@ export function Jugar({ modoInicial, onConfirmar }: Props) {
             type="button"
             role="radio"
             aria-checked={m.id === elegido}
-            className={[
-              'mode',
-              m.id === elegido ? 'mode--active' : '',
-              m.separado ? 'mode--sep' : '',
-            ]
-              .filter(Boolean)
-              .join(' ')}
+            className={`mode ${m.id === elegido ? 'mode--active' : ''}`}
             onClick={() => {
               play('nav-click')
               setElegido(m.id)
@@ -138,12 +132,14 @@ export function Jugar({ modoInicial, onConfirmar }: Props) {
       </div>
 
       <div className="jugar__confirm">
-        <button type="button" className="confirmar" onClick={confirmar} {...sound}>
-          <span className="confirmar__x" aria-hidden="true">
-            ✕
-          </span>
-          <span className="confirmar__label">CONFIRMAR</span>
-        </button>
+        {/* el boton entero (marco, flecha cian y la X) es el arte del cliente */}
+        <button
+          type="button"
+          className="confirmar"
+          aria-label="Confirmar y abrir la colección"
+          onClick={confirmar}
+          {...sound}
+        />
 
         <ol className="jugar__etapas">
           {modo.etapas.map((etapa, i) => (
