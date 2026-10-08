@@ -70,16 +70,11 @@ const slugToRank = new Map(
 if (slugToRank.size === 0) problems.push('ranks.ts: no se pudo leer el mapa RANKS')
 
 const rankResolved = [
-  ...[...slugToRank.keys()].map((slug) => `/assets/ranked/crest/${slug}.svg`),
-  '/assets/ranked/crest/unranked.svg',
   // el emblema grande de rango, que la ficha dibuja a un palmo
   ...[...slugToRank.keys()].map((slug) => `/assets/ranked/emblem/emblem-${slug}.png`),
-  '/assets/ranked/frame/ranked-emblem.png',
-  '/assets/ranked/frame/ranked-crest-placeholder.png',
-  '/assets/ranked/frame/member-banner.png',
-  '/assets/ranked/frame/current-player-banner.png',
-  // el icono de cuenta de la ficha: tiene que existir el profile-icon elegido
-  '/assets/icons/profile/1013.jpg',
+  // el icono de cuenta sale de PLAYER_ICON, no de un id fijo aqui: si la
+  // sesion cambia de retrato, el validador tiene que mirar el de verdad
+  ...[...rankSrc.matchAll(/profileIcon\((\d+)\)/g)].map((m) => `/assets/icons/profile/${m[1]}.jpg`),
 ]
 
 const rankMissing = rankResolved.filter((ref) => !exists(join(PUBLIC, ref)))
@@ -144,8 +139,12 @@ for (const m of heroMissing) console.log('  ' + m)
 
 const manifestPath = join(PUBLIC, 'assets', 'manifest.json')
 const manifest = exists(manifestPath) ? JSON.parse(readFileSync(manifestPath, 'utf8')) : null
+// El manifiesto es la cache de lo que bajó fetch-assets, no un asset en sí:
+// que no exista no rompe nada, la próxima descarga lo regenera.
 console.log(
-  manifest ? `manifiesto: ${manifest.champions?.length ?? 0} campeones` : 'manifiesto: ausente',
+  manifest
+    ? `manifiesto: ${manifest.champions?.length ?? 0} campeones`
+    : 'manifiesto: ausente (cache de fetch-assets, opcional)',
 )
 
 const total = problems.length + rankMissing.length + champMissing.length + heroMissing.length

@@ -6,9 +6,11 @@ import type { Rango } from './types'
  * mientras la interfaz esta en espanol. Este mapa es el unico punto donde se
  * resuelve esa diferencia.
  *
- * Las insignias son los mini crests: vectores de 20x20 que el cliente escala
- * junto al nivel de cuenta. Los emblemas de ranked-emblem/ son composiciones de
- * 1280x720 con el escudo diminuto al centro, utiles como marco, no como icono.
+ * De RANKS se sacan las dos piezas que se pintan: el emblema grande que va bajo
+ * la cifra "5V5 FLEXIBLE" de la ficha, y la insignia pequena. Las insignias
+ * son los mini crests, vectores de 20x20 que el cliente escala junto al nivel de
+ * cuenta; los emblemas de ranked-emblem/ son composiciones de 1280x720 con el
+ * escudo diminuto al centro, utiles como marco, no como icono.
  */
 export const RANKS: Record<Rango, { slug: string; label: string }> = {
   hierro: { slug: 'iron', label: 'Hierro' },
@@ -20,27 +22,8 @@ export const RANKS: Record<Rango, { slug: string; label: string }> = {
   diamante: { slug: 'diamond', label: 'Diamante' },
 }
 
-export const RANK_ORDER: Rango[] = [
-  'hierro',
-  'bronce',
-  'plata',
-  'oro',
-  'platino',
-  'esmeralda',
-  'diamante',
-]
-
-export function rankSlug(rango: Rango): string {
-  return RANKS[rango].slug
-}
-
 export function rankLabel(rango: Rango): string {
   return RANKS[rango].label
-}
-
-/** Insignia de rango junto al nivel, como en la barra superior. */
-export function crestPath(rango: Rango): string {
-  return asset(`assets/ranked/crest/${RANKS[rango].slug}.svg`)
 }
 
 /**
@@ -52,15 +35,6 @@ export function crestPath(rango: Rango): string {
 export function rankEmblem(rango: Rango): string {
   return asset(`assets/ranked/emblem/emblem-${RANKS[rango].slug}.png`)
 }
-
-/** Marco hexagonal del perfil, dibujado sobre el icono de cuenta. */
-export const PROFILE_FRAME = asset('assets/ranked/frame/ranked-emblem.png')
-
-/** Marco sin rango, para cuando la cuenta todavia no tiene insignia. */
-export const PROFILE_FRAME_NEUTRAL = asset('assets/ranked/frame/ranked-crest-placeholder.png')
-
-/** Listones de la ficha del jugador en el lobby. */
-export const MEMBER_BANNER = asset('assets/ranked/frame/member-banner.png')
 
 /**
  * Icono de cuenta del jugador. Es una pieza real del cliente (los profile-icon

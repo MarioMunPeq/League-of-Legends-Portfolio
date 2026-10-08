@@ -65,10 +65,6 @@ for (const p of data.proyectos) {
   if (!existsSync(`public/assets/champions/splash/${p.campeon}.jpg`)) {
     problemas.push(`falta splash/${p.campeon}.jpg (${p.id})`)
   }
-  if (!existsSync(`public/assets/ranked/crest/emerald.svg`)) {
-    problemas.push('falta la insignia de rango')
-    break
-  }
   for (const e of p.enlaces) {
     if (!/^https?:\/\//.test(e.url)) problemas.push(`enlace no http en ${p.id}: ${e.etiqueta}`)
   }
