@@ -5,19 +5,16 @@ import { useAudio, useButtonSound } from '../../hooks/useAudio'
 import type { Route } from '../../hooks/useHashRoute'
 import type { EnlaceSocial, Perfil } from '../../data/types'
 import { asset } from '../../data/assets'
-import { crestPath } from '../../data/ranks'
+import { PLAYER_ICON } from '../../data/ranks'
 import './chrome.css'
+
 /**
- * Pestanas de la izquierda. En el cliente son los juegos (LOL, CLASSIC, TFT): el
- * sitio entero cambia con ellas, asi que en el portfolio son las tres pantallas
- * por las que se entra. Coleccion y artesania no van aqui: el cliente tambien
- * las deja en el grupo de iconos de la derecha, que es donde se han puesto.
+ * Pestanas de la izquierda. En el cliente son los juegos (LOL, CLASSIC, TFT) y
+ * JUGAR ya abre el juego, asi que aqui solo queda la entrada al sitio: las otras
+ * dos pantallas tienen su propio boton (la placa de jugar y el retrato de la
+ * cuenta) y no hacen falta repetidas en la tira.
  */
-const PESTANAS: { route: Route; label: string }[] = [
-  { route: 'inicio', label: 'INICIO' },
-  { route: 'jugar', label: 'JUGAR' },
-  { route: 'perfil', label: 'PERFIL' },
-]
+const PESTANAS: { route: Route; label: string }[] = [{ route: 'inicio', label: 'INICIO' }]
 
 /**
  * Celdas de la derecha. El cliente llena ese grupo con los iconos de sus
@@ -47,10 +44,13 @@ type Props = {
 }
 
 export function TopBar({ route, perfil, enlaces, onNavigate }: Props) {
-  const { muted, toggle, play } = useAudio()
+const { muted, toggle, play } = useAudio()
   const sound = useButtonSound('grid')
-  const navSound = useButtonSound('gold')
-  const crest = useMemo(() => crestPath(perfil.rango), [perfil.rango])
+  /*
+   * El retrato de la barra es el mismo profile-icon que aparece en la ficha:
+   * el cliente lo repite en los dos sitios. La insignia de rango no va aqui.
+   */
+  const retrato = PLAYER_ICON
 
   const porId = useMemo(
     () => new Map(enlaces.map((e) => [e.id, e] as const)),
@@ -91,7 +91,7 @@ export function TopBar({ route, perfil, enlaces, onNavigate }: Props) {
               play('nav-click')
               onNavigate(p.route)
             }}
-            {...navSound}
+            {...sound}
           >
             {p.label}
           </button>
@@ -186,7 +186,7 @@ export function TopBar({ route, perfil, enlaces, onNavigate }: Props) {
         >
           <span className="top__portrait">
             <span className="top__portrait-plate" />
-            <img className="top__crest" src={crest} alt="" />
+            <img className="top__crest" src={retrato} alt="" />
             <img
               className="top__frame"
               src={asset('assets/ui/level-ring/theme-1-solid-border.png')}

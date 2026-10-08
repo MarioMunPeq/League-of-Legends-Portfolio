@@ -9,13 +9,12 @@
     "meses": 46
   },
   "hero": {
-    "eyebrow": "Desarrollador de aplicaciones · DAM",
-    "titulo": "Construyo cosas para entender cómo funcionan.",
-    "subtitulo": "Desarrollador de aplicaciones con interés en inteligencia artificial, automatización y desarrollo.",
-    "descripcion": "Disfruto creando soluciones que resuelvan problemas reales y aprendiendo tecnologías nuevas mediante proyectos prácticos. Este portfolio es la sexta versión del mismo contenido: Persona 5, Minecraft, una biblioteca de repositorios, un compañero de mesa de D&D, un Pip-Boy y ahora el cliente de League of Legends.",
-    "ctaPrimario": "JUGAR",
-    "ctaSecundario": "VER PROYECTOS",
-    "champFavorito": "Yasuo",
+    "eyebrow": "Portfolio de desarrollo · League of Legends",
+    "titulo": "Hecho con la interfaz de League of Legends.",
+    "subtitulo": "Cada pantalla replica una sección real del cliente, con sus piezas y el código abierto que usa Riot.",
+    "descripcion": "Aquí no hay autobiografía ni lista de tecnologías: eso está todo en la pestaña Perfil. Inicio es solo el índice. Los diez proyectos son la colección de campeones, los treinta y cuatro materiales que he tocado son la armería, y las cifras de la cuenta son las de la ficha. Elige una pestaña y sigue.",
+    "fondoInicio": "Sett",
+    "champFavorito": "Sett",
     "portada": "Briar"
   },
   "sobreMi": [

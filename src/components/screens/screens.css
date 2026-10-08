@@ -59,63 +59,46 @@
    Inicio
    ============================================================ */
 
-/* la pantalla crece hasta llenar la columna; el footer global queda debajo */
+/*
+ * La pantalla crece hasta llenar la columna; el footer global queda debajo.
+ * El raíl es estrecho a proposito: solo lleva INICIO, asi que dejarlo con el
+ * ancho de un menu completo dejaba mas hueco que contenido.
+ */
 .home {
   display: grid;
-  grid-template-columns: 15.5rem minmax(0, 1fr);
+  grid-template-columns: 6.5rem minmax(0, 1fr);
   flex: 1 0 auto;
   min-height: 0;
 }
 
-/* --- barra lateral, la lista de secciones del cliente --- */
+/* --- raíl de secciones, como la lista lateral del cliente --- */
 
 .home__side {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  padding: 1rem 0.75rem;
+  padding: 1.25rem 0.5rem;
   overflow-y: auto;
   background: linear-gradient(180deg, rgba(10, 22, 34, 0.92), rgba(4, 12, 21, 0.96));
   border-right: 1px solid var(--line-hair);
 }
 
-.home__side-head {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.25rem 0.5rem 1rem;
-  margin-bottom: 0.5rem;
-  border-bottom: 1px solid var(--line-hair);
-}
-
-.home__side-crest {
-  width: 2.5rem;
-  height: 2.5rem;
-  flex-shrink: 0;
-  filter: drop-shadow(0 0 0.4rem var(--gold-glow));
-}
-
-.home__side-title {
-  font-family: 'Beaufort', serif;
-  font-size: 0.75rem;
-  font-weight: 700;
-  line-height: 1.25;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--ink-bright);
-}
-
+/*
+ * La entrada activa se pinta como en el cliente: con la viñeta dorada y el
+ * texto claro, apoyada en el borde izquierdo.
+ */
 .home__side-item {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.625rem;
-  padding: 0.625rem 0.5rem;
+  gap: 0.5rem;
+  padding: 0.75rem 0.25rem;
   font-family: 'Beaufort', serif;
-  font-size: 0.8125rem;
+  font-size: 0.6875rem;
   font-weight: 700;
-  line-height: 1.25;
-  letter-spacing: 0.08em;
-  text-align: left;
+  line-height: 1.2;
+  letter-spacing: 0.06em;
+  text-align: center;
   text-transform: uppercase;
   color: var(--ink-muted);
   border-radius: var(--radius-sm);
@@ -138,19 +121,14 @@
   color: var(--gold);
 }
 
-/* la entrada de jugar lleva la viñeta encendida del cliente */
-.home__side-item--play {
-  margin-top: 0.75rem;
+.home__side-item--on {
   color: var(--gold-bright);
+  background: rgba(200, 170, 110, 0.1);
+  box-shadow: inset 2px 0 0 var(--gold);
 }
 
-.home__side-bullet {
-  width: 0.5rem;
-  height: 0.5rem;
-  flex-shrink: 0;
-  border-radius: 50%;
-  background: var(--gold);
-  box-shadow: 0 0 0.625rem var(--gold-glow-strong);
+.home__side-item--on svg {
+  color: var(--gold);
 }
 
 /* --- pestanas de coleccion --- */
@@ -226,14 +204,17 @@
   color: var(--ink-ghost);
 }
 
-/* --- escenario: el arte a sangre con el texto encima --- */
-
+/*
+ * El escenario reparte el texto a la izquierda y el cartel de la pestaña a la
+ * derecha. El texto va centrado en su columna y el cartel pegado abajo, que es
+ * como los compone el cliente: titular arriba, fichas abajo.
+ */
 .home__stage {
   position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr) 21rem;
   gap: 2rem;
-  align-items: center;
+  align-items: stretch;
   flex: 1;
   min-height: 0;
   padding: 2.5rem 2.5rem 2.75rem;
@@ -244,17 +225,29 @@
   position: absolute;
   inset: 0;
   background-size: cover;
-  background-position: center 25%;
-  filter: saturate(0.85);
+  background-position: 28% 30%;
+  filter: saturate(0.95) brightness(1.05);
   animation: hero-drift 40s var(--ease-in-out) infinite alternate;
 }
 
+/*
+ * El velo del cliente: oscurece lo justo para que el texto se lea y deja el
+ * resto del arte a la vista. Antes el degradado era tan cerrado que el splash
+ * apenas se veia detras del texto.
+ */
 .home__scrim {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(100deg, rgba(1, 10, 19, 0.97) 0%, rgba(1, 10, 19, 0.88) 38%, rgba(1, 10, 19, 0.35) 78%, rgba(1, 10, 19, 0.7) 100%),
-    radial-gradient(ellipse at 75% 70%, transparent 25%, rgba(1, 10, 19, 0.8) 100%);
+    linear-gradient(
+      100deg,
+      rgba(1, 10, 19, 0.94) 0%,
+      rgba(1, 10, 19, 0.8) 30%,
+      rgba(1, 10, 19, 0.28) 62%,
+      rgba(1, 10, 19, 0.12) 82%,
+      rgba(1, 10, 19, 0.55) 100%
+    ),
+    linear-gradient(180deg, rgba(1, 10, 19, 0.6) 0%, transparent 22%, transparent 72%, rgba(1, 10, 19, 0.7) 100%);
 }
 
 .home__copy,
@@ -264,79 +257,69 @@
 }
 
 .home__copy {
-  max-width: 44rem;
+  align-self: center;
+  max-width: 42rem;
 }
 
+/*
+ * El titular va en el tamaño y el peso de la referencia: son dos lineas
+ * cortas en Beaufort black sobre el arte, con la etiqueta dorada encima.
+ */
 .hero__eyebrow {
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.875rem;
   font-family: 'Beaufort', serif;
   font-size: 0.8125rem;
   font-weight: 700;
-  letter-spacing: 0.28em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--gold);
+  text-shadow: 0 0.125rem 0.75rem rgba(0, 0, 0, 0.9);
 }
 
 .hero__title {
   margin-bottom: 1rem;
+  max-width: 34rem;
   font-family: 'Beaufort', serif;
-  font-size: clamp(2.25rem, 5vw, 3.75rem);
+  font-size: clamp(2rem, 3.6vw, 3.25rem);
   font-weight: 900;
-  line-height: 1.05;
-  text-shadow: 0 0.125rem 1.5rem rgba(0, 0, 0, 0.8);
+  line-height: 1.1;
+  text-shadow: 0 0.125rem 1.5rem rgba(0, 0, 0, 0.85);
 }
 
 .hero__subtitle {
-  margin-bottom: 0.375rem;
-  font-size: 1.125rem;
-  color: var(--ink-base);
-}
-
-.hero__region {
+  max-width: 32rem;
   margin-bottom: 0.75rem;
-  font-size: 0.8125rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--gold);
+  font-size: 1.0625rem;
+  line-height: 1.5;
+  color: var(--ink-base);
+  text-shadow: 0 0.125rem 0.75rem rgba(0, 0, 0, 0.85);
 }
 
 .hero__text {
   max-width: 34rem;
-  margin-bottom: 2rem;
   color: var(--ink-muted);
+  text-shadow: 0 0.125rem 0.75rem rgba(0, 0, 0, 0.85);
 }
 
-.hero__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-bottom: 2.5rem;
-}
-
-.hero__facts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--line-hair);
-}
-
-.hero__fact-value {
-  display: block;
+/*
+ * En vez de los botones que llevaba antes, una linea que dice como se navega.
+ * Inicio es el indice del portfolio, no una landing con llamada a la accion.
+ */
+.hero__pista {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.75rem;
   font-family: 'Beaufort', serif;
-  font-size: 1.75rem;
-  font-weight: 900;
+  font-size: 0.8125rem;
+  letter-spacing: 0.04em;
   color: var(--gold-bright);
-  line-height: 1;
+  text-shadow: 0 0.125rem 0.75rem rgba(0, 0, 0, 0.9);
 }
 
-.hero__fact-label {
-  display: block;
-  margin-top: 0.375rem;
-  font-size: 0.75rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--ink-dim);
+.hero__pista svg {
+  color: var(--gold);
+  transform: rotate(-90deg);
 }
 
 /* aviso de modo confirmado, entre el texto y los botones */
@@ -357,9 +340,10 @@
   color: var(--green-online);
 }
 
-/* --- cartel de la coleccion, a la derecha del escenario --- */
+/* --- cartel de la pestaña, a la derecha del escenario --- */
 
 .home__display {
+  align-self: end;
   text-align: right;
 }
 
@@ -588,10 +572,11 @@
  * El panel del cliente no es un rectangulo: los laterales entran en bisel y
  * el remate baja a punta. El recorte es lo que reproduce esa silueta.
  *
- * El filete va en `::before` con el mismo recorte pero algo mas grande, para
- * que asome como una orla. Va sin `z-index`: el orden de pintado lo pone
- * encima del fondo del panel y no tapa el contenido, que es lo contrario de
- * lo que hacia antes y lo que dejaba el panel en un tono marron continuo.
+ * El filete son dos capas y el orden importa. El fondo del panel es la orla
+ * dorada y el interior va en `::before` con `z-index: -1`. Al reves (fondo azul
+ * y orla en el pseudo) el pseudo se pinta encima del fondo y el panel entero
+ * queda de un solo tono; con este orden el pseudo queda por debajo del
+ * contenido en flujo, asi que el texto sigue viendose.
  */
 .perfil__card {
   position: relative;
@@ -600,26 +585,16 @@
   align-items: center;
   padding: 1.5rem 1.5rem 3rem;
   text-align: center;
-  background: linear-gradient(180deg, #16273c 0%, #0b1524 60%, #0d1a2e 100%);
+  background: linear-gradient(180deg, #6d5a2a 0%, #3d3318 55%, #5c4a22 100%);
   clip-path: polygon(0 0, 100% 0, 100% 88%, 50% 100%, 0 88%);
 }
 
-/* la orla dorada: mismo recorte, dilatado 2 px hacia fuera */
+/* el interior: tapa la orla menos el borde de 2 px que se deja a la vista */
 .perfil__card::before {
   content: '';
   position: absolute;
-  inset: -2px;
-  background: linear-gradient(180deg, #6d5a2a 0%, #3d3318 55%, #5c4a22 100%);
-  clip-path: polygon(0 0, 100% 0, 100% 88%, 50% 100%, 0 88%);
-  z-index: -1;
-}
-
-/* el filo interior claro, como el borde biselado del panel real */
-.perfil__card::after {
-  content: '';
-  position: absolute;
   inset: 2px;
-  background: linear-gradient(180deg, rgba(139, 168, 214, 0.5) 0%, rgba(60, 88, 130, 0.25) 70%);
+  background: linear-gradient(180deg, #16273c 0%, #0b1524 60%, #0d1a2e 100%);
   clip-path: polygon(0 0, 100% 0, 100% 89%, 50% 100%, 0 89%);
   z-index: -1;
 }
@@ -805,29 +780,24 @@
 }
 
 /*
- * Las insignias son piezas grandes: el cliente las dibuja a casi un palmo. La
- * caja es fija y la imagen se desborda a proposito, porque el emblema de rango
- * llega en un lienzo de 1280x720 con el escudo diminuto en medio; `recorte` (un
- * ancho en % en linea) lo escala para que la pieza, y no el lienzo, sea lo que
- * se ve.
+ * Las insignias son piezas grandes: el cliente las dibuja a casi un palmo. Los
+ * PNG de `ranked/emblem` van recortados al alfa del escudo y el estandarte es
+ * vertical, asi que la caja es cuadrada y la imagen entra con `contain`: antes
+ * el lienzo de 1280x720 con el escudo diminuto salia minusculo y el estandarte
+ * se salia de la caja por abajo, cortado.
  */
 .cifra__emblema-box {
-  display: block;
-  position: relative;
-  width: 9rem;
-  height: 9rem;
+  display: grid;
+  place-items: center;
+  width: 9.5rem;
+  height: 9.5rem;
   margin-top: 0.75rem;
-  overflow: hidden;
 }
 
 .cifra__emblema {
-  position: absolute;
-  top: 50%;
-  left: 50%;
   width: 100%;
-  height: auto;
+  height: 100%;
   object-fit: contain;
-  transform: translate(-50%, -50%);
   filter: drop-shadow(0 0.5rem 1rem rgba(0, 0, 0, 0.75));
 }
 
@@ -2644,9 +2614,6 @@
   }
   .home__thumbs {
     justify-content: flex-start;
-  }
-  .hero__facts {
-    gap: 1.5rem;
   }
   .perfil__layout {
     padding: 0 1rem;

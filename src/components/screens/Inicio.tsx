@@ -1,23 +1,21 @@
 import { useMemo, useState, type ReactNode } from 'react'
 import { champSquare, champSplash } from '../../data/assets'
 import { asset } from '../../data/assets'
-import { GoldButton } from '../ui/GoldButton'
 import { Icon, type IconName } from '../ui/Icon'
 import { MaterialIcon, type MaterialIconName } from '../ui/MaterialIcon'
-import { PlayButton } from '../ui/PlayButton'
-import { crestPath } from '../../data/ranks'
 import { modoPorId } from '../../data/modos'
 import type { PortfolioData, Proyecto } from '../../data/types'
 import type { Route } from '../../hooks/useHashRoute'
 import { useAudio, useButtonSound } from '../../hooks/useAudio'
 import './screens.css'
 
-/** Secciones de la barra lateral, como la lista de Hall of Legends. */
+/**
+ * El raíl lateral se queda solo con INICIO. Antes repetía el menú completo,
+ * que ya está en la barra superior: era informacion duplicada y ademas lo que
+ * el cliente pone ahí son entradas de contenido, no secciones de navegación.
+ */
 const SECCIONES: { route: Route; label: string; icono: IconName }[] = [
   { route: 'inicio', label: 'INICIO', icono: 'store' },
-  { route: 'perfil', label: 'PERFIL', icono: 'profile' },
-  { route: 'coleccion', label: 'CAMPEONES', icono: 'collection' },
-  { route: 'artesania', label: 'ARTESANÍA', icono: 'loot' },
 ]
 
 const PESTANAS = [
@@ -50,9 +48,10 @@ type Props = {
 }
 
 /**
- * Inicio: la pantalla de bienvenida con el marco del cliente. El titular, el
- * texto y las cifras son los del portfolio; el envase (barra lateral, pestanas
- * de coleccion, arte a sangre y boton dorado) es el del cliente de LoL.
+ * Inicio: la pantalla de bienvenida. El texto explica que es un portfolio
+ * hecho con la interfaz de LoL y donde esta cada cosa; los datos sobre la
+ * persona viven en Perfil, asi que aqui no se repiten. El_raíl, las pestanas
+ * de contenido, el arte a sangre y el boton dorado son del cliente.
  */
 export function Inicio({ data, onNavegar, onAbrir, modo }: Props) {
   const { play } = useAudio()
@@ -60,8 +59,8 @@ export function Inicio({ data, onNavegar, onAbrir, modo }: Props) {
   const { hero, perfil, proyectos, hitos, materiales } = data
   const [pestana, setPestana] = useState<Pestana>('coleccion')
 
-  const fondo = useMemo(() => champSplash(hero.champFavorito), [hero.champFavorito])
-  const crest = useMemo(() => crestPath(perfil.rango), [perfil.rango])
+  // el arte del fondo va aparte del campeon que da nombre a la coleccion
+  const fondo = useMemo(() => champSplash(hero.fondoInicio ?? hero.champFavorito), [hero])
   const modoActual = modoPorId(modo ?? null)
 
   const topMateriales = useMemo(
@@ -144,39 +143,22 @@ export function Inicio({ data, onNavegar, onAbrir, modo }: Props) {
   return (
     <div className="home">
       <aside className="home__side">
-        <div className="home__side-head">
-          <img className="home__side-crest" src={crest} alt="" />
-          <span className="home__side-title">{hero.eyebrow}</span>
-        </div>
-
         {SECCIONES.map((s) => (
           <button
             key={s.route}
             type="button"
-            className="home__side-item"
+            className="home__side-item home__side-item--on"
+            aria-current="page"
             onClick={() => {
               play('nav-click')
               onNavegar(s.route)
             }}
             {...sound}
           >
-            <Icon name={s.icono} size={20} />
+            <Icon name={s.icono} size={18} />
             <span>{s.label}</span>
           </button>
         ))}
-
-        <button
-          type="button"
-          className="home__side-item home__side-item--play"
-          onClick={() => {
-            play('nav-click')
-            onNavegar('jugar')
-          }}
-          {...sound}
-        >
-          <span className="home__side-bullet" aria-hidden="true" />
-          JUGAR
-        </button>
       </aside>
 
       <div className="home__main">
@@ -209,14 +191,13 @@ export function Inicio({ data, onNavegar, onAbrir, modo }: Props) {
             className="home__art"
             style={{ backgroundImage: `url(${fondo})` }}
             role="img"
-            aria-label={`Arte de ${hero.champFavorito}, campeon favorito`}
+            aria-label={`Arte de ${hero.fondoInicio ?? hero.champFavorito} como fondo del inicio`}
           />
           <div className="home__scrim" />
 
           <div className="home__copy">
             <p className="hero__eyebrow">{hero.eyebrow}</p>
             <h1 className="hero__title">{hero.titulo}</h1>
-            <p className="hero__region">Valladolid · España</p>
             <p className="hero__subtitle">{hero.subtitulo}</p>
             <p className="hero__text">{hero.descripcion}</p>
 
@@ -227,42 +208,15 @@ export function Inicio({ data, onNavegar, onAbrir, modo }: Props) {
               </p>
             )}
 
-            <div className="hero__actions">
-              <PlayButton
-                size="lg"
-                label={hero.ctaPrimario}
-                onClick={() => onNavegar('jugar')}
-              />
-              <GoldButton
-                variant="ghost"
-                size="lg"
-                onClick={() => {
-                  play('nav-click')
-                  onNavegar('coleccion')
-                }}
-              >
-                {hero.ctaSecundario}
-              </GoldButton>
-            </div>
-
-            <div className="hero__facts">
-              <div>
-                <span className="hero__fact-value">{perfil.maestria}</span>
-                <span className="hero__fact-label">Puntos de maestría</span>
-              </div>
-              <div>
-                <span className="hero__fact-value">{proyectos.length}</span>
-                <span className="hero__fact-label">Proyectos</span>
-              </div>
-              <div>
-                <span className="hero__fact-value">{perfil.meses}</span>
-                <span className="hero__fact-label">Meses programando</span>
-              </div>
-              <div>
-                <span className="hero__fact-value">{hitos.length}</span>
-                <span className="hero__fact-label">Hitos</span>
-              </div>
-            </div>
+            {/*
+              Sin botones: Inicio es el mapa del portfolio, no una landing con
+              llamada a la accion. La navegacion se hace desde las pestanas de
+              arriba, el_raíl o la barra superior.
+            */}
+            <p className="hero__pista">
+              <Icon name="caret" size={14} />
+              Todo lo que hay aquí se abre desde las pestañas de arriba.
+            </p>
           </div>
 
           <aside className="home__display">

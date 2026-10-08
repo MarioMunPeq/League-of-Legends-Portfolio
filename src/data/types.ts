@@ -114,12 +114,16 @@ export type PortfolioData = {
     titulo: string
     subtitulo: string
     descripcion: string
-    ctaPrimario: string
-    ctaSecundario: string
     /** campeon cuyo splash abre la pantalla de inicio */
     champFavorito: string
     /** campeon cuyo splash aparece en la ficha de perfil */
     portada?: string
+    /**
+     * Campeon del arte de fondo de Inicio. Va aparte de `champFavorito` porque
+     * el fondo y el campeon que da nombre a la coleccion no tienen por que ser
+     * el mismo: el arte es decoracion, la coleccion es contenido.
+     */
+    fondoInicio?: string
   }
   sobreMi: string[]
   formacion: Formacion[]

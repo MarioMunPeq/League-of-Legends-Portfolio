@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState } from 'react'
 import { asset, champSplash } from '../../data/assets'
-import { emblemCrop, profileIcon, rankEmblem, rankLabel } from '../../data/ranks'
+import { PLAYER_ICON, rankEmblem, rankLabel } from '../../data/ranks'
 import { Icon } from '../ui/Icon'
 import type { IconName } from '../ui/Icon'
 import { FormularioContacto } from '../ui/FormularioContacto'
@@ -20,10 +20,10 @@ const SECCIONES: { id: string; label: string }[] = [
 ]
 
 /**
- * Icono de cuenta de la ficha. El cliente muestra un profile-icon real dentro
- * del marco de nivel; este es el que mejor encaja con la paleta del portfolio.
+ * El retrato de la cuenta sale de `PLAYER_ICON`, el mismo profile-icon que
+ * pinta la barra superior: el cliente repite el icono de la sesion en los dos
+ * sitios, no la insignia de rango.
  */
-const ICONO_CUENTA = 1013
 
 type Props = {
   data: PortfolioData
@@ -45,7 +45,6 @@ export function Perfil({ data }: Props) {
   const sound = useButtonSound('grid')
 
   const crest = useMemo(() => rankEmblem(perfil.rango), [perfil.rango])
-  const recorte = useMemo(() => emblemCrop(perfil.rango), [perfil.rango])
 
   /*
    * Las cinco cifras de la cabecera. `valor` a null es una insignia que el
@@ -56,10 +55,9 @@ export function Perfil({ data }: Props) {
     etiqueta: string
     valor: string | null
     emblema: string
-    recorte?: number
     apagado?: boolean
   }[] = [
-    { etiqueta: '5V5 FLEXIBLE', valor: rangoTexto, emblema: crest, recorte },
+    { etiqueta: '5V5 FLEXIBLE', valor: rangoTexto, emblema: crest },
     {
       etiqueta: 'HONOR',
       valor: `NIVEL ${perfil.nivel}`,
@@ -135,7 +133,7 @@ export function Perfil({ data }: Props) {
             <div className="perfil__emblem">
               <img
                 className="perfil__emblem-icon"
-                src={profileIcon(ICONO_CUENTA)}
+                src={PLAYER_ICON}
                 alt={`Icono de cuenta de ${perfil.summoner}`}
               />
               <img
@@ -180,17 +178,13 @@ export function Perfil({ data }: Props) {
                   </span>
                 )}
                 {/*
-                  El emblema de rango llega en un lienzo mucho mayor que el
-                  escudo que contiene: `recorte` lo encoge para que se vea la
-                  pieza, no el fondo transparente de la composicion.
+                  Los emblemas ya vienen recortados al alfa de la pieza, asi
+                  que basta con containment: antes el lienzo de 1280x720 con el
+                  escudo diminuto en medio salia diminuto, y el estandarte (que
+                  es vertical) se salia de la caja.
                 */}
                 <span className="cifra__emblema-box">
-                  <img
-                    className="cifra__emblema"
-                    src={c.emblema}
-                    alt=""
-                    style={c.recorte ? { width: `${(1 / c.recorte) * 100}%` } : undefined}
-                  />
+                  <img className="cifra__emblema" src={c.emblema} alt="" />
                 </span>
               </div>
             ))}

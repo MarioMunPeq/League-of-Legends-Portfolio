@@ -377,13 +377,18 @@
   clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
 }
 
+/*
+ * El retrato es un profile-icon cuadrado, igual que el de la ficha: se recorta
+ * en circulo para que case con el hueco hexagonal que aporta el marco.
+ */
 .top__crest {
   position: relative;
   width: 2.75rem;
   height: 2.75rem;
-  object-fit: contain;
+  object-fit: cover;
+  border-radius: 50%;
   transform: translateY(-0.25rem);
-  filter: drop-shadow(0 0 0.5rem rgba(0, 0, 0, 0.9));
+  box-shadow: 0 0 0 2px rgba(1, 10, 19, 0.9), 0 0.25rem 0.5rem rgba(0, 0, 0, 0.8);
 }
 
 .top__frame {
@@ -905,13 +910,19 @@
   }
 }
 
-@media (max-width: 1280px) {
+/*
+ * Con una sola pestana la barra se ha acortado casi 300 px, asi que el punto
+ * en el que hay que soltarla baja de 1280 a 1080. Por debajo se retira el
+ * grupo de secciones, que es lo unico que queda de la derecha cuando la
+ * cuenta ya no cabe con nombre.
+ */
+@media (max-width: 1080px) {
   .top__tabs {
     display: none;
   }
 }
 
-@media (max-width: 1150px) {
+@media (max-width: 1000px) {
   .top__nav {
     display: none;
   }

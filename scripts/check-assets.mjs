@@ -114,6 +114,27 @@ console.log(
 )
 for (const m of champMissing) console.log('  ' + m)
 
+/*
+ * Los splash que usa la cabecera tambien se nombran desde el JSON, asi que van
+ * por la caja de Pandora de los nombres de campeon: un typo aqui deja la
+ * pantalla en negro sin que nada falle en la compilacion.
+ */
+const heroMissing = []
+for (const [campo, champ] of [
+  ['fondoInicio', data.hero?.fondoInicio],
+  ['portada', data.hero?.portada],
+  ['champFavorito', data.hero?.champFavorito],
+]) {
+  if (!champ) continue
+  if (!exists(join(PUBLIC, 'assets', 'champions', 'splash', `${champ}.jpg`))) {
+    heroMissing.push(`hero.${campo}: champions/splash/${champ}.jpg`)
+  }
+}
+console.log(
+  heroMissing.length ? `cabecera: faltan ${heroMissing.length}` : 'cabecera: ok',
+)
+for (const m of heroMissing) console.log('  ' + m)
+
 /* Los iconos de material ya no son archivos: son glifos SVG en linea dentro de
    MaterialIcon.tsx, que check-data.mjs recorre material por material. */
 
@@ -127,7 +148,7 @@ console.log(
   manifest ? `manifiesto: ${manifest.champions?.length ?? 0} campeones` : 'manifiesto: ausente',
 )
 
-const total = problems.length + rankMissing.length + champMissing.length
+const total = problems.length + rankMissing.length + champMissing.length + heroMissing.length
 if (total > 0) {
   console.log(`\n${total} referencias sin resolver`)
   process.exitCode = 1
