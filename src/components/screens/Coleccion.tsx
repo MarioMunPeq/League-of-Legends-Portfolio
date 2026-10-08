@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { asset, champSplash } from '../../data/assets'
+import { asset, champSquare } from '../../data/assets'
 import { SearchField, SelectField } from '../ui/Fields'
 import { TabStrip } from '../ui/TabStrip'
 import { Icon } from '../ui/Icon'
@@ -214,7 +214,7 @@ export function Coleccion({ proyectos, mastery, modo, onAbrir, onLimpiarModo }: 
                       <span className="champ-card__art">
                         <img
                           className="champ-card__portrait"
-                          src={champSplash(proyecto.campeon)}
+                          src={champSquare(proyecto.campeon)}
                           alt={proyecto.campeon}
                           loading="lazy"
                         />

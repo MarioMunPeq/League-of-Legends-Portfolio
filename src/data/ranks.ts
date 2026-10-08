@@ -71,5 +71,8 @@ export function profileIcon(id: number): string {
   return asset(`assets/icons/profile/${id}.jpg`)
 }
 
-/** Retrato de la cuenta: el mismo archivo en la ficha y en la barra superior. */
-export const PLAYER_ICON = profileIcon(1013)
+/**
+ * Retrato de la cuenta: el mismo archivo en la ficha y en la barra superior.
+ * Es el profile-icon 26 del juego de datos, el que lleva esta sesion.
+ */
+export const PLAYER_ICON = profileIcon(26)
