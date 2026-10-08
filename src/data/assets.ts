@@ -18,3 +18,10 @@ export const champSquare = (name: string) => asset(`assets/champions/square/${na
 export const champSplash = (name: string) => asset(`assets/champions/splash/${name}.jpg`)
 export const champSpell = (file: string) => asset(`assets/spells/${file}`)
 export const champPassive = (file: string) => asset(`assets/passives/${file}`)
+
+/**
+ * Logos de marca de la mochila de Artesania. Son los archivos que baja
+ * `scripts/fetch-skill-icons.mjs` de Simple Icons; se pintan como mascara para
+ * poder teñirlos del color de la categoria.
+ */
+export const skillIcon = (slug: string) => asset(`assets/icons/skills/${slug}.svg`)

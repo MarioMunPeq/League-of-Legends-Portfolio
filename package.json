@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "assets": "node scripts/fetch-assets.mjs",
     "assets:force": "node scripts/fetch-assets.mjs --force",
-    "check": "node scripts/check-assets.mjs && node scripts/check-data.mjs"
+    "check": "node scripts/check-assets.mjs && node scripts/check-data.mjs",
+    "assets:skills": "node scripts/fetch-skill-icons.mjs"
   },
   "dependencies": {
     "react": "^19.2.8",

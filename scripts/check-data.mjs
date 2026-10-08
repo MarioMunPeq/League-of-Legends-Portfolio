@@ -77,12 +77,35 @@ for (const p of data.proyectos) {
 }
 
 for (const m of data.materiales) {
-  // el glifo SVG de cada material vive en MaterialIcon.tsx, con la clave = id
-  if (!new RegExp(`^\\s{2}'?${m.id}'?:\\s*[\\[{]`, 'm').test(iconSrc)) {
-    problemas.push(`material sin icono SVG: ${m.id}`)
+  const slugs = m.icono === undefined ? [] : Array.isArray(m.icono) ? m.icono : [m.icono]
+
+  if (!slugs.length) {
+    // sin logo de marca tiene que existir el glifo dibujado de MaterialIcon.tsx
+    if (!new RegExp(`^\\s{2}'?${m.id}'?:\\s*[\\[{]`, 'm').test(iconSrc)) {
+      problemas.push(`material sin logo ni glifo SVG: ${m.id}`)
+    }
+    continue
   }
-  if (typeof m.nivel !== 'number') problemas.push(`nivel no numerico: ${m.nombre}`)
+
+  for (const slug of slugs) {
+    if (!/^[a-z0-9-]+$/.test(slug)) problemas.push(`slug de logo raro en ${m.id}: ${slug}`)
+    if (!existsSync(`public/assets/icons/skills/${slug}.svg`)) {
+      problemas.push(`falta el logo ${slug}.svg (${m.id})`)
+    }
+  }
 }
+
+/** Las categorias de Artesania son un conjunto cerrado de dos grupos. */
+const CATEGORIAS = new Set(['Lenguajes', 'Herramientas y calidad'])
+for (const m of data.materiales) {
+  if (!CATEGORIAS.has(m.categoria)) {
+    problemas.push(`categoria fuera del grupo: ${m.categoria} (${m.id})`)
+  }
+  if ('nivel' in m) problemas.push(`el material ${m.id} todavia trae nivel`)
+}
+
+const idsMaterial = data.materiales.map((m) => m.id)
+if (new Set(idsMaterial).size !== idsMaterial.length) problemas.push('ids de material duplicados')
 
 for (const e of data.enlaces) {
   // el portfolio no expone correo, asi que mailto queda fuera a proposito

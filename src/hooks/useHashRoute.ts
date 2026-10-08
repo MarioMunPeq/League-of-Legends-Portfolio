@@ -5,12 +5,27 @@ export type Route = 'inicio' | 'jugar' | 'perfil' | 'coleccion' | 'artesania'
 
 const ROUTES: Route[] = ['inicio', 'jugar', 'perfil', 'coleccion', 'artesania']
 
+/**
+ * El navegador guarda el hash con los espacios escapados, asi que un grupo como
+ * `Herramientas y calidad` llega como `Herramientas%20y%20calidad`. Sin
+ * descifrar no casaria nunca con su nombre. Se protege el caso de un hash mal
+ * formado (un `%` suelto hace lanzar a `decodeURIComponent`).
+ */
+function descifrar(segmento: string | undefined): string | undefined {
+  if (!segmento) return undefined
+  try {
+    return decodeURIComponent(segmento) || undefined
+  } catch {
+    return segmento
+  }
+}
+
 function readHash(): { route: Route; param?: string } {
   const raw = window.location.hash.replace(/^#\/?/, '')
-  const [route = '', param] = raw.split('/')
+  const [ruta = '', param] = raw.split('/')
   return {
-    route: (ROUTES as string[]).includes(route) ? (route as Route) : 'inicio',
-    param: param || undefined,
+    route: (ROUTES as string[]).includes(ruta) ? (ruta as Route) : 'inicio',
+    param: descifrar(param),
   }
 }
 

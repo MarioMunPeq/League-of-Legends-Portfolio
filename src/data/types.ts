@@ -54,14 +54,16 @@ export type Proyecto = {
 export type Material = {
   id: string
   nombre: string
+  /** uno de los dos grupos de la pantalla: Lenguajes | Herramientas y calidad */
   categoria: string
-  descripcion: string
   /**
-   * El glifo sale de `MaterialIcon`: `id` es a la vez la clave del icono, de
-   * modo que un material sin dibujo falla el validador de datos.
+   * Logos de marca del material, como slug de Simple Icons. Es una lista cuando
+   * el nombre agrupa mas de una tecnologia (`html-css` -> html5 + css). Si no
+   * viene, la pantalla usa el glifo dibujado de `MaterialIcon.tsx`.
    */
-  nivel: number
-  destacado: boolean
+  icono?: string | string[]
+  descripcion: string
+  destacado?: boolean
 }
 
 export type EnlaceSocial = {

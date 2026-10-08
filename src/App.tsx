@@ -71,8 +71,14 @@ function Shell() {
 
       <div className="frame__body">
         <main className="main" id="contenido">
-          <div className="main__inner" key={param ?? route}>
-            {param ? (
+          <div className="main__inner" key={`${route}/${param ?? ''}`}>
+            {/*
+             * El parametro del hash solo es un id de proyecto en la coleccion.
+             * En artesania es el grupo con el que se abre (`#/artesania/Lenguajes`),
+             * asi que comprobar el parametro a secas mandaba a la ficha de un
+             * proyecto inexistente.
+             */}
+            {route === 'coleccion' && param ? (
               <DetalleProyecto
                 proyecto={proyecto}
                 onVolver={() => navigate('coleccion')}
@@ -93,7 +99,7 @@ function Shell() {
                 onLimpiarModo={() => setModo(null)}
               />
             ) : (
-              <Artesania materiales={data.materiales} />
+              <Artesania materiales={data.materiales} grupoInicial={param} />
             )}
           </div>
         </main>

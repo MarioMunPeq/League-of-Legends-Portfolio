@@ -1,226 +1,188 @@
 import { useMemo, useState } from 'react'
-import { TabStrip } from '../ui/TabStrip'
 import { SearchField, SelectField } from '../ui/Fields'
-import { MaterialIcon } from '../ui/MaterialIcon'
-import type { MaterialIconName } from '../ui/MaterialIcon'
+import { SkillLogo } from '../ui/SkillLogo'
 import { asset } from '../../data/assets'
 import { useButtonSound } from '../../hooks/useAudio'
 import type { Material } from '../../data/types'
 import './screens.css'
 
-type Orden = 'nombre' | 'nivel' | 'categoria'
+type Orden = 'destacados' | 'nombre'
 
 const ORDEN_LABEL: Record<Orden, string> = {
+  destacados: 'Destacados primero',
   nombre: 'Alfabético',
-  nivel: 'Por nivel',
-  categoria: 'Por categoría',
 }
 
-/**
- * Icono de cabecera de categoria. Son los mismos archivos que usa la pantalla
- * de artesanado del cliente (`assets/category_icons`), que en su lista de la
- * izquierda aparecen junto a MATERIALES, CAMPEONES, ASPECTOS, EFIGIES y
- * EMOTICONOS.
- */
-const CATEGORIA_ICONO: Record<string, string> = {
-  Lenguajes: 'category-all.png',
-  Interfaces: 'category-champion.png',
-  Datos: 'category-chest.png',
-  Plataformas: 'category-companion.png',
-  'IA y datos': 'category-eternals.png',
-  Calidad: 'category-skin.png',
-}
+/** Cuantos logos se Teachnan en la previsualizacion de una ficha de grupo. */
+const MIRA = 12
 
 /**
- * Carril de categorias de la izquierda, con la misma forma que el del cliente:
- * una tira vertical de iconos, el activo marcado con una barra de oro. Los
- * iconos de las seis primeras categorias son los del propio cliente; los dos
- * ultimos (reordenar y ayuda) son glifos de interfaz.
+ * Orden de los grupos. No es el alfabetico: los Lenguajes abren, porque son lo
+ * primero que se lee de alguien que programa.
  */
-const CARRIL: { id: string; label: string; icono?: string }[] = [
-  { id: 'todas', label: 'Todo', icono: 'category-all.png' },
-  { id: 'Lenguajes', label: 'Lenguajes', icono: 'category-champion.png' },
-  { id: 'Interfaces', label: 'Interfaces', icono: 'category-chest.png' },
-  { id: 'Datos', label: 'Datos', icono: 'category-companion.png' },
-  { id: 'IA y datos', label: 'IA y datos', icono: 'category-eternals.png' },
-  { id: 'Calidad', label: 'Calidad', icono: 'category-skin.png' },
-]
+const ORDEN_GRUPOS = ['Lenguajes', 'Herramientas y calidad']
+
+type Grupo = {
+  nombre: string
+  lista: Material[]
+}
 
 type Props = {
   materiales: Material[]
+  /** grupo con el que se abre la pantalla: #/artesania/Lenguajes */
+  grupoInicial?: string
 }
 
-/** Artesania -> Botin: cada tecnologia es un objeto de la mochila. */
-export function Artesania({ materiales }: Props) {
+/**
+ * Artesania -> Loot.
+ *
+ * La pantalla se abre con las fichas de los grupos, como la de botin del
+ * cliente: primero eliges MATERIALES, CAMPEONES, ASPECTOS... y luego ves lo que
+ * hay dentro. Aqui los grupos son dos, Lenguajes y Herramientas y calidad.
+ *
+ * Ni barras de nivel ni notas: un 92 de Git es un numero que no significa nada.
+ * Lo que prueba cada material es su logo de marca y su descripcion.
+ */
+export function Artesania({ materiales, grupoInicial }: Props) {
   const [query, setQuery] = useState('')
-  const [orden, setOrden] = useState<Orden>('nivel')
-  const [categoria, setCategoria] = useState<string>('todas')
-  const [soloDestacados, setSoloDestacados] = useState(false)
+  const [orden, setOrden] = useState<Orden>('destacados')
+  /** grupo abierto, o null cuando se esta en la rejilla de grupos */
+  const [grupo, setGrupo] = useState<string | null>(grupoInicial ?? null)
   const sound = useButtonSound('grid')
 
-  const categorias = useMemo(() => {
-    const counts = new Map<string, Material[]>()
+  const grupos = useMemo<Grupo[]>(() => {
+    const porNombre = new Map<string, Material[]>()
     for (const m of materiales) {
-      const lista = counts.get(m.categoria) ?? []
+      const lista = porNombre.get(m.categoria) ?? []
       lista.push(m)
-      counts.set(m.categoria, lista)
+      porNombre.set(m.categoria, lista)
     }
-    return [...counts.entries()].sort((a, b) => a[0].localeCompare(b[0], 'es'))
+    return [...porNombre.entries()]
+      .map(([nombre, lista]) => ({ nombre, lista }))
+      .sort((a, b) => {
+        const ia = ORDEN_GRUPOS.indexOf(a.nombre)
+        const ib = ORDEN_GRUPOS.indexOf(b.nombre)
+        if (ia !== -1 || ib !== -1) return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib)
+        return a.nombre.localeCompare(b.nombre, 'es')
+      })
   }, [materiales])
 
   const visibles = useMemo(() => {
     const q = query.trim().toLowerCase()
     let lista = materiales.filter((m) => {
-      if (q && !`${m.nombre} ${m.categoria} ${m.descripcion}`.toLowerCase().includes(q)) return false
-      if (categoria !== 'todas' && m.categoria !== categoria) return false
-      if (soloDestacados && !m.destacado) return false
+      if (grupo && m.categoria !== grupo) return false
+      if (q && !`${m.nombre} ${m.descripcion}`.toLowerCase().includes(q)) return false
       return true
     })
 
     lista = [...lista]
     if (orden === 'nombre') lista.sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'))
-    if (orden === 'nivel') lista.sort((a, b) => b.nivel - a.nivel)
-    if (orden === 'categoria')
-      lista.sort(
-        (a, b) => a.categoria.localeCompare(b.categoria, 'es') || a.nombre.localeCompare(b.nombre, 'es'),
-      )
+    else lista.sort((a, b) => Number(!!b.destacado) - Number(!!a.destacado) || a.nombre.localeCompare(b.nombre, 'es'))
     return lista
-  }, [materiales, query, orden, categoria, soloDestacados])
-
-  const destacados = materiales.filter((m) => m.destacado).length
-  const mediaNivel = Math.round(
-    materiales.reduce((acc, m) => acc + m.nivel, 0) / (materiales.length || 1),
-  )
+  }, [materiales, query, orden, grupo])
 
   return (
-    <>
-      <div className="subnav">
-        <TabStrip
-          ariaLabel="Secciones de artesania"
-          active={categoria}
-          onChange={setCategoria}
-          tabs={[
-            { id: 'todas', label: 'MATERIALES', badge: String(materiales.length) },
-            ...categorias.map(([cat, lista]) => ({ id: cat, label: cat.toUpperCase(), badge: String(lista.length) })),
-          ]}
-        />
-      </div>
+    <div className="artesania">
+      {/*
+       * Cabecera del cliente: franja oscura con el icono de la bandeja de botin
+       * y, al lado, los rotulos de seccion. En la captura el titulo va en
+       * mayusculas y el activo en blanco sobre un pano claro.
+       */}
+      <header className="artesania__head">
+        <h1 className="artesania__title">
+          <img className="artesania__mark" src={asset('assets/ui/loot/tray-loot.svg')} alt="" />
+          ARTESANÍA
+        </h1>
 
-      <div className="screen screen--rail">
-        <nav className="rail" aria-label="Categorias de artesania">
-          {CARRIL.map((c) => (
-            <button
-              key={c.id}
-              type="button"
-              className={`rail__item ${categoria === c.id ? 'rail__item--on' : ''}`}
-              title={c.label}
-              aria-label={c.label}
-              aria-pressed={categoria === c.id}
-              onClick={() => setCategoria(categoria === c.id ? 'todas' : c.id)}
-              {...sound}
-            >
-              <img src={asset(`assets/ui/loot/${c.icono}`)} alt="" />
-            </button>
-          ))}
-          <span className="rail__spacer" />
+        <nav className="artesania__tabs" aria-label="Grupos de materiales">
           <button
             type="button"
-            className="rail__item"
-            title="Ayuda"
-            aria-label="Ayuda"
+            className="artesania__tab"
+            aria-current={grupo === null}
+            onClick={() => setGrupo(null)}
             {...sound}
           >
-            <span className="rail__help">?</span>
+            GRUPOS
           </button>
+          {grupos.map((g) => (
+            <button
+              key={g.nombre}
+              type="button"
+              className="artesania__tab"
+              aria-current={grupo === g.nombre}
+              onClick={() => setGrupo(g.nombre)}
+              {...sound}
+            >
+              {g.nombre.toUpperCase()}
+            </button>
+          ))}
         </nav>
+      </header>
 
-        <div className="coleccion">
-          <aside className="arsenal">
-            <div className="arsenal__stats">
-              <div className="framed-stat">
-                <span className="framed-stat__value">{materiales.length}</span>
-                <span className="framed-stat__label">Materiales en mochila</span>
-              </div>
-              <div className="framed-stat framed-stat--split">
-                <span className="framed-stat__value">{destacados}</span>
-                <span className="framed-stat__label">Destacados</span>
-                <span className="framed-stat__rule" aria-hidden="true" />
-                <span className="framed-stat__value">{mediaNivel}</span>
-                <span className="framed-stat__label">Nivel medio</span>
-              </div>
+      <div className="artesania__body">
+        {/* ---- vista de grupos: las fichas grandes, como las del botin ---- */}
+        {grupo === null ? (
+          <>
+            <div className="artesania__lead">
+              <h2>Qué llevo en la mochila</h2>
+              <p>
+                {materiales.length} materiales y herramientas con los que trabajo. Cada grupo
+                abre su listado; dentro está el logo de la marca y para qué la uso.
+              </p>
             </div>
 
-            <label className="arsenal__check">
-              <input
-                type="checkbox"
-                checked={soloDestacados}
-                onChange={(e) => setSoloDestacados(e.target.checked)}
+            <div className="categoria-grid">
+              {grupos.map((g) => (
+                <button
+                  key={g.nombre}
+                  type="button"
+                  className="categoria"
+                  onClick={() => setGrupo(g.nombre)}
+                  {...sound}
+                >
+                  <span className="categoria__logos" aria-hidden="true">
+                    {g.lista.slice(0, MIRA).map((m) => (
+                      <SkillLogo key={m.id} material={m} size={22} />
+                    ))}
+                    {g.lista.length > MIRA && (
+                      <span className="categoria__mas">+{g.lista.length - MIRA}</span>
+                    )}
+                  </span>
+
+                  <span className="categoria__foot">
+                    <span className="categoria__name">{g.nombre}</span>
+                    <span className="categoria__count">{g.lista.length}</span>
+                  </span>
+                </button>
+              ))}
+            </div>
+          </>
+        ) : (
+          /* ---- vista de detalle: los materiales del grupo ---- */
+          <>
+            <div className="artesania__toolbar">
+              <button
+                type="button"
+                className="artesania__back"
+                onClick={() => setGrupo(null)}
                 {...sound}
-              />
-              Solo destacados
-            </label>
+              >
+                <span aria-hidden="true">‹</span> GRUPOS
+              </button>
 
-            {categorias.map(([cat, lista]) => (
-              <section key={cat} className="arsenal__group">
-                <h3>
-                  <img
-                    className="arsenal__cat-icon"
-                    src={asset(`assets/ui/loot/${CATEGORIA_ICONO[cat] ?? 'category-all.png'}`)}
-                    alt=""
-                  />
-                  {cat}
-                </h3>
-                <ul className="arsenal__items">
-                  <li>
-                    <button
-                      type="button"
-                      className={`arsenal__item arsenal__item--all ${categoria === 'todas' ? 'is-on' : ''}`}
-                      aria-pressed={categoria === 'todas'}
-                      aria-label="Ver todos los materiales"
-                      onClick={() => setCategoria('todas')}
-                      {...sound}
-                    >
-                      <MaterialIcon name="vite" categoria={cat} size={44} />
-                    </button>
-                  </li>
-                  {lista.map((m) => (
-                    <li key={m.id}>
-                      <button
-                        type="button"
-                        className={`arsenal__item ${categoria === cat ? 'is-on' : ''}`}
-                        aria-pressed={categoria === cat}
-                        aria-label={`Ver ${m.nombre}`}
-                        title={m.nombre}
-                        onClick={() => setCategoria(categoria === cat ? 'todas' : cat)}
-                        {...sound}
-                      >
-                        <MaterialIcon
-                          name={m.id as MaterialIconName}
-                          categoria={m.categoria}
-                          size={44}
-                        />
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            ))}
-          </aside>
-
-          <div>
-            <div className="arsenal__toolbar">
               <SearchField
-                label="Buscar materiales"
+                label={`Buscar en ${grupo}`}
                 placeholder="Buscar"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                className="arsenal__search"
+                className="artesania__search"
               />
+
               <SelectField
                 label="Ordenar materiales"
                 value={orden}
                 onChange={(e) => setOrden(e.target.value as Orden)}
-                className="arsenal__sort"
+                className="artesania__sort"
               >
                 {Object.entries(ORDEN_LABEL).map(([value, label]) => (
                   <option key={value} value={value}>
@@ -231,9 +193,9 @@ export function Artesania({ materiales }: Props) {
             </div>
 
             <div className="section-title">
-              <h2>{categoria === 'todas' ? 'MATERIALES' : categoria.toUpperCase()}</h2>
+              <h2>{grupo.toUpperCase()}</h2>
               <span>
-                {visibles.length} de {materiales.length}
+                {visibles.length} de {materiales.filter((m) => m.categoria === grupo).length}
               </span>
             </div>
 
@@ -244,24 +206,19 @@ export function Artesania({ materiales }: Props) {
                   className={`material ${m.destacado ? 'material--destacado' : ''}`}
                   {...sound}
                 >
-                  <MaterialIcon name={m.id as MaterialIconName} categoria={m.categoria} />
-                  <div style={{ minWidth: 0 }}>
-                    <span className="material__cat">{m.categoria}</span>
+                  <span className="material__logo">
+                    <SkillLogo material={m} size={30} />
+                  </span>
+                  <div className="material__body">
                     <h3 className="material__name">{m.nombre}</h3>
                     <p className="material__desc">{m.descripcion}</p>
-                    <div className="material__level">
-                      <span className="material__level-bar">
-                        <span className="material__level-fill" style={{ width: `${m.nivel}%` }} />
-                      </span>
-                      <span className="material__level-num">{m.nivel}</span>
-                    </div>
                   </div>
                 </article>
               ))}
             </div>
-          </div>
-        </div>
+          </>
+        )}
       </div>
-    </>
+    </div>
   )
 }

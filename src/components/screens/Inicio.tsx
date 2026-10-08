@@ -63,8 +63,19 @@ export function Inicio({ data, onNavegar, onAbrir, modo }: Props) {
   const fondo = useMemo(() => champSplash(hero.fondoInicio ?? hero.champFavorito), [hero])
   const modoActual = modoPorId(modo ?? null)
 
+  /*
+   * Los tres materiales que se enseñan en el inicio. Sin nivel ya no hay en que
+   * ordenar, asi que mandan los destacados y, a igualdad, el orden alfabetico.
+   */
   const topMateriales = useMemo(
-    () => [...materiales].sort((a, b) => b.nivel - a.nivel).slice(0, 3),
+    () =>
+      [...materiales]
+        .sort(
+          (a, b) =>
+            Number(!!b.destacado) - Number(!!a.destacado) ||
+            a.nombre.localeCompare(b.nombre, 'es'),
+        )
+        .slice(0, 3),
     [materiales],
   )
 
