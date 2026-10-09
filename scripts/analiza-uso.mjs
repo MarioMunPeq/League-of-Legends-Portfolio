@@ -146,7 +146,7 @@ for (const m of texto.matchAll(/['"`]([^'"`]*assets\/[^'"`]+)['"`]/g)) {
 for (const m of texto.matchAll(/url\(\s*['"]?(\/?assets\/[^'")]+)/g)) seguras.add(m[1].replace(/^\//, ''))
 
 /*
- * 2.1b Ficheros sueltos en la raiz de `public/`: `og.png`, `favicon.svg`,
+ * 2.1b Ficheros sueltos en la raiz de `public/`: `og.jpeg`, `favicon.svg`,
  * `apple-touch-icon.png`... No llevan `assets/` en la ruta, asi que el patron de
  * arriba no los ve, y se declaraban muertos siendo cosa que si se usa (los cita
  * el plugin de Open Graph de vite.config.ts). Se resuelven por nombre: si el

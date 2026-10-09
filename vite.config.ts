@@ -22,9 +22,6 @@ const REPO = 'League-of-Legends-Portfolio'
  */
 const ORIGEN = 'https://mariomunpeq.github.io'
 
-/** Cuenta de X/Twitter que se atribuye el contenido al compartirlo. */
-const TWITTER = '@Snakeyesmp'
-
 const AUTOR = 'Mario Muñoz Pequeño'
 
 /**
@@ -34,14 +31,6 @@ const AUTOR = 'Mario Muñoz Pequeño'
 const DESCRIPCION =
   'Portfolio de desarrollo de Mario Muñoz Pequeño: diez proyectos presentados con la ' +
   'interfaz de League of Legends. Proyecto fan, no afiliado a Riot Games.'
-
-const OG = {
-  titulo: 'Un portfolio con la estética de League of Legends',
-  descripcion:
-    'Cada pantalla replica una sección real del cliente de League of Legends, con sus piezas ' +
-    'y el código abierto que usa Riot. Proyecto fan, no afiliado a Riot Games.',
-  alt: 'Retrato de Sett a la derecha y, sobre el fondo oscuro de la interfaz del cliente, el titular «Un portfolio con la estética de League of Legends».',
-}
 
 /** GitHub Pages sirve el proyecto con una redireccion 301 a esta forma. */
 const SITE = `${ORIGEN}/${REPO}/`
@@ -116,20 +105,20 @@ function jsonLd(): string {
 const PRERENDER = resolve(import.meta.dirname, '.prerender/body.html')
 
 /**
- * Inserta las etiquetas de previsualizacion y el cuerpo pre-renderizado.
+ * Inserta los iconos, los datos estructurados y el cuerpo pre-renderizado.
  *
- * Los crawlers de WhatsApp, LinkedIn, X o Slack NO ejecutan JavaScript: leen el
- * HTML tal cual y de ahi sacan la imagen y el texto del enlace. Por eso van en
- * el HTML y no se calculan en React.
+ * El bloque que se ve al compartir el enlace (`og:*`, `twitter:*` y el
+ * `canonical`) NO se genera aqui: esta escrito a mano en `index.html`, que es
+ * donde se lee y donde se cambia. Aqui solo queda lo que depende de `base` o de
+ * los datos del proyecto.
  *
- * Lo delicado es que `og:image` tiene que ser una URL ABSOLUTA. Un crawler que
- * recibe `og.png` no lo resuelve contra el sitio que se esta compartiendo (no
- * sabe de donde vino el enlace) y se queda sin imagen. El prefijo sale de
- * `base`, que ya lleva el nombre del repositorio: si el repo se renombra, las
- * etiquetas lo siguen sin que nadie tenga que acordarse.
+ * Los crawlers de WhatsApp, LinkedIn, X o Slack no ejecutan JavaScript, asi que
+ * todo esto tiene que acabar en el HTML estatico; por eso se inserta en el
+ * build y no en tiempo de ejecucion.
  *
- * Solo en build: en desarrollo `og:url` apuntaria a la URL publica, que no es
- * la que se esta mirando, y los validadores avisarian en falso.
+ * Solo en build: en desarrollo `canonical` y JSON-LD apuntarian a la URL
+ * publica, que no es la que se esta mirando, y los validadores avisarian en
+ * falso.
  */
 function openGraph(): Plugin {
   let base = '/'
@@ -143,7 +132,6 @@ function openGraph(): Plugin {
     transformIndexHtml(html) {
       const raiz = base.endsWith('/') ? base : `${base}/`
       const relativa = (p: string) => `${raiz}${p}`
-      const absoluta = (p: string) => `${ORIGEN}${raiz}${p}`
 
       const meta = [
         // Iconos. Google no acepta SVG, asi que el .ico y el PNG van aunque
@@ -153,31 +141,24 @@ function openGraph(): Plugin {
         `<link rel="icon" type="image/png" sizes="32x32" href="${relativa('favicon-32x32.png')}" />`,
         `<link rel="apple-touch-icon" href="${relativa('apple-touch-icon.png')}" />`,
         `<link rel="manifest" href="${relativa('site.webmanifest')}" />`,
-        `<link rel="canonical" href="${SITE}" />`,
 
         `<meta name="author" content="${AUTOR}" />`,
         `<meta name="description" content="${DESCRIPCION}" />`,
 
-        `<meta property="og:type" content="website" />`,
-        `<meta property="og:site_name" content="xNaque · Portfolio" />`,
-        `<meta property="og:locale" content="es_ES" />`,
-        `<meta property="og:title" content="${OG.titulo}" />`,
-        `<meta property="og:description" content="${OG.descripcion}" />`,
-        `<meta property="og:url" content="${SITE}" />`,
-        `<meta property="og:image" content="${absoluta('og.png')}" />`,
-        `<meta property="og:image:secure_url" content="${absoluta('og.png')}" />`,
-        `<meta property="og:image:type" content="image/png" />`,
-        `<meta property="og:image:width" content="1200" />`,
-        `<meta property="og:image:height" content="630" />`,
-        `<meta property="og:image:alt" content="${OG.alt}" />`,
-
-        `<meta name="twitter:card" content="summary_large_image" />`,
-        `<meta name="twitter:site" content="${TWITTER}" />`,
-        `<meta name="twitter:creator" content="${TWITTER}" />`,
-        `<meta name="twitter:title" content="${OG.titulo}" />`,
-        `<meta name="twitter:description" content="${OG.descripcion}" />`,
-        `<meta name="twitter:image" content="${absoluta('og.png')}" />`,
-        `<meta name="twitter:image:alt" content="${OG.alt}" />`,
+        /*
+         * Deliberadamente NO hay aqui las etiquetas `og:*`, `twitter:*` ni el
+         * `canonical`: viven escritas en `index.html`.
+         *
+         * Se movieron ahi para que el bloque que se lee al compartir un enlace
+         * se pueda editar y revisar en el fichero donde uno lo mira, en vez de
+         * estar escondido en la configuracion del build. Este plugin se queda
+         * con lo que de verdad necesita conocer `base` y los datos del proyecto:
+         * los iconos, el manifest, los datos estructurados y el cuerpo
+         * pre-renderizado.
+         *
+         * Duplicarlas aqui daria dos `og:image` en el mismo HTML, y con ellos
+         * distintos los crawlers cogen el que les da la gana.
+         */
 
         `<script type="application/ld+json">\n${jsonLd()}\n</script>`,
       ].join('\n    ')

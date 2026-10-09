@@ -6,12 +6,78 @@
     <title>Mario Muñoz Pequeño (MarioMunPeq) · Portfolio</title>
     <meta name="color-scheme" content="dark" />
     <meta name="theme-color" content="#010a13" />
+
     <!--
-      El bloque de previsualizacion (canonical, og:*, twitter:*, iconos y el
-      JSON-LD) lo anade el plugin `open-graph` de vite.config.ts, justo despues
-      de este </title>. Vive ahi porque la URL de `og:image` depende de `base`,
-      que solo se conoce al resolver la configuracion.
+      ============================================================
+      PREVISUALIZACION AL COMPARTIR EL ENLACE
+      ============================================================
+
+      Estas etiquetas estan aqui, escritas a mano, y no las añade ningun plugin.
+      Los crawlers de WhatsApp, LinkedIn, X o Slack NO ejecutan JavaScript: leen
+      el HTML tal cual. Que el build las terminara escribiendo en el fichero de
+      salida daba el mismo resultado, pero dejaba el bloque social escondido en
+      `vite.config.ts`, a tres ficheros de distancia de donde se lee o se cambia
+      el texto. Aqui se ve, se edita y se revisa en el sitio donde uno mira.
+
+      El resto de lo que inyecta el plugin (iconos, manifest, JSON-LD y el
+      cuerpo pre-renderizado) sigue generandose en el build, porque eso si depende
+      de `base` y de datos.
+
+      OJO con la URL: tiene que ser ABSOLUTA. Un crawler que recibe una ruta
+      relativa no la resuelve contra el sitio que se esta compartiendo, porque no
+      sabe de donde vino el enlace, y se queda sin foto.
+
+      OJO con el `?v=3`: es lo que rompe la cache. WhatsApp y LinkedIn guardan la
+      previsualizacion durante horas o dias aunque la imagen cambie, asi que al
+      retocar `og.jpeg` hay que subir el numero; si no, los crawlers seguiran
+      viendo la imagen anterior.
     -->
+    <link rel="canonical" href="https://mariomunpeq.github.io/League-of-Legends-Portfolio/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="xNaque · Portfolio" />
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:title" content="Un portfolio con la estética de League of Legends" />
+    <meta
+      property="og:description"
+      content="Cada pantalla replica una sección real del cliente de League of Legends, con sus piezas y el código abierto que usa Riot. Proyecto fan, no afiliado a Riot Games."
+    />
+    <meta property="og:url" content="https://mariomunpeq.github.io/League-of-Legends-Portfolio/" />
+
+    <!-- JPEG y no PNG: pesa una cuarta parte (unos 100 kB frente a 600) y las
+         cuatro plataformas lo pasan igual. Se genera con `npm run og`. -->
+    <meta
+      property="og:image"
+      content="https://mariomunpeq.github.io/League-of-Legends-Portfolio/og.jpeg?v=3"
+    />
+    <meta
+      property="og:image:secure_url"
+      content="https://mariomunpeq.github.io/League-of-Legends-Portfolio/og.jpeg?v=3"
+    />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Retrato de Briar a la derecha y el titular «Un portfolio con la estética de League of Legends» sobre el fondo oscuro de la interfaz del cliente."
+    />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@Snakeyesmp" />
+    <meta name="twitter:creator" content="@Snakeyesmp" />
+    <meta name="twitter:title" content="Un portfolio con la estética de League of Legends" />
+    <meta
+      name="twitter:description"
+      content="Cada pantalla replica una sección real del cliente de League of Legends, con sus piezas y el código abierto que usa Riot. Proyecto fan, no afiliado a Riot Games."
+    />
+    <meta
+      name="twitter:image"
+      content="https://mariomunpeq.github.io/League-of-Legends-Portfolio/og.jpeg?v=3"
+    />
+    <meta
+      name="twitter:image:alt"
+      content="Retrato de Briar a la derecha y el titular «Un portfolio con la estética de League of Legends» sobre el fondo oscuro de la interfaz del cliente."
+    />
   </head>
   <body>
     <div id="root"></div>

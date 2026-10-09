@@ -1,7 +1,7 @@
 /**
  * Genera los recursos que se ven al compartir el enlace.
  *
- *   public/og.png               1200x630, la previsualizacion de WhatsApp/LinkedIn
+ *   public/og.jpeg               1200x630, la previsualizacion de WhatsApp/LinkedIn
  *   public/apple-touch-icon.png  180x180, la ficha del icono en iOS
  *   public/icon-192.png          192x192, icono de la web app manifest
  *   public/icon-512.png          512x512, icono grande y PWA
@@ -15,6 +15,14 @@
  * depender de que el sistema tenga las fuentes ni de reimplementar el arte a
  * mano. Las .otf y las imagenes se incrustan como data URI, asi que el script
  * no necesita ningun servidor.
+ *
+ * La previsualizacion sale en JPEG, no en PNG. Un PNG de 1200x630 con una
+ * fotografia pesa unos 600 kB; el mismo diseno en JPEG se queda en unos 100 kB,
+ * y las cuatro plataformas lo muestran igual. Es la unica imagen que se
+ * rasteriza dos veces (ver `aJpeg`), porque Chrome solo sabe hacer capturas PNG.
+ *
+ * Ojo al retocar `og.jpeg`: hay que subir el `?v=` que lleva en `index.html`,
+ * o WhatsApp y LinkedIn seguiran enseñando la imagen anterior.
  *
  * No se ejecuta en el build: es una tarea manual, para cuando cambie el texto o
  * la portada. Los ficheros que genera si se versionan, porque son los que
@@ -340,8 +348,61 @@ function empaquetarIco(capas, salida) {
   writeFileSync(salida, Buffer.concat([dir, ...entradas, ...imagenes]))
 }
 
+/*
+ * Convierte un PNG en JPEG usando el canvas del propio Chrome.
+ *
+ * `--screenshot` solo sabe escribir PNG, y no hay ninguna libreria de imagen en
+ * el proyecto (ni `sharp` ni `pngjs`). En vez de meter una dependencia, se le
+ * pide al navegador que lo haga: la pagina carga el PNG en un `<img>`, lo pinta
+ * en un canvas y saca `canvas.toDataURL('image/jpeg', calidad)`. El base64 sale
+ * dentro del DOM y se recoge con `--dump-dom`, que este script ya usa.
+ *
+ * Sin alpha no se pierde nada: la previsualizacion es una imagen opaca sobre
+ * fondo negro, y el JPEG no tiene canal alfa. Para los iconos NO se usa esto:
+ * los iconos si son PNG, porque tienen transparencia.
+ */
+function aJpeg(png, salida, calidad = 0.86) {
+  const pagina = join(tmp, 'convertir.html')
+  writeFileSync(
+    pagina,
+    `<!doctype html><html><head><meta charset="utf-8"></head><body>
+      <img id="src" src="data:image/png;base64,${readFileSync(png).toString('base64')}">
+      <pre id="out">pendiente</pre>
+      <script>
+        const img = document.getElementById('src')
+        img.addEventListener('load', () => {
+          const c = document.createElement('canvas')
+          c.width = img.naturalWidth
+          c.height = img.naturalHeight
+          c.getContext('2d').drawImage(img, 0, 0)
+          document.getElementById('out').textContent = c.toDataURL('image/jpeg', ${calidad})
+        })
+      </script>
+    </body></html>`,
+  )
+
+  const html = execFileSync(
+    chrome,
+    [
+      '--headless=new',
+      '--disable-gpu',
+      '--virtual-time-budget=8000',
+      '--dump-dom',
+      `file:///${pagina.replace(/\\/g, '/')}`,
+    ],
+    { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 },
+  )
+
+  const m = html.match(/data:image\/jpeg;base64,([A-Za-z0-9+/=]+)/)
+  if (!m) {
+    console.error('  ! no se pudo convertir a JPEG; se deja el PNG temporal sin tocar')
+    return false
+  }
+  writeFileSync(salida, Buffer.from(m[1], 'base64'))
+  return true
+}
+
 const salidas = [
-  { html: OG, w: 1200, h: 630, salida: join(PUB, 'og.png') },
   { svg: 180, salida: join(PUB, 'apple-touch-icon.png') },
   { svg: 192, salida: join(PUB, 'icon-192.png') },
   { svg: 512, salida: join(PUB, 'icon-512.png') },
@@ -349,14 +410,23 @@ const salidas = [
 ]
 
 for (const s of salidas) {
-  if (s.svg) {
-    renderSVG(svgIcono(s.svg), s.svg, s.salida)
-  } else {
-    render(s.html, s.w, s.h, s.salida)
-  }
+  renderSVG(svgIcono(s.svg), s.svg, s.salida)
   const kb = Math.round((readFileSync(s.salida).length / 1024) * 10) / 10
-  const dim = s.svg ? `${s.svg}x${s.svg}` : `${s.w}x${s.h}`
-  console.log(`  ${relative(RAIZ, s.salida)}  ${dim}  ${kb} KB`)
+  console.log(`  ${relative(RAIZ, s.salida)}  ${s.svg}x${s.svg}  ${kb} KB`)
+}
+
+/*
+ * La previsualizacion se rasteriza en PNG en un temporal y luego se pasa a JPEG.
+ * El PNG intermedio se borra: dejarlo en `public/` seria volver a subir 600 kB
+ * que nadie consume.
+ */
+const ogTemporal = join(tmp, 'og.png')
+render(OG, 1200, 630, ogTemporal)
+const og = join(PUB, 'og.jpeg')
+if (aJpeg(ogTemporal, og)) {
+  console.log(
+    `  ${relative(RAIZ, og)}  1200x630  ${Math.round((readFileSync(og).length / 1024) * 10) / 10} KB`,
+  )
 }
 
 /*
@@ -388,4 +458,4 @@ writeFileSync(join(PUB, 'favicon.svg'), svgIcono(512))
 console.log('  public/favicon.svg  vector')
 
 rmSync(tmp, { recursive: true, force: true })
-console.log('\nlisto. Recuerda que las metas de index.html llevan la URL absoluta.')
+console.log('\nlisto. Si has tocado og.jpeg, sube el ?v= de index.html para romper la cache.')

@@ -12,7 +12,7 @@ npm run check      # verifica que toda referencia a /assets resuelva
 npm run dev
 npm run build      # check + tsc + prerender + vite build
 npm run lint
-npm run og         # regenera og.png, favicon.ico y los iconos (requiere Chrome)
+npm run og         # regenera og.jpeg, favicon.ico y los iconos (requiere Chrome)
 npm run check:hidratacion   # carga dist/ en Chrome y comprueba que hidrata sin errores
 ```
 
