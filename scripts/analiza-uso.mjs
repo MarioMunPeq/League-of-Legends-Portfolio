@@ -179,7 +179,7 @@ for (const m of gen.matchAll(/^ {4}name: "([^"]+)",/gm)) {
   for (const s of iconosHechizos(bloque)) posibles.add(`assets/spells/${s}`)
 }
 
-/** Los que se pintan de verdad: solo los纵横 de los proyectos y del heroe. */
+/** Los que se pintan de verdad: solo los de los proyectos y del heroe. */
 for (const c of championsPintados) {
   const bloque = bloqueDe(c)
   seguras.add(`assets/champions/square/${c}.png`)
@@ -244,7 +244,13 @@ if (texto.includes('assets/ui/rarity/')) {
   const rango = coleccion.match(/Math\.max\(\s*(\d+)\s*,\s*Math\.min\(\s*(\d+)/)
   const lo = rango ? Number(rango[1]) : 1
   const hi = rango ? Number(rango[2]) : 9
-  for (let n = lo; n <= hi; n++) seguras.add(`assets/ui/rarity/${n}.png`)
+  /*
+   * El prefijo tambien sale del codigo, porque la plantilla es `rarity${...}`.
+   * Escribir aqui `rarity${n}.png` a mano salia mal y dejaba los 9
+   * ficheros como si no los usara nadie.
+   */
+  const prefijo = coleccion.match(/`([A-Za-z0-9_-]*)\$\{Math\.max\(/)?.[1] ?? ''
+  for (let n = lo; n <= hi; n++) seguras.add(`assets/ui/rarity/${prefijo}${n}.png`)
 }
 
 /* ================================================================ 3. INFORME */

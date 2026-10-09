@@ -275,7 +275,7 @@ const group = (name) => {
 }
 
 /**
- * Los splash pesan ~165 kB cada uno: con los 173直播间 serian 28 MB.
+ * Los splash pesan ~165 kB cada uno: con los 173 de las dos listas serian 28 MB.
  * Solo se descargan los que la app usa de fondo (proyectos, portada, inicio);
  * para el resto alcanza con el icono cuadrado de la grilla de seleccion.
  */
