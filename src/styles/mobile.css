@@ -1,0 +1,782 @@
+/*
+ * ============================================================================
+ * CAPA MOVIL
+ * ============================================================================
+ *
+ * Todo lo de este fichero vive dentro de `@media (max-width: 767px)`, con una
+ * unica excepcion: `.botnav` se oculta en la base para que en escritorio no
+ * exista. Asi la version de PC no se puede ver afectada ni por accidente: si una
+ * regla se sale del media query, no llega a ejecutarse a 1440 px.
+ *
+ * El corte esta en 767 px y no en 1024 porque a partir de ahi la composicion
+ * de escritorio ya funciona sola: el panel social cabe, la barra del cliente
+ * tiene sitio para su nombre de invocador y las rejillas de dos columnas no
+ * se eternizan. Por debajo, en cambio, hay que recomponer: no se puede tratar
+ * el movil como un escritorio pequeno, sale mas caro que hacerlo bien.
+ *
+ * Tres ideas sostienen el resto:
+ *
+ *   1. La navegacion se baja al borde inferior. La barra del cliente esta
+ *      pensada para raton y a 390 px solo le caben cuatro cosas; ademas, en
+ *      vertical, el pulgar no llega arriba. Las secciones bajan a `.botnav`.
+ *
+ *   2. Nada se corta en silencio. Antes, cinco contenedores tenian scroll
+ *      horizontal sin ninguna pista visual (las pestañas de Artesania, las de
+ *      Perfil, las cifras, los modos de partida y las de Jugar): se veia el
+ *      contenido cortado y no habia forma de saber que se podia desplazar.
+ *      Aqui cada tira decide: si son pocas, se envuelven en varias lineas;
+ *      si son muchas, se convierten en un carrusel con anclaje y con un
+ *      degradado en el borde que anuncia que hay mas.
+ *
+ *   3. Menos ruido, mas ritmo. La escala tipografica se compacta y el aire
+ *      vertical se ajusta a un paso constante, para que en vertical se vea
+ *      una pantalla entera y no un titre y medio.
+ */
+
+/* La barra inferior no existe en escritorio. */
+.botnav {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  /* ======================================================================
+     0. TOKENS MOVILES
+     ====================================================================== */
+
+  :root {
+    /*
+     * Las zonas seguras del dispositivo. Se redefinen aqui a 0 con un respaldo,
+     * de modo que en un navegador de escritorio `env()` vale 0 y no hay que
+     * escribir `calc()` por todas partes.
+     */
+    --safe-t: env(safe-area-inset-top, 0px);
+    --safe-b: env(safe-area-inset-bottom, 0px);
+    --safe-l: env(safe-area-inset-left, 0px);
+    --safe-r: env(safe-area-inset-right, 0px);
+
+    /* altura de la barra inferior, mas el hueco del gesto de inicio */
+    --botnav-h: 3.5rem;
+    /* margen lateral comodo para el pulgar, con lo que marque el notch */
+    --gutter: 1rem;
+    /* paso vertical del ritmo */
+    --gap-y: 1.25rem;
+
+    --topbar-h: 3.25rem;
+    --social-w: 0rem;
+  }
+
+  /*
+   * El cliente esta maquetado para raton. En touch hay dos cosas que estorban:
+   * el resalte azul al tocar, que deja un rectangulo feo con cada pulsacion, y
+   * el retardo de 300 ms de los navegadores viejos.
+   */
+  html {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    touch-action: manipulation;
+  }
+
+  /* ======================================================================
+     1. ESTRUCTURA: la barra inferior ocupa su fila
+     ====================================================================== */
+
+  /*
+   * `.frame` ya es una grilla de dos filas (barra + cuerpo). Anadir la barra
+   * inferior crea una tercera fila implicita, que es justo lo que hace falta:
+   * la grilla reparte el alto y el cuerpo recibe el `1fr`. No hay que tocar
+   * `.frame__body`, que sigue siendo el unico que hace scroll.
+   */
+  .frame {
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    /*
+     * Este `minmax(0, 1fr)` es lo mas importante de todo el fichero. Sin el,
+     * la unica columna de la grilla es `auto`, y una columna `auto` se mide
+     * con el contenido mas ancho de sus hijos: una barra superior que no
+     * llega a encogerse (~500 px) ensanchaba la columna, `.frame` se salia del
+     * viewport y como lleva `overflow: hidden` todo lo que sobraba se
+     * recortaba sin scroll. Se veia media pantalla y la quinta seccion de la
+     * barra inferior, directamente inalcanzable. `min-width: 0` no lo evita:
+     * hace falta que la pista sea 1fr.
+     */
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /*
+   * El contenido tiene que dejar libre el hueco de la barra inferior, o el
+   * ultimo elemento de cada pantalla acaba debajo y no se puede leer.
+   */
+  .main {
+    padding-bottom: calc(var(--botnav-h) + var(--safe-b) + 0.5rem);
+    scroll-padding-bottom: calc(var(--botnav-h) + var(--safe-b));
+  }
+
+  /* ======================================================================
+     2. BARRA INFERIOR (la navegacion en movil)
+     ====================================================================== */
+
+  .botnav {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    align-items: stretch;
+    z-index: 30;
+
+    /* el pie del notch en horizontal, y el gesto de inicio abajo del todo */
+    padding-bottom: var(--safe-b);
+    padding-left: var(--safe-l);
+    padding-right: var(--safe-r);
+
+    background: linear-gradient(180deg, rgba(10, 22, 34, 0.97) 0%, rgba(4, 12, 21, 0.99) 100%);
+    border-top: 1px solid var(--line-hair);
+    box-shadow: 0 -0.25rem 1rem rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(0.75rem);
+    -webkit-backdrop-filter: blur(0.75rem);
+  }
+
+  .botnav__item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.125rem;
+
+    /* 44 px es el minimo comodo para un dedo; con la etiqueta caben justos */
+    min-height: var(--botnav-h);
+    padding: 0.25rem 0.125rem;
+
+    color: var(--ink-muted);
+    text-decoration: none;
+    transition: color var(--t-fast) var(--ease-out);
+  }
+
+  /* el estado activo lo marca el color y un filete, como las pestañas del cliente */
+  .botnav__item--activo {
+    color: var(--gold-bright);
+  }
+
+  .botnav__item--activo::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 1.5rem;
+    height: 2px;
+    transform: translateX(-50%);
+    background: var(--gold);
+    box-shadow: 0 0 0.5rem var(--gold-glow-strong);
+  }
+
+  /*
+   * El glifo se dibuja con la mascara de color del cliente: el icono es
+   * monocromo y lo pinta quien lo usa, asi que el activo puede brillar.
+   */
+  .botnav__icon {
+    display: grid;
+    place-items: center;
+    color: currentColor;
+  }
+
+  .botnav__icon svg {
+    width: 1.375rem;
+    height: 1.375rem;
+  }
+
+  .botnav__label {
+    font-family: 'Spiegel', sans-serif;
+    font-size: 0.625rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    /* "Artesania" es la palabra larga: sin recortar se sale de la celda */
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* En pantallas muy estrechas (320 px) la etiqueta se apila bajo el icono */
+  @media (max-width: 359px) {
+    .botnav__label {
+      font-size: 0.5625rem;
+    }
+  }
+
+  /* ======================================================================
+     3. BARRA SUPERIOR: version ligera
+     ====================================================================== */
+
+  /*
+   * En la barra del cliente solo sobreviven cuatro cosas a 390 px: la placa
+   * de JUGAR, el silencio, el retrato y (a partir de 360) el boton azul. El
+   * resto ya lo oculta la cascada de escritorio, pero se declara aqui
+   * explicitamente para que quede claro cual es la decision y no dependa de
+   * en que breakpoint caiga cada pieza por casualidad.
+   */
+  .top__nav,
+  .top__wallet,
+  .top__tabs,
+  .top__summoner,
+  .top__sysbtns,
+  .top__chevron,
+  .social {
+    display: none;
+  }
+
+  /*
+   * `height` fijo no deja sitio al notch. Con `min-height` la barra crece lo
+   * justo y el contenido baja con ella.
+   */
+  .top {
+    height: auto;
+    min-height: var(--topbar-h);
+    padding-top: var(--safe-t);
+    padding-right: var(--safe-r);
+    padding-left: var(--safe-l);
+  }
+
+  /* el retrato se queda pegado a la derecha, que es donde lo espera el pulgar */
+  .top__tools {
+    margin-left: auto;
+    padding-right: 0;
+  }
+
+  /*
+   * La placa de JUGAR es la pieza mas pesada de la barra (218 px de ancho en el
+   * cliente). En movil se encoge para que quepan el silencio y el retrato.
+   */
+  .top .play {
+    height: 2.25rem;
+  }
+
+  .top .play-logo {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .top .play-label {
+    font-size: 0.8125rem;
+    letter-spacing: 0.08em;
+  }
+
+  /* el silencio es un control de verdad: se le da el tamano de un dedo */
+  .top__iconbtn {
+    width: 2.75rem;
+    height: 2.75rem;
+    margin: 0 0.125rem;
+  }
+
+  /*
+   * El retrato es la unica via a la ficha. En movil pierde el marco hexagonal
+   * (no se aprecia a este tamano) y se queda con el circulo y la cifra.
+   */
+  .top__portrait {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .top__portrait-plate {
+    width: 1.75rem;
+    height: 1.9375rem;
+  }
+
+  .top__crest {
+    width: 1.375rem;
+    height: 1.375rem;
+  }
+
+  .top__level {
+    font-size: 0.6875rem;
+  }
+
+  /* el boton azul de aviso cabe a partir de aqui; en 320 se retira */
+  @media (max-width: 359px) {
+    .top__alert {
+      display: none;
+    }
+  }
+
+  /* ======================================================================
+     4. TIRAS CON SCROLL: envolver, o carrusel con pistas
+     ====================================================================== */
+
+  /*
+   * Este es el arreglo de fondo. Antes, `.main` recortaba en silencio lo que
+   * sobresalia (caja 380 contra 494 de contenido en Inicio), y cinco
+   * contenedores ofrecían scroll horizontal sin ninguna marca. Ahora:
+   *
+   *   - Las tiras cortas se envuelven en varias lineas. Se leen enteras, sin
+   *     gestos que descubrir.
+   *   - Las largas se convierten en carruseles con anclaje, con un pelin de
+   *     la siguiente pieza asomando y un degradado que lo anuncia.
+   *
+   * El degradado va como mascara: difumina el borde derecho sin necesidad de
+   * anadir un elemento por encima, que es lo que suele tapar los toques.
+   */
+  .main {
+    overflow-x: hidden;
+  }
+
+  /* --- 4.1 Inicio: tres secciones, caben en dos lineas --- */
+  .home__tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1.25rem;
+    padding: 0 var(--gutter);
+  }
+
+  .home__tab {
+    padding: 0.625rem 0.125rem;
+    font-size: 0.75rem;
+  }
+
+  /*
+   * La nota de la tira (unos iconos de ayuda y silencio) es adorno sin accion
+   * asociada. En escritorio cabe a la derecha de las pestanas; aqui, al
+   * envolver, caia en una fila propia debajo y parecia un fallo. Se retira.
+   */
+  .home__tab-note {
+    display: none;
+  }
+
+  /* --- 4.2 Artesania: muchas categorias, carrusel con pistas --- */
+  .artesania__tabs {
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+    /* margen a la derecha para que la ultima tarjeta no quede pegada al borde */
+    padding-right: var(--gutter);
+    mask-image: linear-gradient(90deg, #000 0, #000 88%, transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, #000 0, #000 88%, transparent 100%);
+  }
+
+  .artesania__tab {
+    scroll-snap-align: start;
+    flex-shrink: 0;
+    padding: 0 0.875rem;
+    font-size: 0.75rem;
+  }
+
+  /* --- 4.3 Perfil: las cinco cifras, carrusel con anclaje y pieza asomada --- */
+  .perfil__cifras {
+    display: flex;
+    gap: 0.75rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    /* una tarjeta y un poco de la siguiente: la idea de "hay mas" se ve */
+    padding: 0 var(--gutter) 0.25rem;
+    scrollbar-width: none;
+    mask-image: linear-gradient(90deg, #000 0, #000 86%, transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, #000 0, #000 86%, transparent 100%);
+  }
+
+  .perfil__cifras::-webkit-scrollbar {
+    display: none;
+  }
+
+  .cifra {
+    flex: 0 0 8.5rem;
+    scroll-snap-align: center;
+    /* el centro es lo que se alinea con el anclaje */
+    scroll-snap-stop: normal;
+  }
+
+  .cifra__valor {
+    font-size: 1.375rem;
+  }
+
+  .cifra__etiqueta {
+    font-size: 0.6875rem;
+    max-width: 7.5rem;
+  }
+
+  .cifra__emblema-box {
+    width: 5.5rem;
+  }
+
+  /* --- 4.4 Perfil: pestañas, se envuelven --- */
+  .perfil__tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 0.875rem;
+    overflow: visible;
+    padding: 0 var(--gutter);
+  }
+
+  .perfil__tabs .tab {
+    padding: 0.625rem 0.25rem;
+    font-size: 0.75rem;
+  }
+
+  /* --- 4.5 Jugar: cinco modos largos, se envuelven --- */
+  .jugar__tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1rem;
+    overflow: visible;
+    padding: 0 var(--gutter);
+  }
+
+  .jugar__tab {
+    padding: 0.75rem 0;
+    font-size: 0.75rem;
+  }
+
+  /*
+   * El separador vertical solo tiene sentido en una fila. Al envolver, se
+   * convierte en un punto para no dejar un palito suelto entre modos.
+   */
+  .jugar__sep {
+    display: none;
+  }
+
+  /* --- 4.6 Jugar: los dos modos, dos columnas de verdad --- */
+  .jugar__modes {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    overflow: visible;
+    width: 100%;
+    gap: 0;
+  }
+
+  .mode {
+    padding: 1.25rem 0.5rem 1rem;
+  }
+
+  .mode__icon {
+    width: 3.25rem;
+  }
+
+  .mode__titulo {
+    font-size: 0.9375rem;
+    max-width: 100%;
+  }
+
+  /* en 320 las dos columnas deja de dar la talla */
+  @media (max-width: 359px) {
+    .jugar__modes {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .mode + .mode::before {
+      display: none;
+    }
+  }
+
+  /* ======================================================================
+     5. ESCALA TIPOGRAFICA COMPACTA
+     ====================================================================== */
+
+  /*
+   * Los titulares de exhibition se bajan de un escalon. Con `clamp()` el
+   * minimo es lo que manda por debajo de ~900 px, asi que en movil el problema
+   * no era el maximo sino que ese minimo estaba puesto para una pantalla
+   * grande.
+   */
+  .hero__title,
+  .home__display-title,
+  .detalle__titulo {
+    font-size: clamp(1.5rem, 7.4vw, 2rem);
+    line-height: 1.12;
+  }
+
+  .hero__subtitle,
+  .detalle__claim {
+    font-size: 0.9375rem;
+  }
+
+  /* el cuerpo largo del indice es lo que mas empuja: de 22 px a 16 px */
+  .home__guion {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .home__display-claim {
+    font-size: 0.8125rem;
+  }
+
+  .perfil__lema {
+    font-size: 1rem;
+  }
+
+  .perfil__name {
+    font-size: 1.25rem;
+  }
+
+  .artesania__lead h2 {
+    font-size: 1.25rem;
+  }
+
+  .artesania__lead p {
+    font-size: 0.875rem;
+  }
+
+  /* cifras grandes: 48 px y 44 px son de escritorio */
+  .framed-stat__value {
+    font-size: 2.25rem;
+  }
+
+  .meter__value {
+    font-size: 2rem;
+  }
+
+  .categoria__count {
+    font-size: 1.125rem;
+  }
+
+  .categoria__name {
+    font-size: 1rem;
+  }
+
+  /* ======================================================================
+     6. RITMO VERTICAL
+     ====================================================================== */
+
+  .screen,
+  .screen--coleccion {
+    padding: 1.25rem 0 1.5rem;
+  }
+
+  /* las pestanas del subnav y los titulos de seccion, al margen del pulgar */
+  /* la tira del botin lleva el margen del pulgar; sin el, la pestaña se pega al borde */
+  .subnav {
+    padding: 0.375rem 0;
+  }
+
+  .tabs--loot {
+    padding: 0.375rem var(--gutter);
+    gap: 0.875rem;
+  }
+
+  .tabs--loot .tab {
+    font-size: 0.75rem;
+    padding: 0.625rem 0.125rem;
+  }
+
+  .section-title {
+    padding: 0 var(--gutter);
+  }
+
+  .section-title h2 {
+    font-size: 1.0625rem;
+  }
+
+  /* la etiqueta de seccion lleva un espaciado enorme pensado para escritorio */
+  .label {
+    letter-spacing: 0.12em;
+  }
+
+  /* --- Inicio --- */
+  .home__stage {
+    padding: 1.25rem var(--gutter) 1.5rem;
+  }
+
+  /*
+   * El arte de fondo no se toca. Es una capa con `inset: 0` y una animacion de
+   * deriva que la hace asomar unos pixeles; `.home__stage` ya la recorta con su
+   * `overflow: hidden`. Anclarlo con `left: 50%` o darle un ancho fijo pelea
+   * con la animacion y lo que se consigue es un desborde nuevo.
+   */
+
+  /* las miniaturas del indice: carrusel con anclaje */
+  .home__thumbs {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    /* el degradado se reserva para cuando hay algo que desplazar */
+    padding-bottom: 0.25rem;
+  }
+
+  .home__thumbs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .home__thumb {
+    flex: 0 0 4.5rem;
+    scroll-snap-align: start;
+  }
+
+  /* --- Coleccion: los filtros y la grilla --- */
+  .coleccion__side {
+    gap: 0.875rem;
+    padding: 0 var(--gutter);
+  }
+
+  /*
+   * El padding del campo de busqueda no se puede reducir: a la izquierda vive
+   * el icono de la lupa, que con menos hueco se monta encima del texto. Se
+   * conserva el hueco del icono y se recorta solo el lado derecho.
+   */
+  .coleccion__side .input {
+    padding: 0.625rem 0.75rem 0.625rem 2.75rem;
+    min-width: 0;
+  }
+
+  .coleccion__side select.input {
+    padding: 0.625rem 2rem 0.625rem 0.75rem;
+  }
+
+  .framed-stat {
+    padding: 0.875rem 0.75rem;
+  }
+
+  .framed-stat__rule {
+    width: 3rem;
+  }
+
+  /*
+   * La placa de cifras de Coleccion lleva dos datos apilados (valor, etiqueta,
+   * filete, valor, etiqueta). Apilados se comen casi 220 px de los 844 que
+   * tiene el movil, y el contenido que de verdad interesa (la rejilla de
+   * campeones) queda por debajo del pliegue. En vertical se pasan a dos
+   * columnas, una por dato, y el filete se retira porque era el separador
+   * horizontal de la pila.
+   *
+   * Los hijos van colocados a mano porque en el marcado no estan agrupados: no
+   * hay un envoltorio por dato, sino cinco hermanos seguidos, asi que el orden
+   * es valor(1), etiqueta(2), filete(3), valor(4), etiqueta(5). Por eso se
+   * indexa por posicion y no por tipo: los cinco son `span`, y con
+   * `:nth-of-type` el segundo valor (el cuarto hermano) no seeria el segundo.
+   */
+  .framed-stat--split {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.125rem 0.75rem;
+    align-items: center;
+  }
+
+  .framed-stat--split > .framed-stat__rule {
+    display: none;
+  }
+
+  .framed-stat--split > .framed-stat__value:nth-child(1) {
+    grid-area: 1 / 1;
+  }
+
+  .framed-stat--split > .framed-stat__label:nth-child(2) {
+    grid-area: 2 / 1;
+  }
+
+  .framed-stat--split > .framed-stat__value:nth-child(4) {
+    grid-area: 1 / 2;
+  }
+
+  .framed-stat--split > .framed-stat__label:nth-child(5) {
+    grid-area: 2 / 2;
+  }
+
+  .framed-stat--split .framed-stat__label {
+    font-size: 0.6875rem;
+  }
+
+  .champ-card__name {
+    font-size: 0.875rem;
+  }
+
+  /* --- Artesania --- */
+  .categoria-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.875rem;
+    padding: 0 var(--gutter);
+  }
+
+  /*
+   * En escritorio la ficha tiene `min-height: 17rem` porque todas las categorias
+   * viven en una rejilla de 4 columnas y esa altura las iguala. En vertical,
+   * con una sola columna, un grupo con pocas marcas se queda con un bloque de
+   * vacio de casi 150 px entre los logos y el nombre. Se deja una altura
+   * minima corta: la ficha sigue teniendo presencia, pero hugs su contenido.
+   */
+  .categoria {
+    min-height: 9rem;
+    padding: 1rem;
+    gap: 0.875rem;
+  }
+
+  .categoria__logos {
+    flex: 0 0 auto;
+    gap: 0.625rem 0.875rem;
+  }
+
+  /* --- Perfil --- */
+  .perfil__stage {
+    padding: 1rem var(--gutter);
+    gap: 1.25rem;
+  }
+
+  .perfil__layout {
+    padding: 0 var(--gutter);
+  }
+
+  .perfil__banner {
+    height: 9rem;
+  }
+
+  /* --- Jugar --- */
+  .jugar__body {
+    padding: 1.25rem var(--gutter) 0.75rem;
+  }
+
+  .jugar__panel {
+    width: 100%;
+  }
+
+  .jugar__confirm {
+    padding: 0 var(--gutter) 1.25rem;
+  }
+
+  .jugar__desc {
+    font-size: 0.9375rem;
+  }
+
+  /* --- Pie --- */
+  .footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem var(--gutter) 1.25rem;
+    /* por debajo del todo, para que la barra flotante quede sobre el vacio */
+    padding-bottom: calc(0.5rem + var(--safe-b));
+  }
+
+  .footer__disclaimer {
+    min-width: 0;
+    font-size: 0.6875rem;
+    line-height: 1.5;
+  }
+
+  /* ======================================================================
+     7. ZONAS DE TOQUE
+     ====================================================================== */
+
+  /*
+   * Por debajo de este ancho, los controles que el cliente dibuja pequenos se
+   * quedan por debajo de los 44 px. Se les agranda el area sensible sin tocar
+   * el dibujo, que es lo que mantiene la identidad.
+   */
+  .tab,
+  .artesania__tab,
+  .home__tab,
+  .categoria__mas,
+  .rail__item {
+    position: relative;
+  }
+
+  .tab::after,
+  .artesania__tab::after,
+  .categoria__mas::after {
+    content: '';
+    position: absolute;
+    inset: -0.5rem -0.25rem;
+  }
+
+  /* El desplegable denative se abre con el area real, no con el texto */
+  select.input {
+    min-height: 2.75rem;
+  }
+}

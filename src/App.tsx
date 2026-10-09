@@ -2,6 +2,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { AudioProvider } from './hooks/AudioProvider'
 import { useHashRoute } from './hooks/useHashRoute'
 import { TopBar } from './components/layout/TopBar'
+import { BottomNav } from './components/layout/BottomNav'
 import { SocialPanel } from './components/layout/SocialPanel'
 import { Inicio } from './components/screens/Inicio'
 import { Jugar } from './components/screens/Jugar'
@@ -12,6 +13,14 @@ import { DetalleProyecto } from './components/screens/DetalleProyecto'
 import raw from './data/proyectos.json'
 import type { PortfolioData, Proyecto } from './data/types'
 import { useAudio } from './hooks/useAudio'
+/*
+ * La capa movil se importa aqui, y no en main.tsx, para que salga la ultima en
+ * el CSS empaquetado. App arrastra chrome.css y screens.css, que traen sus
+ * propios breakpoints y declaran cosas como `.jugar__modes { overflow-x: auto }`.
+ * Con el mismo peso especifico gana el Stylesheet inyectado despues, asi que
+ * entrar antes haria que la version movil perdiese contra la de escritorio.
+ */
+import './styles/mobile.css'
 
 const data = raw as PortfolioData
 
@@ -116,6 +125,14 @@ function Shell() {
           <span className="chip chip--gold">Nivel {data.perfil.nivel}</span>
         </footer>
       </div>
+
+      {/*
+       * La navegacion de las cinco secciones. En escritorio la resuelven la
+       * barra del cliente y el panel social, asi que esta barra se queda
+       * oculta por CSS a partir de 768 px; solo aparece en movil, donde esas
+       * dos piezas no caben y el pulgar llega al borde inferior.
+       */}
+      <BottomNav route={route} onNavigate={navigate} />
     </div>
   )
 }
