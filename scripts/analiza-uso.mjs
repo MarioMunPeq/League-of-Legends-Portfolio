@@ -131,6 +131,21 @@ for (const m of texto.matchAll(/['"`]([^'"`]*assets\/[^'"`]+)['"`]/g)) {
 }
 for (const m of texto.matchAll(/url\(\s*['"]?(\/?assets\/[^'")]+)/g)) seguras.add(m[1].replace(/^\//, ''))
 
+/*
+ * 2.1b Ficheros sueltos en la raiz de `public/`: `og.png`, `favicon.svg`,
+ * `apple-touch-icon.png`... No llevan `assets/` en la ruta, asi que el patron de
+ * arriba no los ve, y se declaraban muertos siendo cosa que si se usa (los cita
+ * el plugin de Open Graph de vite.config.ts). Se resuelven por nombre: si el
+ * nombre del fichero aparece citado en el codigo, esta en uso.
+ */
+for (const entrada of readdirSync(abs('public'), { withFileTypes: true })) {
+  if (!entrada.isFile()) continue
+  const citado = [`'${entrada.name}'`, `"${entrada.name}"`, `\`${entrada.name}\``].some((c) =>
+    texto.includes(c),
+  )
+  if (citado) seguras.add(entrada.name)
+}
+
 // 2.2 audio: el mapa de sonidos declara `clave: 'fichero.ogg'`
 for (const m of leer(abs('src/data/audio.ts')).matchAll(/:\s*'([^']+\.ogg)'/g)) seguras.add(`audio/${m[1]}`)
 

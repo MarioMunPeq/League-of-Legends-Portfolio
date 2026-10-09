@@ -2750,26 +2750,22 @@
    Footer
    ============================================================ */
 
-/* Fila fija del frame, fuera del contenedor con scroll. */
-.footer {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 1rem;
-  padding: 1rem 2.5rem;
-  border-top: 1px solid var(--line-hair);
-  background: rgba(4, 12, 21, 0.94);
-}
-
-.footer__disclaimer {
-  flex: 1;
-  min-width: 18rem;
+/*
+ * El aviso legal ya no vive en un pie fijo. Lo sustituyen dos notas pequenas:
+ * `.contacto__legal` en la pestana de contacto de la ficha (el texto entero, que
+ * es donde se lee) y `.social__legal` al pie del panel social (una linea, que es
+ * donde se insinua que existe). Las dos remiten al mismo sitio.
+ */
+.contacto__legal {
+  margin-top: 0.5rem;
+  padding-top: 0.875rem;
   font-size: 0.75rem;
-  line-height: 1.5;
+  line-height: 1.55;
   color: var(--ink-dim);
+  border-top: 1px solid var(--line-hair);
 }
 
-.footer__disclaimer strong {
+.contacto__legal strong {
   color: var(--ink-muted);
 }
 
@@ -2942,8 +2938,5 @@
   }
   .jugar__body {
     padding: 1.5rem 1rem 0.75rem;
-  }
-  .footer {
-    padding: 1.25rem 1rem;
   }
 }

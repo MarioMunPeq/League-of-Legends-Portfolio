@@ -12,7 +12,8 @@
     "assets:force": "node scripts/fetch-assets.mjs --force",
     "check": "node scripts/check-assets.mjs && node scripts/check-data.mjs",
     "assets:skills": "node scripts/fetch-skill-icons.mjs",
-    "analizar": "node scripts/analiza-uso.mjs"
+    "analizar": "node scripts/analiza-uso.mjs",
+    "og": "node scripts/generar-og.mjs"
   },
   "dependencies": {
     "react": "^19.2.8",

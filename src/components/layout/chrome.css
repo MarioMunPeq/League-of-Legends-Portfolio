@@ -9,15 +9,15 @@
 }
 
 /*
- * El cuerpo son tres areas: el contenido que hace scroll a la izquierda, el
- * panel social a la derecha ocupando toda la altura, y el pie pegado abajo de
- * la columna de contenido. El pie queda fuera de `.main` a proposito: dentro
- * del contenedor con scroll se solapaba con el contenido al desplazar.
+ * El cuerpo son dos areas: el contenido que hace scroll a la izquierda y el
+ * panel social a la derecha ocupando toda la altura. No hay tercera fila: el pie
+ * fijo con el aviso legal y las chapas de la cuenta se elimino, y con el el
+ * hueco que ocupaba al pie de cada pantalla.
  */
 .frame__body {
   display: grid;
   grid-template-columns: minmax(0, 1fr) var(--social-w);
-  grid-template-rows: minmax(0, 1fr) auto;
+  grid-template-rows: minmax(0, 1fr);
   min-height: 0;
   min-width: 0;
 }
@@ -29,12 +29,7 @@
 
 .frame__body > .social {
   grid-column: 2;
-  grid-row: 1 / span 2;
-}
-
-.frame__body > .footer {
-  grid-column: 1;
-  grid-row: 2;
+  grid-row: 1;
 }
 
 /* ============================================================
@@ -744,6 +739,19 @@
   align-items: center;
   gap: 0.375rem;
   padding: 0.5rem;
+}
+
+/*
+ * Aviso legal del panel: una nota al pie, no un banner. El Tamano es el mas
+ * pequeno que se sigue leyendo sin forzar la vista, y el color es el de la tinta
+ * apagada para que no compita con los botones de encima. El texto largo esta en
+ * la pestana de contacto de la ficha.
+ */
+.social__legal {
+  padding: 0 0.75rem 0.75rem;
+  font-size: 0.625rem;
+  line-height: 1.45;
+  color: var(--ink-ghost);
 }
 
 .social__foot-btn {

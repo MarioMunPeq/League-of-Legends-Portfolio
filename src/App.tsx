@@ -114,20 +114,19 @@ function Shell() {
         </main>
 
         <SocialPanel enlaces={data.enlaces} />
-
-        <footer className="footer">
-          <p className="footer__disclaimer">
-            <strong>Proyecto fan, no afiliado a Riot Games.</strong> League of Legends es una marca
-            registrada de Riot Games. Este portfolio replica su interfaz con fines educativos y de
-            portafolio; los assets gráficos pertenecen a sus respectivos titulares.
-          </p>
-          <span className="chip">{data.perfil.summoner}</span>
-          <span className="chip chip--gold">Nivel {data.perfil.nivel}</span>
-        </footer>
       </div>
 
       {/*
-       * La navegacion de las cinco secciones. En escritorio la resuelven la
+       * Antes, entre el contenido y el borde inferior, habia un pie fijo con el
+       * aviso legal y dos chapas (el nombre de invocador y el nivel). En vertical
+       * se comia entre 150 y 200 px de las 844 de pantalla, en las cinco
+       * pestañas, y las chapas repetian datos que ya salen en la barra superior
+       * y en la ficha. El aviso se lee ahora en el panel social (escritorio) y en
+       * la pestana de contacto de la ficha, en todos los anchos.
+       */}
+
+      {/*
+       * La navegacion de las cuatro secciones. En escritorio la resuelven la
        * barra del cliente y el panel social, asi que esta barra se queda
        * oculta por CSS a partir de 768 px; solo aparece en movil, donde esas
        * dos piezas no caben y el pulgar llega al borde inferior.

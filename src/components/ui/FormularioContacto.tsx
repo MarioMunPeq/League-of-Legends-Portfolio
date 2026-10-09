@@ -92,6 +92,18 @@ export function FormularioContacto({ contacto, summoner }: Props) {
       <p className="muted" style={{ fontSize: '0.75rem' }}>
         Sin formulario ni correo: el contacto ocurre enteramente dentro de estas dos plataformas.
       </p>
+
+      {/*
+        El aviso legal vive aqui. Antes estaba en un banner fijo al pie de todas
+        las pantallas, que en vertical se comia una parte importante del alto y
+        se repetia cinco veces sin aportar nada. Esta pestana es donde tiene
+        sentido: es la unica seccion que habla de quien firma el trabajo.
+      */}
+      <p className="contacto__legal">
+        <strong>Proyecto fan, no afiliado a Riot Games.</strong> League of Legends es una marca
+        registrada de Riot Games. Este portfolio replica su interfaz con fines educativos y de
+        portafolio; los assets gráficos pertenecen a sus respectivos titulares.
+      </p>
     </div>
   )
 }

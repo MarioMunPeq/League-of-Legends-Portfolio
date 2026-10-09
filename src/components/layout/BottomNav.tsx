@@ -10,8 +10,11 @@ import type { Route } from '../../hooks/useHashRoute'
  *
  * En movil la barra de arriba se queda sin secciones (no caben) y la del
  * cliente esta pensada para raton, asi que la navegacion se baja al borde
- * inferior, que es donde llega el pulgar. Los destinos son los mismos cinco
- * que tiene la aplicacion, en el orden en que aparecen en el cliente.
+ * inferior, que es donde llega el pulgar.
+ *
+ * Son cuatro, no cinco: Jugar no se repite porque la placa de la barra
+ * superior ya lleva ahi, y en vertical queda justo encima del pulgar, a un
+ * tap. Dos caminos a la misma pantalla en el mismo sitio era ruido.
  *
  * El icono va con `Mask`-style: glifo monocromo y lo pone el color del estado,
  * igual que los iconos de la barra social del cliente.
@@ -21,7 +24,6 @@ const SECCIONES: { route: Route; label: string; glifo: Parameters<typeof Icon>[0
   { route: 'coleccion', label: 'Coleccion', glifo: 'collection' },
   { route: 'artesania', label: 'Artesania', glifo: 'loot' },
   { route: 'perfil', label: 'Perfil', glifo: 'profile' },
-  { route: 'jugar', label: 'Jugar', glifo: 'play' },
 ]
 
 type Props = {

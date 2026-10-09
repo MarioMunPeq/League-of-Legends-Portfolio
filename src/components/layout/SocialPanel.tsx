@@ -2,6 +2,7 @@
 import { useButtonSound } from '../../hooks/useAudio'
 import { asset } from '../../data/assets'
 import type { EnlaceSocial } from '../../data/types'
+import { AVISO_FAN_CORTO } from '../../data/legal'
 import './chrome.css'
 
 const AVATARS = [1, 12, 26, 588, 1013, 1420]
@@ -165,6 +166,14 @@ export function SocialPanel({ enlaces }: Props) {
             <Mask name="uikit-icons/icon_settings.png" size={24} />
           </button>
         </div>
+
+        {/*
+          El aviso legal, en version corta y con tipografia de nota al pie. No es
+          un banner: es la linea mas discreta del panel, del Tamano de una nota
+          al pie de pagina. El texto largo esta en la pestana de contacto de la
+          ficha, que es donde se lee con calma.
+        */}
+        <p className="social__legal">{AVISO_FAN_CORTO}</p>
       </div>
     </aside>
   )
