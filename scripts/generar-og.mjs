@@ -3,8 +3,11 @@
  *
  *   public/og.png               1200x630, la previsualizacion de WhatsApp/LinkedIn
  *   public/apple-touch-icon.png  180x180, la ficha del icono en iOS
+ *   public/icon-192.png          192x192, icono de la web app manifest
  *   public/icon-512.png          512x512, icono grande y PWA
  *   public/favicon.svg           vectorial, para los navegadores de escritorio
+ *   public/favicon-32x32.png     32x32, el que Google muestra en los resultados
+ *   public/favicon.ico           16/32/48, el que pide /favicon.ico a pelo
  *
  * Se dibuja con Chrome headless en vez de con un canvas porque el sitio tiene
  * tipografias propias (Beaufort y Spiegel, .otf) y arte real: asi la
@@ -285,10 +288,64 @@ function renderSVG(svg, L, salida) {
   )
 }
 
+/*
+ * Empaqueta varios PNG en un unico .ico.
+ *
+ * Un ICO no es un formato de imagen: es un contenedor con una cabecera y una
+ * tabla de entradas, y cada entrada apunta a los bytes de una imagen. Desde
+ * Windows Vista las entradas pueden ser directamente un PNG, que es justo lo
+ * que hay aqui: no hace falta escribir un BMP a mano, y el archivo sale
+ * identico en todos los navegadores.
+ *
+ * El ancho y el alto van en un byte, asi que 256 se escribe como 0 (es el
+ * valor reservado del formato para "mas de 255").
+ */
+function empaquetarIco(capas, salida) {
+  const CABECERA = 6
+  const ENTRADA = 16
+
+  const imagenes = capas.map((c) => readFileSync(c.salida))
+
+  const dir = Buffer.alloc(CABECERA)
+  dir.writeUInt16LE(0, 0) // reservado
+  dir.writeUInt16LE(1, 2) // 1 = icono
+  dir.writeUInt16LE(capas.length, 4)
+
+  /*
+   * Primero se escribe TODA la tabla y despues las imagenes, en ese orden.
+   * Los `imageOffset` de cada entrada son absolutos y se calculan desde el
+   * final de la tabla, asi que intercalar entrada e imagen (un
+   * [entrada, imagen, entrada, imagen...]) deja los punteros apuntando a datos
+   * que no son la imagen de esa entrada: el archivo se abre sin error pero
+   * cada icono sale corrupto.
+   */
+  const entradas = []
+  let offset = CABECERA + capas.length * ENTRADA
+
+  capas.forEach((capa, i) => {
+    const datos = imagenes[i]
+    const e = Buffer.alloc(ENTRADA)
+    e.writeUInt8(capa.lado === 256 ? 0 : capa.lado, 0) // ancho
+    e.writeUInt8(capa.lado === 256 ? 0 : capa.lado, 1) // alto
+    e.writeUInt8(0, 2) // paleta: 0 = sin paleta propia
+    e.writeUInt8(0, 3) // reservado
+    e.writeUInt16LE(1, 4) // planos de color
+    e.writeUInt16LE(32, 6) // bits por pixel
+    e.writeUInt32LE(datos.length, 8)
+    e.writeUInt32LE(offset, 12)
+    entradas.push(e)
+    offset += datos.length
+  })
+
+  writeFileSync(salida, Buffer.concat([dir, ...entradas, ...imagenes]))
+}
+
 const salidas = [
   { html: OG, w: 1200, h: 630, salida: join(PUB, 'og.png') },
   { svg: 180, salida: join(PUB, 'apple-touch-icon.png') },
+  { svg: 192, salida: join(PUB, 'icon-192.png') },
   { svg: 512, salida: join(PUB, 'icon-512.png') },
+  { svg: 32, salida: join(PUB, 'favicon-32x32.png') },
 ]
 
 for (const s of salidas) {
@@ -301,6 +358,27 @@ for (const s of salidas) {
   const dim = s.svg ? `${s.svg}x${s.svg}` : `${s.w}x${s.h}`
   console.log(`  ${relative(RAIZ, s.salida)}  ${dim}  ${kb} KB`)
 }
+
+/*
+ * El .ico no se puede pedir a Chrome directamente (su `--screenshot` solo
+ * escribe PNG), asi que se rasterizan las tres medidas en temporal y se
+ * empaquetan. Son las que Windows y los navegadores eligen solos: 16 en la
+ * barra del sistema, 48 en la pestana.
+ *
+ * Sin este fichero, `/favicon.ico` da 404 y Google no muestra icono en los
+ * resultados de busqueda: para eso no acepta SVG.
+ */
+const ICO_TAMANOS = [16, 32, 48]
+const capasIco = ICO_TAMANOS.map((lado) => {
+  const salida = join(tmp, `ico-${lado}.png`)
+  renderSVG(svgIcono(lado), lado, salida)
+  return { lado, salida }
+})
+const ico = join(PUB, 'favicon.ico')
+empaquetarIco(capasIco, ico)
+console.log(
+  `  ${relative(RAIZ, ico)}  ${ICO_TAMANOS.join('/')}  ${Math.round((readFileSync(ico).length / 1024) * 10) / 10} KB`,
+)
 
 /*
  * El favicon es el mismo SVG del icono, vectorial y sin rasterizar: pesa menos

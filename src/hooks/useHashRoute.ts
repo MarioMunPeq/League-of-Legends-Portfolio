@@ -1,5 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
-import { play } from '../data/audio'
+import { useCallback, useEffect, useState } from 'react'
 
 export type Route = 'inicio' | 'jugar' | 'perfil' | 'coleccion' | 'artesania'
 
@@ -20,7 +19,9 @@ function descifrar(segmento: string | undefined): string | undefined {
   }
 }
 
-function readHash(): { route: Route; param?: string } {
+type RouteState = { route: Route; param?: string }
+
+function readHash(): RouteState {
   const raw = window.location.hash.replace(/^#\/?/, '')
   const [ruta = '', param] = raw.split('/')
   return {
@@ -29,11 +30,26 @@ function readHash(): { route: Route; param?: string } {
   }
 }
 
+/**
+ * Estado inicial compartido por el servidor y el primer render del cliente.
+ *
+ * No se lee el hash aqui a proposito. El HTML pre-renderizado siempre muestra
+ * `inicio`, asi que si el cliente arrancara leyendo `window.location.hash` una
+ * visita a `#/perfil` hydrataria contra un arbol distinto y React lo
+ * reconstruiria entero (con el aviso de desajuste en consola). Arrancando
+ * siempre en `inicio` la hydratacion es exacta y el enlace profundo se
+ * corrige en el efecto de abajo, antes de que llegue a pintar nada.
+ */
+const INICIO: RouteState = { route: 'inicio' }
+
 export function useHashRoute() {
-  const [state, setState] = useState(readHash)
+  const [state, setState] = useState(INICIO)
 
   useEffect(() => {
     const onChange = () => setState(readHash())
+    // Se lee una vez al montar: entra aqui la visita con enlace profundo, que
+    // el HTML pre-renderizado no puede conocer.
+    onChange()
     window.addEventListener('hashchange', onChange)
     return () => window.removeEventListener('hashchange', onChange)
   }, [])
@@ -43,19 +59,4 @@ export function useHashRoute() {
   }, [])
 
   return { route: state.route, param: state.param, navigate }
-}
-
-/**
- * Reproduce el sonido de carga de pagina una vez por ruta,
- * igual que el cliente al cambiar de seccion.
- */
-export function usePageSound(route: string) {
-  const first = useRef(true)
-  useEffect(() => {
-    if (first.current) {
-      first.current = false
-      return
-    }
-    void play('page')
-  }, [route])
 }

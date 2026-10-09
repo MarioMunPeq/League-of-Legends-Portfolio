@@ -5,12 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run check && tsc -b && vite build",
+    "build": "npm run check && tsc -b && npm run prerender && vite build",
+    "prerender": "node scripts/prerender.mjs",
     "lint": "oxlint",
     "preview": "vite preview",
     "assets": "node scripts/fetch-assets.mjs",
     "assets:force": "node scripts/fetch-assets.mjs --force",
     "check": "node scripts/check-assets.mjs && node scripts/check-data.mjs",
+    "check:hidratacion": "node scripts/check-hidratacion.mjs",
     "assets:skills": "node scripts/fetch-skill-icons.mjs",
     "analizar": "node scripts/analiza-uso.mjs",
     "og": "node scripts/generar-og.mjs"

@@ -3,6 +3,7 @@ import { GoldButton } from './GoldButton'
 import { Icon } from './Icon'
 import { useAudio } from '../../hooks/useAudio'
 import type { PortfolioData } from '../../data/types'
+import { AVISO_FAN_DETALLE, AVISO_FAN_TITULO } from '../../data/legal'
 import '../screens/screens.css'
 
 type Props = {
@@ -100,9 +101,7 @@ export function FormularioContacto({ contacto, summoner }: Props) {
         sentido: es la unica seccion que habla de quien firma el trabajo.
       */}
       <p className="contacto__legal">
-        <strong>Proyecto fan, no afiliado a Riot Games.</strong> League of Legends es una marca
-        registrada de Riot Games. Este portfolio replica su interfaz con fines educativos y de
-        portafolio; los assets gráficos pertenecen a sus respectivos titulares.
+        <strong>{AVISO_FAN_TITULO}</strong> {AVISO_FAN_DETALLE}
       </p>
     </div>
   )

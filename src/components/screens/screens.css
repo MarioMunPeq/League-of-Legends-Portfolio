@@ -971,12 +971,6 @@
   min-width: 0;
 }
 
-.side-filters {
-  position: sticky;
-  top: 4.25rem;
-  padding: 1.25rem;
-}
-
 .coleccion__side {
   position: sticky;
   top: 4.25rem;
@@ -1132,43 +1126,6 @@
 
 .coleccion__modo-clear:hover {
   color: var(--gold-bright);
-}
-
-.side-filters h3 {
-  margin-bottom: 0.875rem;
-  padding-bottom: 0.5rem;
-  font-size: 0.8125rem;
-  letter-spacing: 0.14em;
-  color: var(--gold);
-  border-bottom: 1px solid var(--line-hair);
-}
-
-.meter {
-  margin: 1.25rem 0;
-  text-align: center;
-}
-
-.meter__value {
-  font-family: 'Beaufort', serif;
-  font-size: 2.75rem;
-  font-weight: 900;
-  color: var(--gold-bright);
-  line-height: 1;
-  text-shadow: 0 0 1.5rem var(--gold-glow);
-}
-
-.meter__label {
-  margin-top: 0.375rem;
-  font-size: 0.6875rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--gold);
-}
-
-.meter + .meter {
-  margin-top: 1.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--line-hair);
 }
 
 /* cinco columnas, como las del botin del cliente en pantallas anchas */
@@ -1397,84 +1354,6 @@
 /* ============================================================
    Materiales
    ============================================================ */
-
-/* pantalla con carril de categorias a la izquierda, como la del cliente */
-.screen--rail {
-  display: grid;
-  grid-template-columns: 3.75rem minmax(0, 1fr);
-  gap: 0;
-  padding-left: 0;
-}
-
-/* tira vertical de categorias: el activo lleva la barra de oro a la izquierda */
-.rail {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.75rem 0;
-  background: linear-gradient(90deg, rgba(4, 12, 21, 0.95), rgba(10, 22, 34, 0.7));
-  border-right: 1px solid var(--line-hair);
-}
-
-.rail__item {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: 2.75rem;
-  height: 2.75rem;
-  border-radius: var(--radius-sm);
-  transition: background var(--t-fast) var(--ease-out);
-}
-
-.rail__item::before {
-  content: '';
-  position: absolute;
-  left: -0.75rem;
-  top: 50%;
-  width: 3px;
-  height: 0;
-  transform: translateY(-50%);
-  background: var(--gold);
-  transition: height var(--t-med) var(--ease-out);
-}
-
-.rail__item--on::before {
-  height: 2rem;
-}
-
-.rail__item:hover {
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.rail__item img {
-  width: 1.75rem;
-  height: 1.75rem;
-  object-fit: contain;
-  opacity: 0.55;
-  transition: opacity var(--t-fast) var(--ease-out);
-}
-
-.rail__item:hover img,
-.rail__item--on img {
-  opacity: 1;
-}
-
-.rail__help {
-  display: grid;
-  place-items: center;
-  width: 1.5rem;
-  height: 1.5rem;
-  font-family: 'Beaufort', serif;
-  font-size: 0.875rem;
-  color: var(--ink-dim);
-  border: 1px solid var(--line-hair);
-  border-radius: 50%;
-}
-
-.rail__spacer {
-  flex: 1;
-}
 
 /*
  * Cifras enmarcadas. El cliente no las cierra con esquinas cuadradas: las
@@ -2803,20 +2682,10 @@
   .coleccion {
     grid-template-columns: minmax(0, 1fr);
   }
-  .side-filters {
-    position: static;
-  }
   .home {
     grid-template-columns: minmax(0, 1fr);
   }
   .home__side {
-    display: none;
-  }
-  .screen--rail {
-    grid-template-columns: minmax(0, 1fr);
-    padding-left: 2.5rem;
-  }
-  .rail {
     display: none;
   }
   .jugar__modes {

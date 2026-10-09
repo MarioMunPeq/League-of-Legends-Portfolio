@@ -59,10 +59,24 @@ function resolver(espec, desdeAbs) {
   return null
 }
 
-const entrada = posix(abs('src/main.tsx'))
-const alcanzado = new Set([entrada])
-const cola = [entrada]
+/*
+ * Hay DOS puntos de entrada, no uno. `main.tsx` es la app; `entry-prerender.tsx`
+ * lo carga `scripts/prerender.mjs` para generar el HTML estatico que se sirve en
+ * GitHub Pages. No lo importa nadie, asi que recorriendo solo `main.tsx` salia
+ * marcado como codigo muerto cuando es precisamente el que da el SEO.
+ */
+const ENTRADAS = ['src/main.tsx', 'src/entry-prerender.tsx'].filter(existsSync)
+const alcanzado = new Set()
+const cola = []
 const paquetes = new Set()
+
+for (const e of ENTRADAS) {
+  const p = posix(abs(e))
+  if (!alcanzado.has(p)) {
+    alcanzado.add(p)
+    cola.push(p)
+  }
+}
 
 while (cola.length) {
   const f = cola.pop()
@@ -147,7 +161,17 @@ for (const entrada of readdirSync(abs('public'), { withFileTypes: true })) {
 }
 
 // 2.2 audio: el mapa de sonidos declara `clave: 'fichero.ogg'`
-for (const m of leer(abs('src/data/audio.ts')).matchAll(/:\s*'([^']+\.ogg)'/g)) seguras.add(`audio/${m[1]}`)
+const audioSrc = leer(abs('src/data/audio.ts'))
+const bloqueFILES = audioSrc.slice(audioSrc.indexOf('const FILES'))
+for (const m of bloqueFILES.matchAll(/^\s*'?([\w-]+)'?:\s*'([^']+\.ogg)'/gm)) {
+  const [, clave, fichero] = m
+  /*
+   * Estar en el mapa no significa sonar. `play()` va con el nombre de la clave,
+   * asi que un sonido que nadie pide queda descargado y precargado en cada
+   * visita sin llegar a oirse nunca. Solo cuenta el que alguien reproduce.
+   */
+  if (new RegExp(`play\\(\\s*'${clave}'`).test(texto)) seguras.add(`audio/${fichero}`)
+}
 
 // 2.3-API: parseo por campeon, separando la pasiva de los hechizos. El manifiesto
 // guarda el nombre de archivo pelado y en dos carpetas distintas, asi que si se

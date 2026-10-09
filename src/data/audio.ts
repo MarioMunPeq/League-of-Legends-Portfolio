@@ -1,13 +1,12 @@
 import { asset } from './assets'
 
-export type SoundName =
-  | 'hover'
-  | 'click'
-  | 'grid-hover'
-  | 'grid-click'
-  | 'nav-click'
-  | 'page'
-  | 'visor'
+/*
+ * Solo entran sonidos que alguien reproduce con `play()`. Los que estaban en el
+ * mapa sin usarse (`page` y `visor`) se quitaron: `ensure()` crea un `Audio`
+ * para cada clave, asi que una clave sin uso no es inocua, es una peticion que
+ * falla en cada visita. `npm run assets` los vuelve a bajar si hacen falta.
+ */
+export type SoundName = 'hover' | 'click' | 'grid-hover' | 'grid-click' | 'nav-click'
 
 const FILES: Record<SoundName, string> = {
   hover: 'sfx-uikit-button-gold-hover.ogg',
@@ -15,8 +14,6 @@ const FILES: Record<SoundName, string> = {
   'grid-hover': 'sfx-uikit-grid-hover.ogg',
   'grid-click': 'sfx-uikit-grid-click.ogg',
   'nav-click': 'sfx-nav-button-play-click.ogg',
-  page: 'sfx-lobby-strawberry-page-load.ogg',
-  visor: 'sfx-regalia-lobby-visor-open.ogg',
 }
 
 /** Sonidos que pueden solaparse y necesitan una voz propia por reproduccion. */

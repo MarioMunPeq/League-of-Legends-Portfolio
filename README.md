@@ -10,9 +10,15 @@ npm install
 npm run assets     # descarga los assets (idempotente; assets:force rehace todo)
 npm run check      # verifica que toda referencia a /assets resuelva
 npm run dev
-npm run build      # check + tsc + vite build
+npm run build      # check + tsc + prerender + vite build
 npm run lint
+npm run og         # regenera og.png, favicon.ico y los iconos (requiere Chrome)
+npm run check:hidratacion   # carga dist/ en Chrome y comprueba que hidrata sin errores
 ```
+
+> `npm run build` es el comando de build de verdad: el paso de `prerender` es el
+> que deja la pantalla de inicio escrita dentro del HTML. Lanzando `vite build`
+> a mano se publicaria una pagina vacia para los buscadores.
 
 ## Estructura
 
@@ -38,8 +44,32 @@ lol-portfolio/
 │  │  └─ screens/ Inicio, Perfil, Coleccion, Artesania, Seleccion, Lobby, DetalleProyecto
 │  ├─ hooks/   AudioProvider, useAudio, useHashRoute
 │  └─ styles/  tokens.css, riot.css
-└─ scripts/  fetch-assets.mjs, assets.config.mjs, check-assets.mjs
+└─ scripts/  fetch-assets.mjs, assets.config.mjs, check-assets.mjs,
+             prerender.mjs, generar-og.mjs, check-hidratacion.mjs
 ```
+
+## SEO
+
+La pagina es una SPA, asi que por si sola Google no veria nada: el HTML que
+descarga es `<div id="root"></div>` y de ahi no sale ni un texto ni un `<h1>`.
+Hay dos piezas que lo resuelven, ambas en build:
+
+- **`scripts/prerender.mjs`** renderiza `Inicio` en Node y deja el HTML dentro
+  de `dist/index.html`. Los datos salen de `proyectos.json`, no de una API, asi
+  que no hay nada que esperar en el build. El navegador despues hidrata ese
+  mismo arbol (`src/main.tsx` usa `hydrateRoot`, no `createRoot`).
+- **`vite.config.ts`** anade `og:*`, `twitter:*`, canonical, iconos y un
+  JSON-LD (`Person` + `WebSite` + `ItemList` con los diez proyectos). Las URLs
+  de `og:image` son absolutas y se calculan a partir de `base` y de `ORIGEN`.
+
+`npm run check:hidratacion` abre `dist/` en Chrome y falla si la hidratacion
+falla o si los enlaces profundos (`#/perfil`, ...) no cargan, que son las dos
+formas de romperse sin que se entere el build.
+
+Un detalle que sale caro si se cambia mal: **`ORIGEN` en `vite.config.ts` es el
+usuario de GitHub Pages** (`mariomunpeq`). Con un typo ahi el build no falla;
+genera las etiquetas igual, pero apuntan a un host inexistente y toda la
+previsualizacion al compartir el enlace sale sin foto.
 
 ## Mapeo cliente → portfolio
 

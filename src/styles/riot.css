@@ -602,21 +602,10 @@ textarea.input {
   }
 }
 
-@keyframes shimmer {
-  from {
-    background-position: -200% 0;
-  }
-  to {
-    background-position: 200% 0;
-  }
-}
+/*
+ * `shimmer` y `pulse-soft` estaban declaradas aqui pero ninguna regla las
+ * usaba: ningun `animation:` las nombra. Se han quitado. Un keyframe huerfano no
+ * pesa mucho, pero es codigo que parece activo y no lo esta, que es peor que
+ * no tenerlo.
+ */
 
-@keyframes pulse-soft {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.55;
-  }
-}

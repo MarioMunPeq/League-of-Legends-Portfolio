@@ -245,16 +245,32 @@
   }
 
   /*
-   * La placa de JUGAR es la pieza mas pesada de la barra (218 px de ancho en el
-   * cliente). En movil se encoge para que quepan el silencio y el retrato.
+   * La placa de JUGAR es la pieza mas pesada de la barra: el cartel tiene
+   * `min-width: 10.3rem` (218 px en el cliente) y el escudo 3.4rem. Encoger solo
+   * la altura no sirve de nada, porque el ancho lo fija ese min-width.
+   *
+   * Las clases son `.play`, `.play-crest`, `.play-crest img` y `.play-plate`.
+   * Aqui se reducia `.play-logo`, que no existe en `PlayButton`, asi que la
+   * regla entera no hacia nada y la placa se quedaba a tamano de escritorio.
    */
   .top .play {
-    height: 2.25rem;
+    height: 2.5rem;
+    padding: 0 0.375rem;
   }
 
-  .top .play-logo {
-    width: 1.5rem;
-    height: 1.5rem;
+  .top .play-crest {
+    width: 2rem;
+    height: 2rem;
+    margin-right: -0.4rem;
+  }
+
+  .top .play-crest img {
+    width: 1.6rem;
+    height: 1.3rem;
+  }
+
+  .top .play-plate {
+    min-width: 5.25rem;
   }
 
   .top .play-label {
@@ -519,10 +535,6 @@
     font-size: 2.25rem;
   }
 
-  .meter__value {
-    font-size: 2rem;
-  }
-
   .categoria__count {
     font-size: 1.125rem;
   }
@@ -755,8 +767,7 @@
   .tab,
   .artesania__tab,
   .home__tab,
-  .categoria__mas,
-  .rail__item {
+  .categoria__mas {
     position: relative;
   }
 

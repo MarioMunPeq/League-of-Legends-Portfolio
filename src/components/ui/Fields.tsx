@@ -1,5 +1,5 @@
 import { useId } from 'react'
-import type { InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes } from 'react'
+import type { InputHTMLAttributes, SelectHTMLAttributes } from 'react'
 import { useButtonSound } from '../../hooks/useAudio'
 
 const LENS =
@@ -30,36 +30,6 @@ export function SearchField({
       </label>
       <SearchIcon />
       <input id={id} type="search" className="input" autoComplete="off" {...rest} />
-    </div>
-  )
-}
-
-export function TextField({
-  label,
-  className = '',
-  ...rest
-}: FieldProps & InputHTMLAttributes<HTMLInputElement>) {
-  const id = useId()
-  return (
-    <div className={`field ${className}`}>
-      <label className={LABEL} htmlFor={id}>
-        {label}
-      </label>
-      <input id={id} type="text" className="input input--plain" {...rest} />
-    </div>
-  )
-}
-
-export function TextArea({
-  label,
-  className = '',
-  ...rest
-}: FieldProps & TextareaHTMLAttributes<HTMLTextAreaElement>) {
-  const id = useId()
-  return (
-    <div className={`stack ${className}`}>
-      <label htmlFor={id}>{label}</label>
-      <textarea id={id} className="input" {...rest} />
     </div>
   )
 }
